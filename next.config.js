@@ -18,7 +18,7 @@ const coreConfig = {
 import { withSentryConfig } from "@sentry/nextjs";
 import { env } from "./src/env.js";
 
-const configWithSentry = withSentryConfig(module.exports, {
+const configWithSentry = withSentryConfig(coreConfig, {
   // For all available options, see:
   // https://www.npmjs.com/package/@sentry/webpack-plugin#options
 
