@@ -1,0 +1,44 @@
+{
+    "Metadata": {
+        "title": "Delícias Mineiras",
+        "description": "Catálogo de produtos da Delícias Mineiras",
+        "keywords": "Delícias Mineiras, Produtos, Catálogo"
+    },
+    "Common": {
+        "loading": "Carregando"
+    },
+    "HomePage": {
+        "title": "Página Inicial"
+    },
+    "DashboardPage": {
+        "title": "Painel"
+    },
+    "LoginPage": {
+        "title": "Entrar",
+        "description": "Escolha uma das opções abaixo para fazer login.",
+        "google": "Entrar com Google",
+        "passkey": "Entrar com Passkey",
+        "or": "ou",
+        "email": {
+            "label": "Endereço de email",
+            "send": "Entrar com Email",
+            "sending": "Enviando...",
+            "sent": "Verifique sua caixa de entrada para o link de login."
+        }
+    },
+    "UserMenu": {
+        "login": "Entrar",
+        "account": "Minha Conta",
+        "language": {
+            "label": "Alterar idioma",
+            "locale": "{locale, select, pt {🇵🇹 Português} en {🇺🇸 Inglês} other {Unknown}}"
+        },
+        "theme": {
+            "label": "Alterar tema",
+            "light": "Claro",
+            "dark": "Escuro",
+            "system": "Sistema"
+        },
+        "logout": "Sair"
+    }
+}

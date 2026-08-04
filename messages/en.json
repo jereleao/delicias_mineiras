@@ -1,0 +1,44 @@
+{
+    "Metadata": {
+        "title": "Delícias Mineiras",
+        "description": "Delícias Mineiras Product Catalog",
+        "keywords": "Delícias Mineiras, Products, Catalog"
+    },
+    "Common": {
+        "loading": "Loading"
+    },
+    "HomePage": {
+        "title": "Home Page"
+    },
+    "DashboardPage": {
+        "title": "Dashboard"
+    },
+    "LoginPage": {
+        "title": "Login",
+        "description": "Choose one of the options below to log in.",
+        "google": "Login with Google",
+        "passkey": "Login with Passkey",
+        "or": "or",
+        "email": {
+            "label": "Email address",
+            "send": "Login with Email",
+            "sending": "Sending...",
+            "sent": "Check your inbox for the login link."
+        }
+    },
+    "UserMenu": {
+        "login": "Login",
+        "account": "My Account",
+        "language": {
+            "label": "Change Language",
+            "locale": "{locale, select, pt {🇵🇹 Portuguese} en {🇺🇸 English} other {Unknown}}"
+        },
+        "theme": {
+            "label": "Change theme",
+            "light": "Light",
+            "dark": "Dark",
+            "system": "System"
+        },
+        "logout": "Logout"
+    }
+}
