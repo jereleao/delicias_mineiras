@@ -27,9 +27,10 @@ export const env = createEnv({
     EMAIL_SERVER_USER: z.string(),
     EMAIL_SERVER_PASSWORD: z.string(),
     EMAIL_FROM: z.string().email(),
-    DEFAULT_LANGUAGE: z.string().default("en")
+    DEFAULT_LANGUAGE: z.string().default("en"),
+    DEFAULT_THEME: z.enum(["light", "dark", "system"]).default("system"),
   },
-      
+
   /**
    * Specify your client-side environment variables schema here. This way you can ensure the app
    * isn't built with invalid env vars. To expose them to the client, prefix them with
@@ -37,6 +38,7 @@ export const env = createEnv({
    */
   client: {
     NEXT_PUBLIC_BASE_URL: z.string().url().default("http://localhost:3000"),
+    NEXT_PUBLIC_SENTRY_DSN: z.string().url().optional(),
   },
 
   /**
@@ -61,6 +63,8 @@ export const env = createEnv({
     EMAIL_SERVER_PASSWORD: process.env.EMAIL_SERVER_PASSWORD,
     EMAIL_FROM: process.env.EMAIL_FROM,
     DEFAULT_LANGUAGE: process.env.DEFAULT_LANGUAGE,
+    DEFAULT_THEME: process.env.DEFAULT_THEME,
+    NEXT_PUBLIC_SENTRY_DSN: process.env.NEXT_PUBLIC_SENTRY_DSN,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially
