@@ -1,12 +1,12 @@
 "use client";
 
-import { type ElementRef, useEffect, useRef } from "react";
+import { Suspense, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { createPortal } from "react-dom";
 
 export function Modal({ children }: { children: React.ReactNode }) {
   const router = useRouter();
-  const dialogRef = useRef<ElementRef<"dialog">>(null);
+  const dialogRef = useRef<HTMLDialogElement>(null);
 
   useEffect(() => {
     if (!dialogRef.current?.open) {
@@ -21,11 +21,13 @@ export function Modal({ children }: { children: React.ReactNode }) {
   return createPortal(
     <dialog
       ref={dialogRef}
-      className="flex h-screen w-screen items-center justify-center bg-zinc-900/15"
+      className="z-10 flex h-screen w-screen items-center justify-center bg-zinc-900/15"
       onClose={onDismiss}
+      onClick={(e) => e.target === dialogRef.current && onDismiss()}
     >
-      {children}
-      {/* <button onClick={onDismiss} className="close-button" /> */}
+      <Suspense fallback={<p className="bg-foreground">Loading...</p>}>
+        {children}
+      </Suspense>
     </dialog>,
     document.getElementById("modal-root")!,
   );

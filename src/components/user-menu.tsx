@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useTransition } from "react";
 import type { Session } from "next-auth";
 import { useTranslations } from "next-intl";
-import { LoaderCircle } from "lucide-react";
+import { LoaderCircleIcon } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -27,12 +27,12 @@ export default function UserMenu({ session }: UserMenuProps) {
 
   const handleLogout = () => startLogout(() => logoutAction());
 
-  const t = useTranslations("UserMenu");
+  const t = useTranslations();
 
   if (isLogingOut)
     return (
       <div className="border-foreground flex size-8 items-center justify-center rounded-full border p-0">
-        <LoaderCircle className="animate-spin" />
+        <LoaderCircleIcon className="animate-spin" />
       </div>
     );
 
@@ -57,7 +57,7 @@ export default function UserMenu({ session }: UserMenuProps) {
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem asChild>
-            <Link href="/account">{t("account")}</Link>
+            <Link href="/account">{t("AccountPage.title")}</Link>
           </DropdownMenuItem>
           <UserMenuLanguage />
           <UserMenuTheme />

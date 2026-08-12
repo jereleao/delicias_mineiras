@@ -1,18 +1,18 @@
 "use client";
 
 import z from "zod";
-import { UserInfoEdit } from "./user-info-edit";
-import UserAvatarEdit from "./user-avatar-edit";
+import { UserFormFields } from "./user-form-fields";
+import { UserAvatarField } from "./user-avatar-field";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState, useTransition } from "react";
 import { ImageCropper } from "./image-cropper";
-import { uploadFile } from "../../_actions/put-file";
 import { urlToFile } from "~/utils";
 import { api } from "~/libs/trpc/react";
 import type { UserData } from "~/libs/api/routers/user";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { uploadFile } from "~/libs/storage/action/upload-file";
 
 type UserProfileEditProps = Pick<UserData, "id" | "name" | "bio" | "image">;
 
@@ -68,7 +68,7 @@ export function UserProfileEdit({
       if (changedImage) {
         console.debug("TODO: Delete previous asset from this user");
 
-        const file = await urlToFile(data.image!, `img-${id}.jpg`);
+        const file = await urlToFile(data.image!, `user-img-${id}.jpg`);
 
         const uploadedFile = await uploadFile(file);
 
@@ -96,8 +96,12 @@ export function UserProfileEdit({
 
   return (
     <div className="flex w-full flex-col-reverse md:flex-row">
-      <UserInfoEdit form={form} onSubmit={onSubmit} isPending={isPendingSave} />
-      <UserAvatarEdit form={form} setAvatarSrc={setAvatarSrc} />
+      <UserFormFields
+        form={form}
+        onSubmit={onSubmit}
+        isPending={isPendingSave}
+      />
+      <UserAvatarField form={form} setAvatarSrc={setAvatarSrc} />
     </div>
   );
 }

@@ -1,0 +1,1 @@
+ALTER TABLE "de_mi_product" ADD COLUMN "active" boolean DEFAULT true;

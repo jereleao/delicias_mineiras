@@ -16,6 +16,7 @@ import { usePasskeyAvailable } from "~/hooks/use-passkey-available";
 import { usePasskeyPromptDismissed } from "~/hooks/use-passkey-prompt-dismissed";
 import { useWebauthnRegister } from "~/hooks/use-webauthn-register";
 import { api } from "~/libs/trpc/react";
+import { useTranslations } from "next-intl";
 
 export default function PasskeyAvailability() {
   const passkeyAvailable = usePasskeyAvailable();
@@ -42,7 +43,7 @@ export default function PasskeyAvailability() {
 
   const [isRegistering, registerPasskey] = useWebauthnRegister(enabled);
 
-  const { mutate: disablePasskey, isPending: isPendintMutation } =
+  const { mutate: disablePasskey, isPending: isPendingMutation } =
     api.user.disablePasskey.useMutation({
       onSuccess: () => {
         setPasskeyDialogOpen(false);
@@ -61,25 +62,25 @@ export default function PasskeyAvailability() {
     setPasskeyDialogOpen(false);
   };
 
+  const t = useTranslations("PasskeyAvailability");
+
   return (
     <Dialog open={passkeyDialogOpen} onOpenChange={setPasskeyDialogOpen}>
       <DialogContent className="sm:max-w-sm">
         <DialogHeader>
-          <DialogTitle>Enable passkeys?</DialogTitle>
-          <DialogDescription>
-            Add a passkey to sign in faster and more securely.
-          </DialogDescription>
+          <DialogTitle>{t("title")}</DialogTitle>
+          <DialogDescription>{t("description")}</DialogDescription>
         </DialogHeader>
         <DialogFooter>
           <Button
             variant="outline"
             onClick={handleDisablePasskey}
-            disabled={isPendintMutation}
+            disabled={isPendingMutation}
           >
-            No
+            {t("dismiss")}
           </Button>
           <Button onClick={handleRegisterPasskey} disabled={isRegistering}>
-            Yes
+            {t("register")}
           </Button>
         </DialogFooter>
       </DialogContent>

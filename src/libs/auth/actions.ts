@@ -10,7 +10,7 @@ import { eq } from "drizzle-orm";
 import { rpId } from "~/libs/auth/config";
 
 export async function logoutAction() {
-  await signOut();
+  await signOut({ redirectTo: "/" });
 }
 
 export async function loginWithPasskey(

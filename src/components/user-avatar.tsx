@@ -3,7 +3,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import type { Session } from "next-auth";
 import ConditionGuard from "~/components/condition-guard";
-import { UserRound } from "lucide-react";
+import { UserRoundIcon } from "lucide-react";
 import { cn } from "~/utils";
 
 type SessionUser = NonNullable<Session["user"]>;
@@ -21,7 +21,7 @@ export default function UserAvatar({
     <Avatar className={cn("size-8", className)}>
       <AvatarImage src={image!} alt={name ?? ""} />
       <AvatarFallback>
-        <ConditionGuard condition={!!name} fallback={<UserRound />}>
+        <ConditionGuard condition={!!name} fallback={<UserRoundIcon />}>
           {name
             ?.split(" ")
             .map((n) => n[0])

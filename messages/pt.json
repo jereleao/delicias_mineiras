@@ -5,13 +5,26 @@
         "keywords": "Delícias Mineiras, Produtos, Catálogo"
     },
     "Common": {
-        "loading": "Carregando"
+        "loading": "Carregando",
+        "chars": "caracteres"
     },
     "HomePage": {
         "title": "Página Inicial"
     },
-    "DashboardPage": {
-        "title": "Painel"
+    "AdminPage": {
+        "title": "Painel Administrativo",
+        "products": {
+            "new": {
+                "title": "Produto",
+                "description": "Criar um novo produto"
+            }
+        }
+    },
+    "AboutPage": {
+        "title": "Quem Somos"
+    },
+    "ContactPage": {
+        "title": "Contato"
     },
     "LoginPage": {
         "title": "Entrar",
@@ -28,7 +41,6 @@
     },
     "UserMenu": {
         "login": "Entrar",
-        "account": "Minha Conta",
         "language": {
             "label": "Alterar idioma",
             "locale": "{locale, select, pt {🇵🇹 Português} en {🇺🇸 Inglês} other {Unknown}}"
@@ -40,5 +52,19 @@
             "system": "Sistema"
         },
         "logout": "Sair"
+    },
+    "PasskeyAvailability": {
+        "title": "Disponibilidade de Passkeys",
+        "description": "Passkeys estão disponíveis neste dispositivo. Você pode usá-los para fazer login.",
+        "dismiss": "Dispensar",
+        "register": "Registrar Passkey"
+    },
+    "AccountPage": {
+        "title": "Minha Conta",
+        "preferences": "Preferências",
+        "profile": {
+            "title": "Perfil"
+        },
+        "passkeys": "Passkeys"
     }
 }

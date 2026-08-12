@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { useState, useTransition } from "react";
-import { FingerprintPattern, LoaderCircle } from "lucide-react";
+import { FingerprintPattern, LoaderCircleIcon } from "lucide-react";
 import { signIn } from "next-auth/react";
 import { Button } from "~/components/ui/button";
 import { GoogleIcon } from "~/components/icons";
@@ -70,7 +70,7 @@ export default function LoginForm() {
             >
               <ConditionGuard
                 condition={!isAsserting}
-                fallback={<LoaderCircle className="mr-2 animate-spin" />}
+                fallback={<LoaderCircleIcon className="mr-2 animate-spin" />}
               >
                 <FingerprintPattern className="mr-2" />
               </ConditionGuard>

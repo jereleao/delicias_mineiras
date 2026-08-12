@@ -1,25 +1,32 @@
 import { redirect } from "next/navigation";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
-import { UserProfileEdit } from "./_components/profile/user-profile-edit";
-import PasskeyPreferences from "./_components/passkeys/passkey-preferences";
+import { getTranslations } from "next-intl/server";
 import { api } from "~/libs/trpc/server";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
+import { UserProfileTab } from "./_components/user-profile-tab";
+import { PasskeyTab } from "./_components/passkey-tab";
+import { PreferencesTab } from "./_components/preferences-tab";
+import { UserProfileEdit } from "./_components/profile/user-profile-edit";
 
 export default async function AccountPage() {
   const userData = await api.user.me();
 
   if (!userData) redirect("/login");
 
+  const t = await getTranslations("AccountPage");
+
   return (
     <Tabs defaultValue="profile">
       <TabsList variant="line">
-        <TabsTrigger value="profile">Profile</TabsTrigger>
-        <TabsTrigger value="passkey">Passkeys</TabsTrigger>
+        <TabsTrigger value="profile">{t("profile.title")}</TabsTrigger>
+        <TabsTrigger value="passkey">{t("passkeys")}</TabsTrigger>
       </TabsList>
       <TabsContent value="profile">
-        <UserProfileEdit {...userData} />
+        <UserProfileTab {...userData}>
+          <UserProfileEdit {...userData} />
+        </UserProfileTab>
       </TabsContent>
       <TabsContent value="passkey" className="size-full">
-        <PasskeyPreferences />
+        <PasskeyTab />
       </TabsContent>
     </Tabs>
   );

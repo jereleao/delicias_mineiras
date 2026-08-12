@@ -1,14 +1,14 @@
 import { isoBase64URL } from "@simplewebauthn/server/helpers";
 import {
-  MonitorSmartphone,
-  Smartphone,
-  Usb,
-  Nfc,
-  Bluetooth,
-  Waypoints,
-  Trash2,
-  LaptopMinimal,
-  LoaderCircle,
+  MonitorSmartphoneIcon,
+  SmartphoneIcon,
+  UsbIcon,
+  NfcIcon,
+  BluetoothIcon,
+  WaypointsIcon,
+  Trash2Icon,
+  LaptopMinimalIcon,
+  LoaderCircleIcon,
 } from "lucide-react";
 import { useLocale } from "next-intl";
 import { useMemo } from "react";
@@ -38,13 +38,13 @@ type CredentialDeviceType = "singleDevice" | "multiDevice";
 const ALL_TRANSPORTS: Array<{
   key: Transport;
   label: string;
-  icon: typeof MonitorSmartphone;
+  icon: typeof MonitorSmartphoneIcon;
 }> = [
-  { key: "internal", label: "Internal", icon: MonitorSmartphone },
-  { key: "hybrid", label: "Hybrid", icon: Waypoints },
-  { key: "usb", label: "USB", icon: Usb },
-  { key: "nfc", label: "NFC", icon: Nfc },
-  { key: "ble", label: "Bluetooth", icon: Bluetooth },
+  { key: "internal", label: "Internal", icon: MonitorSmartphoneIcon },
+  { key: "hybrid", label: "Hybrid", icon: WaypointsIcon },
+  { key: "usb", label: "USB", icon: UsbIcon },
+  { key: "nfc", label: "NFC", icon: NfcIcon },
+  { key: "ble", label: "Bluetooth", icon: BluetoothIcon },
 ];
 
 const ALL_AUTH_ATTACHMENTS: Array<{
@@ -114,9 +114,11 @@ export function CredentialCard({ credential }: CredentialCardProps) {
         </CardTitle>
         <CardDescription className="flex items-center justify-end gap-2">
           {credential.platform == "desktop" && (
-            <LaptopMinimal className="size-4" />
+            <LaptopMinimalIcon className="size-4" />
           )}
-          {credential.platform == "mobile" && <Smartphone className="size-4" />}
+          {credential.platform == "mobile" && (
+            <SmartphoneIcon className="size-4" />
+          )}
           <p>{credential.os}</p>
         </CardDescription>
         <CardAction>
@@ -127,9 +129,9 @@ export function CredentialCard({ credential }: CredentialCardProps) {
             disabled={isDeleting}
           >
             {isDeleting ? (
-              <LoaderCircle className="animate-spin" />
+              <LoaderCircleIcon className="animate-spin" />
             ) : (
-              <Trash2 className="size-4" />
+              <Trash2Icon className="size-4" />
             )}
           </Button>
         </CardAction>

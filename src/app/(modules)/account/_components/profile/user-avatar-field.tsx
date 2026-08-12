@@ -1,6 +1,6 @@
 import { Button } from "~/components/ui/button";
 import UserAvatar from "~/components/user-avatar";
-import { Pencil } from "lucide-react";
+import { LoaderCircleIcon, PencilIcon } from "lucide-react";
 import type { UseFormReturn } from "react-hook-form";
 import type { UserInfoType } from "./user-profile-edit";
 import {
@@ -10,21 +10,20 @@ import {
   DropzoneTrigger,
   useDropzone,
 } from "~/components/ui/dropzone";
-import type { Dispatch, SetStateAction } from "react";
+import { useState, type Dispatch, type SetStateAction } from "react";
 
 type UserAvatarEditProps = {
   form: UseFormReturn<UserInfoType>;
   setAvatarSrc: Dispatch<SetStateAction<string | null>>;
 };
 
-export default function UserAvatarEdit({
-  form,
-  setAvatarSrc,
-}: UserAvatarEditProps) {
+export function UserAvatarField({ form, setAvatarSrc }: UserAvatarEditProps) {
   const { name, image } = form.getValues();
+  const [loading, setLoading] = useState(false);
 
   const dropzone = useDropzone({
     onDropFile: async (file: File) => {
+      setLoading(true);
       return {
         status: "success",
         result: URL.createObjectURL(file),
@@ -32,6 +31,7 @@ export default function UserAvatarEdit({
     },
     onFileUploaded(result) {
       setAvatarSrc(result);
+      setLoading(false);
     },
     validation: {
       accept: {
@@ -50,9 +50,14 @@ export default function UserAvatarEdit({
         <DropzoneTrigger className="absolute right-0 bottom-0 bg-transparent p-0 hover:bg-transparent">
           <Button
             className="hover:bg-primary size-7 rounded-full px-1.5"
+            disabled={loading}
             asChild
           >
-            <Pencil className="size-4" />
+            {loading ? (
+              <LoaderCircleIcon className="size-4 animate-spin" />
+            ) : (
+              <PencilIcon className="size-4" />
+            )}
           </Button>
         </DropzoneTrigger>
       </DropZoneArea>

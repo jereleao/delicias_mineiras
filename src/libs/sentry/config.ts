@@ -1,6 +1,6 @@
 import { env } from "~/env";
 
-const isSentryEnabled = env.NODE_ENV === "production";
+const isSentryEnabled = process.env.NODE_ENV === "production";
 
 export const sentryConfig = {
   dsn: env.NEXT_PUBLIC_SENTRY_DSN,

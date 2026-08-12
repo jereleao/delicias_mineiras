@@ -5,13 +5,71 @@
         "keywords": "Delícias Mineiras, Products, Catalog"
     },
     "Common": {
-        "loading": "Loading"
+        "loading": "Loading",
+        "chars": "characters",
+        "noResults": "No results.",
+        "submit": "Submit"
     },
     "HomePage": {
         "title": "Home Page"
     },
-    "DashboardPage": {
-        "title": "Dashboard"
+    "AdminPage": {
+        "title": "Admin Dashboard",
+        "products": {
+            "form": {
+                "title": "Product",
+                "description": "Create a new product",
+                "submit": "Submit",
+                "fields": {
+                    "categoryId": {
+                        "label": "Category",
+                        "description": "This category will create sections on the products page.",
+                        "add": "Add"
+                    },
+                    "name": {
+                        "label": "Name",
+                        "placeholder": "Cheddar Cheease",
+                        "description": "This name will appear as product title."
+                    },
+                    "description": {
+                        "label": "Description",
+                        "placeholder": "Average 600g/piece",
+                        "description": "This description will appear bellow the title."
+                    },
+                    "price": {
+                        "label": "Price"
+                    },
+                    "imageFile": {
+                        "label": "Image"
+                    },
+                    "keywords": {
+                        "label": "Keywords",
+                        "description": "The keywords can be used to refine the search results.",
+                        "placeholder": "Word",
+                        "add": "Add Keyword"
+                    }
+                }
+            },
+            "table": {
+                "columns": {
+                    "name": "Product",
+                    "description": "Description",
+                    "categoryName": "Category",
+                    "price": "Price"
+                },
+                "actions": {
+                    "view": "View Product",
+                    "delete": "Delete Product",
+                    "inactivate": "Inactivate Product"
+                }
+            }
+        }
+    },
+    "AboutPage": {
+        "title": "About Us"
+    },
+    "ContactPage": {
+        "title": "Contact"
     },
     "LoginPage": {
         "title": "Login",
@@ -28,7 +86,6 @@
     },
     "UserMenu": {
         "login": "Login",
-        "account": "My Account",
         "language": {
             "label": "Change Language",
             "locale": "{locale, select, pt {🇵🇹 Portuguese} en {🇺🇸 English} other {Unknown}}"
@@ -40,5 +97,19 @@
             "system": "System"
         },
         "logout": "Logout"
+    },
+    "PasskeyAvailability": {
+        "title": "Passkey Availability",
+        "description": "Passkeys are available on this device. You can use them to log in.",
+        "dismiss": "Dismiss",
+        "register": "Register Passkey"
+    },
+    "AccountPage": {
+        "title": "My Account",
+        "preferences": "Preferences",
+        "profile": {
+            "title": "Profile"
+        },
+        "passkeys": "Passkeys"
     }
 }

@@ -3,12 +3,15 @@ import "~/styles/globals.css";
 import { type Metadata } from "next";
 import { Geist, Roboto } from "next/font/google";
 
-import { TRPCReactProvider } from "~/libs/trpc/react";
 import { cn } from "~/utils";
-import { SessionProvider } from "next-auth/react";
+import { env } from "~/env";
+
 import { NextIntlClientProvider } from "next-intl";
-import { Toaster } from "~/components/ui/sonner";
+import { SessionProvider } from "next-auth/react";
+import { TRPCReactProvider } from "~/libs/trpc/react";
 import { ThemeProvider } from "~/components/theme-provider";
+import { TooltipProvider } from "~/components/ui/tooltip";
+import { Toaster } from "~/components/ui/sonner";
 
 const roboto = Roboto({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -41,15 +44,17 @@ export default function RootLayout({
         <TRPCReactProvider>
           <ThemeProvider
             attribute="class"
-            defaultTheme="system"
+            defaultTheme={env.DEFAULT_THEME}
             enableSystem
             disableTransitionOnChange
           >
             <NextIntlClientProvider>
               <SessionProvider>
-                {children}
-                {modal}
-                <div id="modal-root" />
+                <TooltipProvider>
+                  {children}
+                  {modal}
+                  <div id="modal-root" />
+                </TooltipProvider>
               </SessionProvider>
             </NextIntlClientProvider>
           </ThemeProvider>

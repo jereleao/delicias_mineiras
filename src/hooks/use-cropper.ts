@@ -98,7 +98,7 @@ function rotateSize(width: number, height: number, rotation: number) {
   };
 }
 
-function createImage(url: string) {
+export function createImage(url: string) {
   return new Promise<HTMLImageElement>((resolve, reject) => {
     const image = new Image();
     image.addEventListener("load", () => resolve(image));

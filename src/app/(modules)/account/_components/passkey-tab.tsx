@@ -5,12 +5,12 @@ import { FieldDescription, FieldSet } from "~/components/ui/field";
 import ConditionGuard from "~/components/condition-guard";
 import { usePasskeyAvailable } from "~/hooks/use-passkey-available";
 import { useWebauthnRegister } from "~/hooks/use-webauthn-register";
-import { FingerprintPattern, LoaderCircle } from "lucide-react";
+import { FingerprintPatternIcon, LoaderCircleIcon } from "lucide-react";
 import { api } from "~/libs/trpc/react";
-import { CredentialCard } from "./credential-card";
-import { CredentialArraySkeleton } from "./credential-card-skeleton";
+import { CredentialCard } from "./passkeys/credential-card";
+import { CredentialArraySkeleton } from "./passkeys/credential-card-skeleton";
 
-export default function PasskeyPreferences() {
+export function PasskeyTab() {
   const passkeyAvailable = usePasskeyAvailable();
 
   const [isRegistering, handleRegisterPasskey] = useWebauthnRegister();
@@ -21,7 +21,7 @@ export default function PasskeyPreferences() {
     <FieldSet className="pt-2 pl-1">
       <div className="flex justify-between">
         <FieldDescription>
-          Check you authentication preferences.
+          The configured devices are listed below.
         </FieldDescription>
         <ConditionGuard condition={passkeyAvailable}>
           <div className="flex justify-end">
@@ -33,9 +33,9 @@ export default function PasskeyPreferences() {
             >
               <ConditionGuard
                 condition={!isRegistering}
-                fallback={<LoaderCircle className="mr-2 animate-spin" />}
+                fallback={<LoaderCircleIcon className="mr-2 animate-spin" />}
               >
-                <FingerprintPattern className="mr-2" />
+                <FingerprintPatternIcon className="mr-2" />
               </ConditionGuard>
               <span>Register passkey on this devide</span>
             </Button>

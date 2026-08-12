@@ -1,9 +1,6 @@
-/**
- * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially useful
- * for Docker builds.
- */
-import "./src/env.js";
 import createNextIntlPlugin from "next-intl/plugin";
+import { withSentryConfig } from "@sentry/nextjs";
+import { env } from "./src/env.js";
 
 /** @type {import("next").NextConfig} */
 const coreConfig = {
@@ -13,10 +10,23 @@ const coreConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "placehold.co",
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "3a8stpuvdluunra5.public.blob.vercel-storage.com",
+        port: "",
+        pathname: "/**",
+      },
+    ],
+  },
 };
-
-import { withSentryConfig } from "@sentry/nextjs";
-import { env } from "./src/env.js";
 
 const configWithSentry = withSentryConfig(coreConfig, {
   // For all available options, see:

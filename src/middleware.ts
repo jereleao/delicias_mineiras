@@ -3,7 +3,6 @@ import { NextResponse, type NextRequest } from "next/server";
 import { env } from "./env";
 
 export async function middleware(request: NextRequest) {
-
   const url = request.nextUrl.clone();
 
   const isProd = env.NODE_ENV === "production";
@@ -16,7 +15,7 @@ export async function middleware(request: NextRequest) {
     });
 
     // Define protected routes
-    const protectedRoutes = ["/dashboard", "/account"];
+    const protectedRoutes = ["/admin", "/account"];
 
     // Check if the requested path is protected
     const isProtectedRoute = protectedRoutes.some((route) =>

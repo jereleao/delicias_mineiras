@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { cn } from "~/utils";
-import { ExternalLink } from "lucide-react";
+import { ExternalLinkIcon } from "lucide-react";
 
 interface CustomLinkProps extends React.LinkHTMLAttributes<HTMLAnchorElement> {
   href: string;
@@ -35,7 +35,7 @@ const CustomLink = ({
       {...rest}
     >
       <span>{children}</span>
-      <ExternalLink className="ml-0.5 inline-block h-4 w-4" />
+      <ExternalLinkIcon className="ml-0.5 inline-block size-4" />
     </Link>
   );
 };
