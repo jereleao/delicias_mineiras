@@ -51,8 +51,8 @@ export default function Footer() {
   const { status } = useSession();
 
   return (
-    <footer className="bg-muted container mx-auto w-full max-w-6xl px-4 py-8 sm:px-6">
-      <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-3">
+    <footer className="bg-muted w-dvw">
+      <div className="container mx-auto grid max-w-6xl grid-cols-1 gap-10 px-4 py-8 sm:grid-cols-2 sm:px-6 lg:grid-cols-3">
         {columns.map((column) => (
           <nav key={column.title} aria-label={column.title}>
             <h2 className="text-foreground text-sm font-bold tracking-wide uppercase">

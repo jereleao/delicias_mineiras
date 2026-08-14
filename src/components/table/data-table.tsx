@@ -27,11 +27,13 @@ import { DataTablePagination } from "./data-table-pagination";
 interface DataTableProps<TData extends RowData> {
   columns: ColumnDef<DataTableFeatures, TData>[];
   data: TData[];
+  className?: string;
 }
 
 export function DataTable<TData extends RowData>({
   columns,
   data,
+  className,
 }: DataTableProps<TData>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -68,7 +70,7 @@ export function DataTable<TData extends RowData>({
           className="max-w-sm"
         />
       </div> */}
-      <div className="overflow-hidden rounded-md border">
+      <div className={cn("overflow-hidden rounded-md border", className)}>
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
