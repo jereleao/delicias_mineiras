@@ -3,8 +3,8 @@
 import { revalidatePath } from "next/cache";
 import { api } from "~/libs/trpc/server";
 
-export async function deleteAction(productId: number | string) {
-  await api.product.delete({ id: Number(productId) });
+export async function activateAction(productId: number | string) {
+  await api.product.update({ id: Number(productId), active: true });
 
   revalidatePath("/admin/products");
 }

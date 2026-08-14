@@ -17,6 +17,7 @@ const europeanNumberSchema = z.preprocess(
 export const MAX_KEYWORD_COUNT = 11;
 
 export const newProductSchema = z.object({
+  id: z.number(),
   categoryId: z.coerce.number({ error: "Required" }),
   name: z
     .string({ error: "Required" })
@@ -25,7 +26,7 @@ export const newProductSchema = z.object({
   description: z
     .string()
     .max(100, "Description must be at most 100 characters.")
-    .optional(),
+    .nullable(),
   price: europeanNumberSchema,
   imageUrl: z.string({ error: "Upload a product image." }),
   keywords: z
@@ -35,7 +36,7 @@ export const newProductSchema = z.object({
       }),
     )
     .max(MAX_KEYWORD_COUNT, `You can add up to ${MAX_KEYWORD_COUNT} key words.`)
-    .optional(),
+    .nullable(),
 });
 
 export type NewProductType = z.infer<typeof newProductSchema>;

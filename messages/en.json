@@ -24,7 +24,10 @@
                     "categoryId": {
                         "label": "Category",
                         "description": "This category will create sections on the products page.",
-                        "add": "Add"
+                        "add": {
+                            "button": "Add",
+                            "placeholder": "New Category"
+                        }
                     },
                     "name": {
                         "label": "Name",
@@ -60,7 +63,12 @@
                 "actions": {
                     "view": "View Product",
                     "delete": "Delete Product",
-                    "inactivate": "Inactivate Product"
+                    "inactivate": "Inactivate Product",
+                    "activate": "Activate Product",
+                    "edit": {
+                        "title": "Edit Product",
+                        "description": "Edit the current product"
+                    }
                 }
             }
         }

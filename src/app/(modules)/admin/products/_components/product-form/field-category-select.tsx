@@ -1,15 +1,8 @@
 "use client";
 
-import { LoaderCircleIcon } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
-import { useState } from "react";
-import { type UseFormReturn } from "react-hook-form";
-import {
-  type NewProductFormType,
-  type NewProductType,
-} from "../../_actions/new-product-schema";
-import { LoadingButton } from "~/components/ui/button";
-import { Input } from "~/components/ui/input";
+import { Controller, type UseFormReturn } from "react-hook-form";
 import { api } from "~/libs/trpc/react";
 import {
   Select,
@@ -18,7 +11,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select";
-import { FormBase } from "~/components/form/client/form-base";
+import { Input } from "~/components/ui/input";
+import { LoadingButton } from "~/components/ui/button";
+import { LoaderCircleIcon } from "lucide-react";
 import {
   Field,
   FieldContent,
@@ -26,6 +21,10 @@ import {
   FieldError,
   FieldLabel,
 } from "~/components/ui/field";
+import type {
+  NewProductFormType,
+  NewProductType,
+} from "../../_actions/new-product-schema";
 
 type FieldCategorySelectProps = {
   form: UseFormReturn<NewProductFormType, unknown, NewProductType>;
@@ -36,72 +35,75 @@ export default function FieldCategorySelect({
 }: FieldCategorySelectProps) {
   const t = useTranslations("AdminPage.products.form");
 
-  const { data: categoryOptions, isPending: isPendingCategoryOptions } =
+  const { data: categoryOptions = [], isPending: isPendingCategoryOptions } =
     api.category.all.useQuery();
 
   const [newCategoryName, setNewCategoryName] = useState("");
   const [open, setOpen] = useState(false);
+  const [pendingNewId, setPendingNewId] = useState<string | null>(null);
 
   const { mutateAsync, isPending: isPendingCategoryMutation } =
     api.category.create.useMutation();
 
   const utils = api.useUtils();
 
-  const addCategory = async (field?: { onChange: (value: string) => void }) => {
+  const addCategory = async () => {
     const trimmedName = newCategoryName.trim();
-
     if (!trimmedName) return;
 
     const insertResult = await mutateAsync({ name: trimmedName });
+    const { id, name } = insertResult.at(0)!;
 
-    const newCategory = insertResult.at(0)!;
-    const newCategoryId = String(newCategory.id);
+    const newIdStr = id.toString();
 
-    await utils.category.all.invalidate();
+    // This is not synclonous, so I need to add this thing with useEffert to delay the set
+    utils.category.all.setData(undefined, (old = []) => [...old, { id, name }]);
 
     setNewCategoryName("");
-    setOpen(false);
-
-    if (field) {
-      field.onChange(newCategoryId);
-    }
-
-    form.setValue("categoryId", newCategoryId, {
-      shouldDirty: true,
-      shouldValidate: true,
-    });
+    setPendingNewId(newIdStr);
   };
 
+  // Set value only after options list has updated
+  useEffect(() => {
+    if (pendingNewId) {
+      form.setValue("categoryId", pendingNewId, {
+        shouldDirty: true,
+        shouldValidate: true,
+        shouldTouch: true,
+      });
+      setPendingNewId(null);
+      setOpen(false);
+    }
+  }, [pendingNewId, form]);
+
   return (
-    <FormBase
+    <Controller
       control={form.control}
       name="categoryId"
-      label={t("fields.categoryId.label")}
-      description={t("fields.categoryId.description")}
-      render={({ field, fieldState, label, description }) => {
+      render={({ field, fieldState }) => {
         return (
           <Field data-invalid={fieldState.invalid}>
             <FieldContent>
-              <FieldLabel htmlFor={field.name}>
-                {label}{" "}
+              <FieldLabel>
+                {t("fields.categoryId.label")}
                 {isPendingCategoryOptions && (
                   <LoaderCircleIcon className="size-4 animate-spin" />
                 )}
               </FieldLabel>
-              {description && (
-                <FieldDescription>{description}</FieldDescription>
-              )}
+              <FieldDescription>
+                {t("fields.categoryId.description")}
+              </FieldDescription>
             </FieldContent>
+
             <Select
-              {...field}
-              value={
-                field.value === undefined || field.value === null
-                  ? undefined
-                  : String(field.value)
+              value={(field.value as string) ?? ""}
+              onValueChange={(value) =>
+                form.setValue("categoryId", value, {
+                  shouldDirty: true,
+                  shouldTouch: true,
+                  shouldValidate: true,
+                })
               }
-              onValueChange={(value) => {
-                field.onChange(value);
-              }}
               open={open}
               onOpenChange={setOpen}
             >
@@ -113,9 +115,9 @@ export default function FieldCategorySelect({
                 <SelectValue />
               </SelectTrigger>
               <SelectContent position="popper">
-                {categoryOptions?.map((opt) => (
-                  <SelectItem key={opt.id} value={opt.id.toString()}>
-                    {opt.name}
+                {categoryOptions.map(({ id, name: label }) => (
+                  <SelectItem key={id} value={id.toString()}>
+                    {label}
                   </SelectItem>
                 ))}
 
@@ -125,11 +127,11 @@ export default function FieldCategorySelect({
                 >
                   <Input
                     value={newCategoryName}
-                    onChange={(event) => setNewCategoryName(event.target.value)}
-                    placeholder="New category name"
-                    onKeyDown={(event) => {
-                      if (event.key === "Enter") {
-                        event.preventDefault();
+                    onChange={(e) => setNewCategoryName(e.target.value)}
+                    placeholder={t("fields.categoryId.add.placeholder")}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        e.preventDefault();
                         addCategory();
                       }
                     }}
@@ -137,14 +139,15 @@ export default function FieldCategorySelect({
                   <LoadingButton
                     type="button"
                     size="sm"
-                    onClick={() => addCategory()}
+                    onClick={addCategory}
                     isLoading={isPendingCategoryMutation}
                   >
-                    {"Add"}
+                    {t("fields.categoryId.add.button")}
                   </LoadingButton>
                 </div>
               </SelectContent>
             </Select>
+
             {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
           </Field>
         );

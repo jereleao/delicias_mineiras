@@ -1,6 +1,12 @@
 "use client";
 
-import { BanIcon, EyeIcon, Trash2Icon } from "lucide-react";
+import {
+  BanIcon,
+  CircleCheckBigIcon,
+  EyeIcon,
+  PencilIcon,
+  Trash2Icon,
+} from "lucide-react";
 import { DataTableColumnHeader } from "~/components/table/data-table-column-header";
 import { createColumnHelper } from "~/components/table/data-table-features";
 import { Button, LoadingButton } from "~/components/ui/button";
@@ -10,9 +16,21 @@ import type { Product } from "~/libs/api/routers/product";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { Tooltip } from "~/components/ui/tooltip";
-import { useActionState, useTransition } from "react";
+import { useTransition } from "react";
 import { deleteAction } from "../_actions/delete-action";
 import { inactivateAction } from "../_actions/inactivate-action";
+import { activateAction } from "../_actions/activate-action";
+import { cn } from "~/utils";
+import { DialogButton } from "~/components/dialog-button";
+import { ProductForm } from "./product-form";
+import type {
+  NewProductFormType,
+  NewProductType,
+} from "../_actions/new-product-schema";
+import DeleteProductButton from "./buttons/delete-button";
+import { EditProductButton } from "./buttons/edit-button";
+import { ActivateProductButton } from "./buttons/activate-button";
+import { InactivateProductButton } from "./buttons/inactivate-button";
 
 const columnHelper = createColumnHelper<Product>();
 
@@ -51,6 +69,16 @@ export const columns = columnHelper.columns([
         tKey="AdminPage.products.table.columns.name"
       />
     ),
+    cell: ({ cell, row }) => {
+      const isActive = row.original.active;
+      const cellValue = cell.getValue();
+
+      return (
+        <span className={cn(!isActive && "text-muted-foreground")}>
+          {cellValue}
+        </span>
+      );
+    },
   }),
   columnHelper.accessor("description", {
     header: ({ column }) => (
@@ -60,6 +88,16 @@ export const columns = columnHelper.columns([
         className="w-full"
       />
     ),
+    cell: ({ cell, row }) => {
+      const isActive = row.original.active;
+      const cellValue = cell.getValue();
+
+      return (
+        <span className={cn(!isActive && "text-muted-foreground")}>
+          {cellValue}
+        </span>
+      );
+    },
   }),
   columnHelper.accessor("categoryName", {
     meta: {
@@ -73,6 +111,16 @@ export const columns = columnHelper.columns([
         tKey="AdminPage.products.table.columns.categoryName"
       />
     ),
+    cell: ({ cell, row }) => {
+      const isActive = row.original.active;
+      const cellValue = cell.getValue();
+
+      return (
+        <span className={cn(!isActive && "text-muted-foreground")}>
+          {cellValue}
+        </span>
+      );
+    },
   }),
   columnHelper.accessor("price", {
     meta: {
@@ -94,7 +142,18 @@ export const columns = columnHelper.columns([
         currency: "BRL",
       }).format(amount);
 
-      return <div className="pr-4 text-right font-medium">{formatted}</div>;
+      const isActive = row.original.active;
+
+      return (
+        <div
+          className={cn(
+            "pr-4 text-right font-medium",
+            !isActive && "text-muted-foreground",
+          )}
+        >
+          {formatted}
+        </div>
+      );
     },
   }),
   columnHelper.display({
@@ -115,87 +174,19 @@ export const columns = columnHelper.columns([
     cell: ({ row }) => {
       const productId = row.original.id.toString();
 
+      const isActive = row.original.active;
+
       return (
         <div>
-          <ViewProductButton productId={productId} />
-          <InactivateProductButton productId={productId} />
+          <EditProductButton {...row.original} />
+          {isActive ? (
+            <InactivateProductButton productId={productId} />
+          ) : (
+            <ActivateProductButton productId={productId} />
+          )}
           <DeleteProductButton productId={productId} />
         </div>
       );
     },
   }),
 ]);
-
-type ViewProductButtonProps = {
-  productId: number | string;
-};
-
-function ViewProductButton({ productId }: ViewProductButtonProps) {
-  const t = useTranslations("AdminPage.products.table");
-  return (
-    <Tooltip content={t("actions.view")}>
-      <Link href={`/admin/products/${productId}`}>
-        <Button variant="ghost" size="icon-sm" className="hover:bg-primary/10">
-          <EyeIcon className="size-4" />
-          <span className="sr-only">{t("actions.view")}</span>
-        </Button>
-      </Link>
-    </Tooltip>
-  );
-}
-
-type DeleteProductButtonProps = {
-  productId: number | string;
-};
-
-function DeleteProductButton({ productId }: DeleteProductButtonProps) {
-  const t = useTranslations("AdminPage.products.table");
-  const [isPending, startTransition] = useTransition();
-
-  const handleClick = () =>
-    startTransition(async () => await deleteAction(productId));
-
-  return (
-    <Tooltip content={t("actions.delete")}>
-      <LoadingButton
-        variant="ghost"
-        size="icon-sm"
-        className="hover:bg-primary/10"
-        isLoading={isPending}
-        replace
-        onClick={handleClick}
-      >
-        <Trash2Icon className="stroke-destructive size-4" />
-        <span className="sr-only">{t("actions.delete")}</span>
-      </LoadingButton>
-    </Tooltip>
-  );
-}
-
-type InactivateProductButtonProps = {
-  productId: number | string;
-};
-
-function InactivateProductButton({ productId }: InactivateProductButtonProps) {
-  const t = useTranslations("AdminPage.products.table");
-  const [isPending, startTransition] = useTransition();
-
-  const handleClick = () =>
-    startTransition(async () => await inactivateAction(productId));
-
-  return (
-    <Tooltip content={t("actions.inactivate")}>
-      <LoadingButton
-        variant="ghost"
-        size="icon-sm"
-        className="hover:bg-primary/10"
-        isLoading={isPending}
-        replace
-        onClick={handleClick}
-      >
-        <BanIcon className="size-4" />
-        <span className="sr-only">{t("actions.inactivate")}</span>
-      </LoadingButton>
-    </Tooltip>
-  );
-}

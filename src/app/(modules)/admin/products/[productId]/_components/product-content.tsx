@@ -1,10 +1,36 @@
+"use client";
+
 import type { Product } from "~/libs/api/routers/product";
+import { ProductForm } from "../../_components/product-form";
+import { useRouter } from "next/navigation";
+import type { NewProductType } from "../../_actions/new-product-schema";
 
 type ProductContentProps = {
   product: Product;
   modal?: boolean;
 };
 
-export default function ProductContent({ product }: ProductContentProps) {
-  return <div className="">{product.name}</div>;
+export default function ProductContent({
+  product: { id, categoryId, name, description, price, imageUrl, keywords },
+}: ProductContentProps) {
+  const router = useRouter();
+
+  const product: NewProductType = {
+    id,
+    categoryId,
+    name,
+    description: description ?? null,
+    price: Number(price),
+    imageUrl: imageUrl ?? "",
+    keywords: keywords ? keywords.split("|").map((word) => ({ word })) : null,
+  };
+
+  return (
+    <div className="">
+      <ProductForm
+        product={product}
+        setOpen={(open) => !open && router.back()}
+      />
+    </div>
+  );
 }

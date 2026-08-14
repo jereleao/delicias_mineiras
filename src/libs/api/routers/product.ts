@@ -30,6 +30,7 @@ export const productRouter = createTRPCRouter({
         imageUrl: products.imageUrl,
         keywords: products.keywords,
         categoryName: categories.name,
+        active: products.active,
       })
       .from(products)
       .leftJoin(categories, eq(products.categoryId, categories.id))
@@ -85,23 +86,20 @@ export const productRouter = createTRPCRouter({
 
   update: protectedProcedure
     .input(updateProductSchema)
-    .mutation(async ({ ctx, input }) => {
+    .mutation(async ({ ctx, input: { price: priceAsNumber, ...input } }) => {
       const product = await ctx.db.query.products.findFirst({
         where: (product, { eq }) => eq(product.id, input.id),
       });
 
       if (!product) throw new Error("not Found");
 
+      const price = priceAsNumber?.toString() || product.price;
+
+      const updated = { ...product, ...input, price };
+
       await ctx.db
         .update(products)
-        .set({
-          categoryId: input.categoryId,
-          name: input.name,
-          description: input.description,
-          price: input.price.toString(),
-          imageUrl: input.imageUrl,
-          keywords: input.keywords || "",
-        })
+        .set(updated)
         .where(eq(products.id, input.id));
     }),
 

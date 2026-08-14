@@ -6,15 +6,25 @@ import { byIdSchema, createTable } from "~/libs/db/schemas/common";
 export const createProductSchema = z.object({
   categoryId: z.number(),
   name: z.string().min(1),
-  description: z.string().optional(),
+  description: z.string().nullable(),
   price: z.number(),
   imageUrl: z.string(),
-  keywords: z.string().optional(),
+  keywords: z.string().nullable(),
 });
 
 export type CreateProductType = z.infer<typeof createProductSchema>;
 
-export const updateProductSchema = byIdSchema.merge(createProductSchema);
+const updatePropertiesSchema = createProductSchema
+  .merge(
+    z.object({
+      active: z.boolean(),
+    }),
+  )
+  .partial();
+
+export const updateProductSchema = byIdSchema.merge(updatePropertiesSchema);
+
+export type UpdateProductType = z.infer<typeof updateProductSchema>;
 
 export const products = createTable(
   "product",
@@ -24,7 +34,7 @@ export const products = createTable(
       .integer()
       .notNull()
       .references(() => categories.id),
-    name: d.varchar({ length: 256 }),
+    name: d.varchar({ length: 256 }).notNull(),
     description: d.varchar({ length: 256 }),
     price: d.numeric({ precision: 10, scale: 2 }).notNull(),
     imageUrl: d.varchar({ length: 256 }),

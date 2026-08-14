@@ -13,7 +13,12 @@ import { byIdSchema } from "~/libs/db/schemas/common";
 
 export const categoryRouter = createTRPCRouter({
   all: publicProcedure.query(async ({ ctx }) => {
-    const categories = await ctx.db.query.categories.findMany();
+    const categories = await ctx.db.query.categories.findMany({
+      columns: {
+        id: true,
+        name: true,
+      },
+    });
 
     return categories ?? null;
   }),
