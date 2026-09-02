@@ -7,28 +7,38 @@ export const env = createEnv({
    * isn't built with invalid env vars.
    */
   server: {
-    AUTH_SECRET:
-      process.env.NODE_ENV === "production"
-        ? z.string()
-        : z.string().optional(),
-    AUTH_GOOGLE_ID: z.string(),
-    AUTH_GOOGLE_SECRET: z.string(),
-    POSTGRES_URL: z.string().url(),
     NEXT_RUNTIME: z.enum(["nodejs", "edge"]).default("nodejs"),
     NODE_ENV: z
       .enum(["development", "test", "production"])
       .default("development"),
-    WEB_AUTHN_CHALLENGE: z.string(),
+
     APPLICATION_NAME: z.string(),
-    VERCEL_URL: z.string().optional(),
-    PORT: z.coerce.number().optional(),
-    EMAIL_SERVER_HOST: z.string(),
-    EMAIL_SERVER_PORT: z.coerce.number(),
-    EMAIL_SERVER_USER: z.string(),
-    EMAIL_SERVER_PASSWORD: z.string(),
-    EMAIL_FROM: z.string().email(),
     DEFAULT_LANGUAGE: z.string().default("en"),
     DEFAULT_THEME: z.enum(["light", "dark", "system"]).default("system"),
+    VERCEL_URL: z.string().optional(),
+    PORT: z.coerce.number().optional(),
+
+    AUTH_SECRET:
+      process.env.NODE_ENV === "production"
+        ? z.string()
+        : z.string().optional(),
+    WEB_AUTHN_CHALLENGE: z.string(),
+    REQUIRED_CREATED_USER: z.boolean().default(false),
+    AUTH_GOOGLE_ID: z.string(),
+    AUTH_GOOGLE_SECRET: z.string(),
+
+    SENTRY_AUTH_TOKEN: z.string().optional(),
+
+    EMAIL_SERVER_USER: z.string(),
+    EMAIL_SERVER_PASSWORD: z.string(),
+    EMAIL_SERVER_HOST: z.string(),
+    EMAIL_SERVER_PORT: z.coerce.number(),
+    EMAIL_FROM: z.email(),
+
+    POSTGRES_URL: z.url(),
+
+    BLOB_STORE_ID: z.string(),
+    BLOB_READ_WRITE_TOKEN: z.string(),
   },
 
   /**
@@ -37,8 +47,8 @@ export const env = createEnv({
    * `NEXT_PUBLIC_`.
    */
   client: {
-    NEXT_PUBLIC_BASE_URL: z.string().url().default("http://localhost:3000"),
-    NEXT_PUBLIC_SENTRY_DSN: z.string().url().optional(),
+    NEXT_PUBLIC_BASE_URL: z.url().default("http://localhost:3000"),
+    NEXT_PUBLIC_SENTRY_DSN: z.url().optional(),
   },
 
   /**
@@ -46,25 +56,36 @@ export const env = createEnv({
    * middlewares) or client-side so we need to destruct manually.
    */
   runtimeEnv: {
-    AUTH_SECRET: process.env.AUTH_SECRET,
-    AUTH_GOOGLE_ID: process.env.AUTH_GOOGLE_ID,
-    AUTH_GOOGLE_SECRET: process.env.AUTH_GOOGLE_SECRET,
-    POSTGRES_URL: process.env.POSTGRES_URL,
-    NODE_ENV: process.env.NODE_ENV,
-    WEB_AUTHN_CHALLENGE: process.env.WEB_AUTHN_CHALLENGE,
     NEXT_RUNTIME: process.env.NEXT_RUNTIME,
-    NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
+    NODE_ENV: process.env.NODE_ENV,
+
     APPLICATION_NAME: process.env.APPLICATION_NAME,
+    DEFAULT_LANGUAGE: process.env.DEFAULT_LANGUAGE,
+    DEFAULT_THEME: process.env.DEFAULT_THEME,
     VERCEL_URL: process.env.VERCEL_URL,
     PORT: process.env.PORT,
+
+    AUTH_SECRET: process.env.AUTH_SECRET,
+    WEB_AUTHN_CHALLENGE: process.env.WEB_AUTHN_CHALLENGE,
+    REQUIRED_CREATED_USER: process.env.REQUIRED_CREATED_USER,
+    AUTH_GOOGLE_ID: process.env.AUTH_GOOGLE_ID,
+    AUTH_GOOGLE_SECRET: process.env.AUTH_GOOGLE_SECRET,
+
+    SENTRY_AUTH_TOKEN: process.env.SENTRY_AUTH_TOKEN,
+
     EMAIL_SERVER_HOST: process.env.EMAIL_SERVER_HOST,
     EMAIL_SERVER_PORT: process.env.EMAIL_SERVER_PORT,
     EMAIL_SERVER_USER: process.env.EMAIL_SERVER_USER,
     EMAIL_SERVER_PASSWORD: process.env.EMAIL_SERVER_PASSWORD,
     EMAIL_FROM: process.env.EMAIL_FROM,
-    DEFAULT_LANGUAGE: process.env.DEFAULT_LANGUAGE,
-    DEFAULT_THEME: process.env.DEFAULT_THEME,
+
+    POSTGRES_URL: process.env.POSTGRES_URL,
+
+    BLOB_STORE_ID: process.env.BLOB_STORE_ID,
+    BLOB_READ_WRITE_TOKEN: process.env.BLOB_READ_WRITE_TOKEN,
+
     NEXT_PUBLIC_SENTRY_DSN: process.env.NEXT_PUBLIC_SENTRY_DSN,
+    NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially
