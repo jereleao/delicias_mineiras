@@ -34,7 +34,7 @@ export function ProductCard({
           <span className="font-display text-primary text-xl font-extrabold">
             {formatPrice(+product.price)}
           </span>
-          <button
+          {/* <button
             type="button"
             onClick={handleAdd}
             aria-label={`Adicionar ${product.name} ao pedido`}
@@ -45,7 +45,7 @@ export function ProductCard({
             ) : (
               <PlusIcon className="size-5" />
             )}
-          </button>
+          </button> */}
         </div>
       </div>
 

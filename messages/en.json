@@ -79,6 +79,10 @@
     "ContactPage": {
         "title": "Contact"
     },
+    "Footer": {
+        "institutional": "Institutional",
+        "restricted": "Restricted Area"
+    },
     "LoginPage": {
         "title": "Login",
         "description": "Choose one of the options below to log in.",

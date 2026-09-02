@@ -1,4 +1,5 @@
 import { eq } from "drizzle-orm";
+import type { inferRouterOutputs } from "@trpc/server";
 import {
   createTRPCRouter,
   protectedProcedure,
@@ -10,6 +11,12 @@ import {
   updateCategorySchema,
 } from "~/libs/db/schemas/categories";
 import { byIdSchema } from "~/libs/db/schemas/common";
+
+type CategoryOutputs = inferRouterOutputs<typeof categoryRouter>;
+
+export type Category = CategoryOutputs["all"][number];
+
+export type GetCategoryResponse = Array<Category>;
 
 export const categoryRouter = createTRPCRouter({
   all: publicProcedure.query(async ({ ctx }) => {

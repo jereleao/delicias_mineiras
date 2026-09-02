@@ -4,6 +4,7 @@ import { useSession } from "next-auth/react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useMemo } from "react";
+import { LogoLinkHome } from "~/components/logo-link-home";
 
 type FooterLink = {
   label: string;
@@ -20,17 +21,22 @@ type FooterColumn = {
 export default function Footer() {
   const t = useTranslations();
 
+  const { status } = useSession();
+
   const columns: FooterColumn[] = useMemo(() => {
     return [
       {
-        title: "Institucional",
+        title: t("Footer.institutional"),
         links: [
           { label: t("AboutPage.title"), href: "/about" },
           { label: t("ContactPage.title"), href: "/contact" },
         ],
       },
       {
-        title: "Entrar",
+        title:
+          status === "authenticated"
+            ? t("Footer.restricted")
+            : t("UserMenu.login"),
         href: "/login",
         links: [
           {
@@ -46,9 +52,7 @@ export default function Footer() {
         ],
       },
     ];
-  }, [t]);
-
-  const { status } = useSession();
+  }, [t, status]);
 
   return (
     <footer className="bg-muted w-dvw">
@@ -84,6 +88,9 @@ export default function Footer() {
             </ul>
           </nav>
         ))}
+        <div>
+          <LogoLinkHome />
+        </div>
       </div>
     </footer>
   );
