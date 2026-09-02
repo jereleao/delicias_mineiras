@@ -94,6 +94,11 @@
             "send": "Login with Email",
             "sending": "Sending...",
             "sent": "Check your inbox for the login link."
+        },
+        "error": {
+            "title": "An error occurred.",
+            "options": "{error, select, AccessDenied {This email address is not authorized to log in.} other {Please try again.}}",
+            "back": "Back to home page"
         }
     },
     "UserMenu": {

@@ -133,7 +133,24 @@ export const authConfig = {
   session: {
     strategy: "jwt",
   },
+  pages: {
+    error: "/auth",
+  },
   callbacks: {
+    async signIn({ user, account, profile }) {
+      // console.log("signIn", { user, account, profile });
+      if (env.REQUIRED_CREATED_USER) {
+        if (!user.email) return false;
+
+        const existingUser = await db.query.users.findFirst({
+          where: (userRow, { eq }) => eq(userRow.email, user.email as string),
+        });
+
+        if (!existingUser) return false;
+      }
+
+      return true;
+    },
     async jwt({ token, user, account, profile, session, trigger }) {
       // console.log("jwt", { token, user, account, profile, session, trigger });
 

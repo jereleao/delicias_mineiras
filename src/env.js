@@ -23,7 +23,7 @@ export const env = createEnv({
         ? z.string()
         : z.string().optional(),
     WEB_AUTHN_CHALLENGE: z.string(),
-    REQUIRED_CREATED_USER: z.boolean().default(false),
+    REQUIRED_CREATED_USER: z.coerce.boolean().default(false),
     AUTH_GOOGLE_ID: z.string(),
     AUTH_GOOGLE_SECRET: z.string(),
 
@@ -37,7 +37,10 @@ export const env = createEnv({
 
     POSTGRES_URL: z.url(),
 
-    BLOB_STORE_ID: z.string(),
+    BLOB_STORE_ID:
+      process.env.NODE_ENV === "production"
+        ? z.string()
+        : z.string().optional(),
     BLOB_READ_WRITE_TOKEN: z.string(),
   },
 

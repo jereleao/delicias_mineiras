@@ -98,6 +98,11 @@
             "send": "Entrar com Email",
             "sending": "Enviando...",
             "sent": "Verifique sua caixa de entrada para o link de login."
+        },
+        "error": {
+            "title": "Ocorreu um erro.",
+            "options": "{error, select, AccessDenied {Este endereço de email não está autorizado a entrar.} other {Por favor tente novamente.}}",
+            "back": "Voltar para a página inicial"
         }
     },
     "UserMenu": {

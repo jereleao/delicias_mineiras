@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { useState, useTransition } from "react";
+import { useState, useTransition, type SubmitEvent } from "react";
 import { FingerprintPattern, LoaderCircleIcon } from "lucide-react";
 import { signIn } from "next-auth/react";
 import { Button } from "~/components/ui/button";
@@ -20,26 +20,35 @@ export default function LoginForm() {
 
   const passkeyAvailable = usePasskeyAvailable();
 
-  const [isPending, startTransition] = useTransition();
+  const [isPendingEmail, startEmailTransition] = useTransition();
 
   const [isAsserting, manuallyStartAuthentication] = useWebauthnAssert();
 
-  const handleSendEmail = (email: string) =>
-    startTransition(async () => {
-      await signIn("nodemailer", {
+  const handleSendEmail = (email: string) => {
+    startEmailTransition(async () => {
+      setEmailSent(false);
+
+      const result = await signIn("nodemailer", {
         email,
         redirect: false,
         callbackUrl: "/",
       });
+
+      if (result?.error) {
+        window.location.assign(
+          `/auth?error=${encodeURIComponent(result.error)}`,
+        );
+        return;
+      }
+
       setEmailSent(true);
     });
+  };
 
-  const handleEmailSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleEmailSubmit = async (event: SubmitEvent) => {
     event.preventDefault();
 
-    if (!email) {
-      return;
-    }
+    if (!email) return;
 
     handleSendEmail(email);
   };
@@ -93,13 +102,13 @@ export default function LoginForm() {
               onChange={(event) => setEmail(event.target.value)}
               placeholder="you@example.com"
               className="py-6"
-              disabled={isPending}
+              disabled={isPendingEmail}
               required
               autoComplete="email webauthn"
             />
           </Field>
-          <Button type="submit" className="py-6" disabled={isPending}>
-            {isPending ? t("email.sending") : t("email.send")}
+          <Button type="submit" className="py-6" disabled={isPendingEmail}>
+            {isPendingEmail ? t("email.sending") : t("email.send")}
           </Button>
         </form>
 
