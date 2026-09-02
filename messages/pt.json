@@ -6,7 +6,9 @@
     },
     "Common": {
         "loading": "Carregando",
-        "chars": "caracteres"
+        "chars": "caracteres",
+        "noResults": "Nenhum resultado.",
+        "submit": "Enviar"
     },
     "HomePage": {
         "title": "Página Inicial"
@@ -17,6 +19,61 @@
             "new": {
                 "title": "Produto",
                 "description": "Criar um novo produto"
+            },
+            "form": {
+                "title": "Produto",
+                "description": "Criar um novo produto",
+                "submit": "Enviar",
+                "fields": {
+                    "categoryId": {
+                        "label": "Categoria",
+                        "description": "Esta categoria criará seções na página de produtos.",
+                        "add": {
+                            "button": "Adicionar",
+                            "placeholder": "Nova categoria"
+                        }
+                    },
+                    "name": {
+                        "label": "Nome",
+                        "placeholder": "Queijo cheddar",
+                        "description": "Este nome aparecerá como título do produto."
+                    },
+                    "description": {
+                        "label": "Descrição",
+                        "placeholder": "Média de 600 g por peça",
+                        "description": "Esta descrição aparecerá abaixo do título."
+                    },
+                    "price": {
+                        "label": "Preço"
+                    },
+                    "imageFile": {
+                        "label": "Imagem"
+                    },
+                    "keywords": {
+                        "label": "Palavras-chave",
+                        "description": "As palavras-chave podem ser usadas para refinar os resultados da busca.",
+                        "placeholder": "Palavra",
+                        "add": "Adicionar palavra-chave"
+                    }
+                }
+            },
+            "table": {
+                "columns": {
+                    "name": "Produto",
+                    "description": "Descrição",
+                    "categoryName": "Categoria",
+                    "price": "Preço"
+                },
+                "actions": {
+                    "view": "Ver produto",
+                    "delete": "Excluir produto",
+                    "inactivate": "Inativar produto",
+                    "activate": "Ativar produto",
+                    "edit": {
+                        "title": "Editar produto",
+                        "description": "Editar o produto atual"
+                    }
+                }
             }
         }
     },
@@ -25,6 +82,10 @@
     },
     "ContactPage": {
         "title": "Contato"
+    },
+    "Footer": {
+        "institutional": "Institucional",
+        "restricted": "Área restrita"
     },
     "LoginPage": {
         "title": "Entrar",

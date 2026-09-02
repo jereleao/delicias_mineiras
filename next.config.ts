@@ -1,9 +1,9 @@
 import createNextIntlPlugin from "next-intl/plugin";
 import { withSentryConfig } from "@sentry/nextjs";
 import { env } from "./src/env.js";
+import type { NextConfig } from "next";
 
-/** @type {import("next").NextConfig} */
-const coreConfig = {
+const coreConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
