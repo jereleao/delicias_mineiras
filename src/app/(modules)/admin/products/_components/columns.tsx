@@ -1,33 +1,13 @@
 "use client";
 
-import {
-  BanIcon,
-  CircleCheckBigIcon,
-  EyeIcon,
-  PencilIcon,
-  Trash2Icon,
-} from "lucide-react";
 import { DataTableColumnHeader } from "~/components/table/data-table-column-header";
 import { createColumnHelper } from "~/components/table/data-table-features";
-import { Button, LoadingButton } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
-import { NewProductButton } from "./new-product-button";
 import type { Product } from "~/libs/api/routers/product";
-import Link from "next/link";
-import { useTranslations } from "next-intl";
-import { Tooltip } from "~/components/ui/tooltip";
-import { useTransition } from "react";
-import { deleteAction } from "../_actions/delete-action";
-import { inactivateAction } from "../_actions/inactivate-action";
-import { activateAction } from "../_actions/activate-action";
 import { cn } from "~/utils";
-import { DialogButton } from "~/components/dialog-button";
-import { ProductForm } from "./product-form";
-import type {
-  NewProductFormType,
-  NewProductType,
-} from "../_actions/new-product-schema";
-import DeleteProductButton from "./buttons/delete-button";
+
+import { DeleteProductButton } from "./buttons/delete-button";
+import { NewProductButton } from "./new-product-button";
 import { EditProductButton } from "./buttons/edit-button";
 import { ActivateProductButton } from "./buttons/activate-button";
 import { InactivateProductButton } from "./buttons/inactivate-button";
@@ -37,6 +17,11 @@ const columnHelper = createColumnHelper<Product>();
 export const columns = columnHelper.columns([
   columnHelper.display({
     id: "select",
+    meta: {
+      classNames: {
+        header: "w-8",
+      },
+    },
     header: ({ table }) => (
       <Checkbox
         checked={table.getIsAllPageRowsSelected()}
@@ -161,7 +146,7 @@ export const columns = columnHelper.columns([
     meta: {
       classNames: {
         cell: "flex justify-center py-1",
-        header: "max-w-12",
+        header: "w-24",
       },
     },
     header: ({ column }) => (

@@ -1,13 +1,10 @@
 "use client";
 
-import { Trash2Icon, PencilIcon } from "lucide-react";
 import { DataTableColumnHeader } from "~/components/table/data-table-column-header";
 import { createColumnHelper } from "~/components/table/data-table-features";
-import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
 import { NewCategoryButton } from "./new-category-button";
 import type { Category } from "~/libs/api/routers/category";
-import { cn } from "~/utils";
 import { EditCategoryButton } from "./buttons/edit-button";
 import { DeleteCategoryButton } from "./buttons/delete-button";
 
@@ -16,6 +13,11 @@ const columnHelper = createColumnHelper<Category>();
 export const columns = columnHelper.columns([
   columnHelper.display({
     id: "select",
+    meta: {
+      classNames: {
+        header: "w-8",
+      },
+    },
     header: ({ table }) => (
       <Checkbox
         checked={table.getIsAllPageRowsSelected()}
@@ -37,11 +39,6 @@ export const columns = columnHelper.columns([
     enableHiding: false,
   }),
   columnHelper.accessor("name", {
-    meta: {
-      classNames: {
-        header: "w-48",
-      },
-    },
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
@@ -59,7 +56,7 @@ export const columns = columnHelper.columns([
     meta: {
       classNames: {
         cell: "flex justify-center py-1",
-        header: "max-w-12",
+        header: "w-24",
       },
     },
     header: ({ column }) => (
@@ -75,6 +72,7 @@ export const columns = columnHelper.columns([
       return (
         <div className="flex gap-1">
           <EditCategoryButton {...category} />
+
           <DeleteCategoryButton categoryId={category.id} />
         </div>
       );

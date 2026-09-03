@@ -4,6 +4,7 @@ import { NavigationMenu as NavigationMenuPrimitive } from "radix-ui";
 
 import { cn } from "~/utils";
 import { ChevronDownIcon } from "lucide-react";
+import Link from "next/link";
 
 function NavigationMenu({
   className,
@@ -166,9 +167,34 @@ function NavigationMenuIndicator({
   );
 }
 
+function ListItem({
+  title,
+  children,
+  href,
+  ...props
+}: React.ComponentPropsWithoutRef<"li"> & { href: string }) {
+  return (
+    <li {...props}>
+      <NavigationMenuLink asChild>
+        <Link href={href}>
+          <div className="flex flex-col gap-1 text-sm">
+            <div className="leading-none font-medium">{title}</div>
+            {children && (
+              <div className="text-muted-foreground line-clamp-2">
+                {children}
+              </div>
+            )}
+          </div>
+        </Link>
+      </NavigationMenuLink>
+    </li>
+  );
+}
+
 export {
   NavigationMenu,
   NavigationMenuList,
+  ListItem,
   NavigationMenuItem,
   NavigationMenuContent,
   NavigationMenuTrigger,

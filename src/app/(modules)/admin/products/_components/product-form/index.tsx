@@ -105,9 +105,10 @@ export function ProductForm({ setOpen, product }: ProductFormProps) {
           ...newProduct,
         };
 
-        utils.product.all.setData(undefined, (old = []) =>
-          old.map((o) => (o.id == changedProduct.id ? changedProduct : o)),
-        );
+        utils.product.all.setData(undefined, (old = []) => [
+          ...old,
+          changedProduct,
+        ]);
       }
 
       await utils.product.all.invalidate();

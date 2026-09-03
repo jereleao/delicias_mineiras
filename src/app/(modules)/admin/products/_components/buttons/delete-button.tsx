@@ -9,10 +9,9 @@ type DeleteProductButtonProps = {
   productId: number | string;
 };
 
-export default function DeleteProductButton({
-  productId,
-}: DeleteProductButtonProps) {
+export function DeleteProductButton({ productId }: DeleteProductButtonProps) {
   const t = useTranslations("AdminPage.products.table");
+
   const [isPending, startTransition] = useTransition();
 
   const handleClick = () =>

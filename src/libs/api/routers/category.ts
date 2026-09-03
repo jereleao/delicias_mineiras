@@ -66,12 +66,18 @@ export const categoryRouter = createTRPCRouter({
 
       if (!category) throw new Error("not Found");
 
-      await ctx.db
+      const newCategory = await ctx.db
         .update(categories)
         .set({
           name: input.name,
         })
-        .where(eq(categories.id, input.id));
+        .where(eq(categories.id, input.id))
+        .returning({
+          id: categories.id,
+          name: categories.name,
+        });
+
+      return newCategory;
     }),
 
   delete: protectedProcedure

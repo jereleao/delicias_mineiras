@@ -5,17 +5,10 @@ import type {
   NewProductType,
 } from "../../_actions/new-product-schema";
 import { type SubmitHandler, type UseFormReturn } from "react-hook-form";
-import {
-  Form,
-  FormInput,
-  FormSelect,
-  FormTextarea,
-} from "~/components/form/client";
+import { Form, FormInput, FormTextarea } from "~/components/form/client";
 import { LoadingButton } from "~/components/ui/button";
 import { useTranslations } from "next-intl";
 import { FieldKeyWords } from "./field-key-words";
-import { api } from "~/libs/trpc/react";
-import type { SelectOption } from "~/components/form/client/types";
 import FieldCategorySelect from "./field-category-select";
 
 type ProductFormFieldsProps = {
@@ -30,9 +23,6 @@ export default function ProductFormFields({
   onSubmit,
 }: ProductFormFieldsProps) {
   const t = useTranslations("AdminPage.products.form");
-
-  const { data: categoryOptions, isPending: isPendingCategoryOptions } =
-    api.category.all.useQuery();
 
   return (
     <Form

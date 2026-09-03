@@ -10,6 +10,18 @@
         "noResults": "No results.",
         "submit": "Submit"
     },
+    "NavigationMenu": {
+        "navbar": {
+            "products": "Products",
+            "administration": "Administration"
+        },
+        "admin": {
+            "products": "Products",
+            "products-description": "Manage all products",
+            "categories": "Categories",
+            "users": "Users"
+        }
+    },
     "HomePage": {
         "title": "Home Page"
     },
@@ -68,6 +80,32 @@
                     "edit": {
                         "title": "Edit Product",
                         "description": "Edit the current product"
+                    }
+                }
+            }
+        },
+        "categories": {
+            "form": {
+                "title": "Category",
+                "description": "Create a new category",
+                "submit": "Submit",
+                "fields": {
+                    "name": {
+                        "label": "Name",
+                        "placeholder": "Cheease",
+                        "description": "This name will appear as a section title."
+                    }
+                }
+            },
+            "table": {
+                "columns": {
+                    "name": "Category"
+                },
+                "actions": {
+                    "delete": "Delete Category",
+                    "edit": {
+                        "title": "Edit Category",
+                        "description": "Edit the current category"
                     }
                 }
             }

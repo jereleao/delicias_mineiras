@@ -48,14 +48,7 @@ export function EditProductButton({
         ContentComponent={ProductForm}
         product={product}
       >
-        <Button
-          variant="ghost"
-          size="icon-sm"
-          className="hover:bg-primary/10"
-          // isLoading={isPending}
-          // replace
-          // onClick={handleClick}
-        >
+        <Button variant="ghost" size="icon-sm" className="hover:bg-primary/10">
           <PencilIcon className="size-4" />
           <span className="sr-only">{t("actions.edit.title")}</span>
         </Button>

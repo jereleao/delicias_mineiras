@@ -1,9 +1,9 @@
 "use client";
 
 import type { Product } from "~/libs/api/routers/product";
-import { ProductForm } from "../../_components/product-form";
+import { ProductForm } from "../../_components/category-form";
 import { useRouter } from "next/navigation";
-import type { NewProductType } from "../../_actions/new-product-schema";
+import type { NewProductType } from "../../_actions/new-category-schema";
 
 type ProductContentProps = {
   product: Product;

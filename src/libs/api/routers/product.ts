@@ -50,6 +50,7 @@ export const productRouter = createTRPCRouter({
         imageUrl: products.imageUrl,
         keywords: products.keywords,
         categoryName: categories.name,
+        active: products.active,
       })
       .from(products)
       .leftJoin(categories, eq(products.categoryId, categories.id))
