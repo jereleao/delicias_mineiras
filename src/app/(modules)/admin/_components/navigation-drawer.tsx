@@ -14,7 +14,6 @@ import {
   AccordionTrigger,
 } from "~/components/ui/accordion";
 import { ADMIN_MENUS } from "./admin-menus";
-import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import CustomLink from "~/components/custom-link";
 
@@ -34,7 +33,7 @@ export async function AdminDrawerMenu({ className }: AdminDrawerMenuProps) {
         </DrawerTrigger>
         <DrawerContent className="data-[vaul-drawer-direction=bottom]:max-h-[50vh] data-[vaul-drawer-direction=top]:max-h-[50vh]">
           <DrawerHeader>
-            <DrawerTitle>Menus</DrawerTitle>
+            <DrawerTitle>{t("menus")}</DrawerTitle>
           </DrawerHeader>
           <div className="no-scrollbar overflow-y-auto px-4">
             <Accordion type="multiple">

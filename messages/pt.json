@@ -10,20 +10,29 @@
         "noResults": "Nenhum resultado.",
         "submit": "Enviar"
     },
+    "NavigationMenu": {
+        "menus": "Menus",
+        "navbar": {
+            "products": "Produtos",
+            "administration": "Adiminstração"
+        },
+        "admin": {
+            "products": "Produtos",
+            "products-description": "Gerenciar todos os produtos",
+            "categories": "Categorias",
+            "users": "Usuários"
+        }
+    },
     "HomePage": {
         "title": "Página Inicial"
     },
     "AdminPage": {
         "title": "Painel Administrativo",
         "products": {
-            "new": {
-                "title": "Produto",
-                "description": "Criar um novo produto"
-            },
             "form": {
                 "title": "Produto",
                 "description": "Criar um novo produto",
-                "submit": "Enviar",
+                "submit": "Salvar",
                 "fields": {
                     "categoryId": {
                         "label": "Categoria",
@@ -72,6 +81,32 @@
                     "edit": {
                         "title": "Editar produto",
                         "description": "Editar o produto atual"
+                    }
+                }
+            }
+        },
+        "categories": {
+            "form": {
+                "title": "Categoria",
+                "description": "Criar uma nova categoria",
+                "submit": "Salvar",
+                "fields": {
+                    "name": {
+                        "label": "Nome",
+                        "placeholder": "Queijos",
+                        "description": "Este nome aparecera como título de uma seção."
+                    }
+                }
+            },
+            "table": {
+                "columns": {
+                    "name": "Categoria"
+                },
+                "actions": {
+                    "delete": "Excluir Categoria",
+                    "edit": {
+                        "title": "Editar Categoria",
+                        "description": "Editar a categoria atual"
                     }
                 }
             }
