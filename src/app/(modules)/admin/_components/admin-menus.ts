@@ -1,23 +1,23 @@
 export const ADMIN_MENUS = [
   {
-    tKeyTitle: "navbar.products",
+    menuKey: "navbar.products",
     menus: [
       {
-        tKeyTitle: "admin.products",
+        menuKey: "admin.products",
         tKeyDescription: "admin.products-description",
         href: "/admin/products",
       },
       {
-        tKeyTitle: "admin.categories",
+        menuKey: "admin.categories",
         href: "/admin/categories",
       },
     ],
   },
   {
-    tKeyTitle: "navbar.administration",
+    menuKey: "navbar.administration",
     menus: [
       {
-        tKeyTitle: "admin.users",
+        menuKey: "admin.users",
         href: "/admin/users",
       },
     ],

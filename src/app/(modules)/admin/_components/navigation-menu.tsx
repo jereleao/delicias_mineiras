@@ -23,15 +23,15 @@ export async function AdminNavigationMenu({
     <NavigationMenu className={className}>
       <NavigationMenuList>
         {ADMIN_MENUS.map((menu) => (
-          <NavigationMenuItem key={menu.tKeyTitle}>
-            <NavigationMenuTrigger>{t(menu.tKeyTitle)}</NavigationMenuTrigger>
+          <NavigationMenuItem key={menu.menuKey}>
+            <NavigationMenuTrigger>{t(menu.menuKey)}</NavigationMenuTrigger>
             <NavigationMenuContent>
               <ul className="w-96 py-1">
                 {menu.menus.map((subMenu) => (
                   <ListItem
-                    key={subMenu.tKeyTitle + subMenu.href}
+                    key={subMenu.menuKey + subMenu.href}
                     href={subMenu.href}
-                    title={t(subMenu.tKeyTitle)}
+                    title={t(subMenu.menuKey)}
                   >
                     {"tKeyDescription" in subMenu
                       ? t(subMenu.tKeyDescription)

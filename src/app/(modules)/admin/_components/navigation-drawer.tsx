@@ -39,18 +39,18 @@ export async function AdminDrawerMenu({ className }: AdminDrawerMenuProps) {
             <Accordion type="multiple">
               {ADMIN_MENUS.map((menu) => (
                 <AccordionItem
-                  key={menu.tKeyTitle}
-                  value={menu.tKeyTitle}
+                  key={menu.menuKey}
+                  value={menu.menuKey}
                   className="border-0!"
                 >
                   <AccordionTrigger className="bg-secondary text-secondary-foreground my-1 w-full px-2 py-1 text-sm font-medium">
-                    {t(menu.tKeyTitle)}
+                    {t(menu.menuKey)}
                   </AccordionTrigger>
                   <AccordionContent className="pb-0">
                     <ul className="pt-1">
                       {menu.menus.map((subMenu) => (
                         <li
-                          key={subMenu.tKeyTitle + subMenu.href}
+                          key={subMenu.menuKey + subMenu.href}
                           className="ml-4 flex flex-1 items-start pb-2 text-left text-sm font-medium not-last:pb-3 disabled:pointer-events-none disabled:opacity-50"
                         >
                           <CustomLink
@@ -58,7 +58,7 @@ export async function AdminDrawerMenu({ className }: AdminDrawerMenuProps) {
                             className="w-full no-underline!"
                           >
                             <div className="border-b pb-1 leading-none font-medium">
-                              {t(subMenu.tKeyTitle)}
+                              {t(subMenu.menuKey)}
                             </div>
                           </CustomLink>
                         </li>
