@@ -5,11 +5,10 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { api } from "~/libs/trpc/react";
 import { useTransition, type Dispatch } from "react";
-import { useRouter } from "next/navigation";
 import {
-  newCategorySchema,
-  type NewCategoryType,
-} from "../../_actions/new-category-schema";
+  categoryFormSchema,
+  type CategoryFormType,
+} from "../../_actions/category-schema";
 import { updateCategoryAction } from "../../_actions/update-category-action";
 import { addNewCategory } from "../../_actions/add-new-category-action";
 import { LoadingButton } from "~/components/ui/button";
@@ -17,14 +16,14 @@ import { useTranslations } from "next-intl";
 
 type CategoryFormProps = {
   setOpen: Dispatch<boolean>;
-  category?: NewCategoryType;
+  category?: CategoryFormType;
 };
 
 export function CategoryForm({ setOpen, category }: CategoryFormProps) {
   const t = useTranslations("AdminPage.categories.form");
 
   const form = useForm({
-    resolver: zodResolver(newCategorySchema),
+    resolver: zodResolver(categoryFormSchema),
     defaultValues: {
       id: category?.id ?? 0,
       name: category?.name ?? "",
@@ -34,9 +33,8 @@ export function CategoryForm({ setOpen, category }: CategoryFormProps) {
   const [isPendingSave, startSaveTransition] = useTransition();
 
   const utils = api.useUtils();
-  const router = useRouter();
 
-  function onSubmit(data: NewCategoryType) {
+  function onSubmit(data: CategoryFormType) {
     startSaveTransition(async () => {
       if (category) {
         const changedCategory = await updateCategoryAction(
@@ -59,7 +57,6 @@ export function CategoryForm({ setOpen, category }: CategoryFormProps) {
       }
 
       await utils.category.all.invalidate();
-      router.refresh();
 
       setOpen(false);
     });

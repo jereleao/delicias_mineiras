@@ -1,9 +1,5 @@
 import { eq } from "drizzle-orm";
-import {
-  createTRPCRouter,
-  protectedProcedure,
-  publicProcedure,
-} from "~/libs/api/trpc";
+import { createTRPCRouter, permissionProcedure } from "~/libs/api/trpc";
 import { banners } from "~/libs/db/schema";
 import {
   createBannerSchema,
@@ -12,7 +8,7 @@ import {
 import { byIdSchema } from "~/libs/db/schemas/common";
 
 export const bannerRouter = createTRPCRouter({
-  all: publicProcedure.query(async ({ ctx }) => {
+  all: permissionProcedure("admin.banners").query(async ({ ctx }) => {
     const banners = await ctx.db.query.banners.findMany({
       columns: {
         id: true,
@@ -29,17 +25,19 @@ export const bannerRouter = createTRPCRouter({
     return banners ?? null;
   }),
 
-  getById: publicProcedure.input(byIdSchema).query(async ({ ctx, input }) => {
-    const banner = await ctx.db.query.banners.findFirst({
-      where: (banner, { eq }) => eq(banner.id, input.id),
-      orderBy: (banner, { desc }) => [desc(banner.createdAt)],
-    });
-    if (!banner) throw new Error("not Found");
+  getById: permissionProcedure("admin.banners")
+    .input(byIdSchema)
+    .query(async ({ ctx, input }) => {
+      const banner = await ctx.db.query.banners.findFirst({
+        where: (banner, { eq }) => eq(banner.id, input.id),
+        orderBy: (banner, { desc }) => [desc(banner.createdAt)],
+      });
+      if (!banner) throw new Error("not Found");
 
-    return banner ?? null;
-  }),
+      return banner ?? null;
+    }),
 
-  create: protectedProcedure
+  create: permissionProcedure("admin.banners:manage")
     .input(createBannerSchema)
     .mutation(async ({ ctx, input }) => {
       const newBanner = {
@@ -54,7 +52,7 @@ export const bannerRouter = createTRPCRouter({
       await ctx.db.insert(banners).values(newBanner);
     }),
 
-  update: protectedProcedure
+  update: permissionProcedure("admin.banners:edit")
     .input(updateBannerSchema)
     .mutation(async ({ ctx, input }) => {
       const banner = await ctx.db.query.banners.findFirst({
@@ -75,7 +73,7 @@ export const bannerRouter = createTRPCRouter({
         .where(eq(banners.id, input.id));
     }),
 
-  delete: protectedProcedure
+  delete: permissionProcedure("admin.banners:manage")
     .input(byIdSchema)
     .mutation(async ({ ctx, input }) => {
       const banner = await ctx.db.query.banners.findFirst({

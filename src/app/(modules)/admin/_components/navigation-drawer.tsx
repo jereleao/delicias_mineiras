@@ -13,9 +13,10 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "~/components/ui/accordion";
-import { ADMIN_MENUS } from "./admin-menus";
+import { isAllowed, MENUS } from "~/libs/auth/menus";
 import { getTranslations } from "next-intl/server";
 import CustomLink from "~/components/custom-link";
+import { auth } from "~/libs/auth";
 
 type AdminDrawerMenuProps = Readonly<{
   className?: string;
@@ -23,6 +24,16 @@ type AdminDrawerMenuProps = Readonly<{
 
 export async function AdminDrawerMenu({ className }: AdminDrawerMenuProps) {
   const t = await getTranslations("NavigationMenu");
+
+  const session = await auth();
+
+  const allowedMenus = MENUS.map(({ menuGroup, menus }) => ({
+    menuGroup,
+    menus: menus.filter(({ menuKey }) =>
+      isAllowed(menuKey, session?.user.permissions ?? []),
+    ),
+  })).filter(({ menus }) => menus.length > 0);
+
   return (
     <div className={className}>
       <Drawer direction="left">
@@ -37,14 +48,14 @@ export async function AdminDrawerMenu({ className }: AdminDrawerMenuProps) {
           </DrawerHeader>
           <div className="no-scrollbar overflow-y-auto px-4">
             <Accordion type="multiple">
-              {ADMIN_MENUS.map((menu) => (
+              {allowedMenus.map((menu) => (
                 <AccordionItem
-                  key={menu.menuKey}
-                  value={menu.menuKey}
+                  key={menu.menuGroup}
+                  value={menu.menuGroup}
                   className="border-0!"
                 >
                   <AccordionTrigger className="bg-secondary text-secondary-foreground my-1 w-full px-2 py-1 text-sm font-medium">
-                    {t(menu.menuKey)}
+                    {t(menu.menuGroup)}
                   </AccordionTrigger>
                   <AccordionContent className="pb-0">
                     <ul className="pt-1">

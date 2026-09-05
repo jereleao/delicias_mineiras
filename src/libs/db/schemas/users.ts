@@ -1,6 +1,7 @@
 import { customType, index, primaryKey } from "drizzle-orm/pg-core";
 import { type AdapterAccount } from "next-auth/adapters";
 import { createTable } from "~/libs/db/schemas/common";
+import { roles } from "~/libs/db/schemas/permissions";
 
 export const users = createTable("user", (d) => ({
   id: d
@@ -8,6 +9,10 @@ export const users = createTable("user", (d) => ({
     .notNull()
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
+  roleId: d
+    .integer()
+    .references(() => roles.id)
+    .notNull(),
   name: d.varchar({ length: 255 }),
   bio: d.varchar({ length: 255 }),
   email: d.varchar({ length: 255 }).notNull(),

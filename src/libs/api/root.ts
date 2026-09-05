@@ -4,6 +4,7 @@ import { productRouter } from "./routers/product";
 import { categoryRouter } from "./routers/category";
 import { userRouter } from "./routers/user";
 import { webauthnRouter } from "./routers/webauthn";
+import { permissionRouter } from "./routers/permissions";
 
 /**
  * This is the primary router for your server.
@@ -16,6 +17,7 @@ export const appRouter = createTRPCRouter({
   category: categoryRouter,
   user: userRouter,
   webauthn: webauthnRouter,
+  permission: permissionRouter,
 });
 
 // export type definition of API

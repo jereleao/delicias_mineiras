@@ -17,12 +17,7 @@ import {
 } from "~/components/ui/dropdown-menu";
 
 import { type DataTableFeatures } from "./data-table-features";
-import {
-  useTranslations,
-  type Messages,
-  type NamespaceKeys,
-  type NestedKeyOf,
-} from "next-intl";
+import { useTranslations } from "next-intl";
 
 interface BaseDataTableColumnHeaderProps<
   TData extends RowData,
@@ -44,7 +39,7 @@ interface DataTableColumnHeaderTitle<
   TData extends RowData,
   TValue,
 > extends BaseDataTableColumnHeaderProps<TData, TValue> {
-  title:
+  title?:
     | React.ComponentType<{ column?: Column<DataTableFeatures, TData, TValue> }>
     | React.ReactNode;
 }
@@ -66,7 +61,7 @@ export function DataTableColumnHeader<TData extends RowData, TValue>({
     ) : typeof otherProps.title == "function" ? (
       <otherProps.title column={column} />
     ) : (
-      (otherProps.title ?? column.id)
+      (otherProps.title ?? "")
     );
 
   if (!column.getCanSort()) {
@@ -95,18 +90,18 @@ export function DataTableColumnHeader<TData extends RowData, TValue>({
         <DropdownMenuContent align="start">
           <DropdownMenuItem onClick={() => column.toggleSorting(false)}>
             <ArrowUpIcon />
-            Asc
+            {t("Common.tables.asc")}
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => column.toggleSorting(true)}>
             <ArrowDownIcon />
-            Desc
+            {t("Common.tables.desc")}
           </DropdownMenuItem>
           {column.getCanHide() && (
             <>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={() => column.toggleVisibility(false)}>
                 <EyeOffIcon />
-                Hide
+                {t("Common.tables.hide")}
               </DropdownMenuItem>
             </>
           )}

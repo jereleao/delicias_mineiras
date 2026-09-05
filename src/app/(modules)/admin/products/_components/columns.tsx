@@ -11,37 +11,38 @@ import { NewProductButton } from "./new-product-button";
 import { EditProductButton } from "./buttons/edit-button";
 import { ActivateProductButton } from "./buttons/activate-button";
 import { InactivateProductButton } from "./buttons/inactivate-button";
+import PermissionGuard from "~/components/permission-guard";
 
 const columnHelper = createColumnHelper<Product>();
 
 export const columns = columnHelper.columns([
-  columnHelper.display({
-    id: "select",
-    meta: {
-      classNames: {
-        header: "w-8",
-      },
-    },
-    header: ({ table }) => (
-      <Checkbox
-        checked={table.getIsAllPageRowsSelected()}
-        indeterminate={
-          table.getIsSomePageRowsSelected() && !table.getIsAllPageRowsSelected()
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  }),
+  // columnHelper.display({
+  //   id: "select",
+  //   meta: {
+  //     classNames: {
+  //       header: "w-8",
+  //     },
+  //   },
+  //   header: ({ table }) => (
+  //     <Checkbox
+  //       checked={table.getIsAllPageRowsSelected()}
+  //       indeterminate={
+  //         table.getIsSomePageRowsSelected() && !table.getIsAllPageRowsSelected()
+  //       }
+  //       onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+  //       aria-label="Select all"
+  //     />
+  //   ),
+  //   cell: ({ row }) => (
+  //     <Checkbox
+  //       checked={row.getIsSelected()}
+  //       onCheckedChange={(value) => row.toggleSelected(!!value)}
+  //       aria-label="Select row"
+  //     />
+  //   ),
+  //   enableSorting: false,
+  //   enableHiding: false,
+  // }),
   columnHelper.accessor("name", {
     meta: {
       classNames: {
@@ -153,7 +154,11 @@ export const columns = columnHelper.columns([
       <DataTableColumnHeader
         column={column}
         className="flex justify-center"
-        title={NewProductButton}
+        title={
+          <PermissionGuard permission="admin.products:manage">
+            <NewProductButton />
+          </PermissionGuard>
+        }
       />
     ),
     cell: ({ row }) => {
@@ -163,13 +168,17 @@ export const columns = columnHelper.columns([
 
       return (
         <div>
-          <EditProductButton {...row.original} />
-          {isActive ? (
-            <InactivateProductButton productId={productId} />
-          ) : (
-            <ActivateProductButton productId={productId} />
-          )}
-          <DeleteProductButton productId={productId} />
+          <PermissionGuard permission="admin.products:edit">
+            <EditProductButton {...row.original} />
+            {isActive ? (
+              <InactivateProductButton productId={productId} />
+            ) : (
+              <ActivateProductButton productId={productId} />
+            )}
+          </PermissionGuard>
+          <PermissionGuard permission="admin.products:manage">
+            <DeleteProductButton productId={productId} />
+          </PermissionGuard>
         </div>
       );
     },

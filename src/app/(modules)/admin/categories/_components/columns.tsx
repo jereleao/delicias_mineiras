@@ -7,37 +7,38 @@ import { NewCategoryButton } from "./new-category-button";
 import type { Category } from "~/libs/api/routers/category";
 import { EditCategoryButton } from "./buttons/edit-button";
 import { DeleteCategoryButton } from "./buttons/delete-button";
+import PermissionGuard from "~/components/permission-guard";
 
 const columnHelper = createColumnHelper<Category>();
 
 export const columns = columnHelper.columns([
-  columnHelper.display({
-    id: "select",
-    meta: {
-      classNames: {
-        header: "w-8",
-      },
-    },
-    header: ({ table }) => (
-      <Checkbox
-        checked={table.getIsAllPageRowsSelected()}
-        indeterminate={
-          table.getIsSomePageRowsSelected() && !table.getIsAllPageRowsSelected()
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  }),
+  // columnHelper.display({
+  //   id: "select",
+  //   meta: {
+  //     classNames: {
+  //       header: "w-8",
+  //     },
+  //   },
+  //   header: ({ table }) => (
+  //     <Checkbox
+  //       checked={table.getIsAllPageRowsSelected()}
+  //       indeterminate={
+  //         table.getIsSomePageRowsSelected() && !table.getIsAllPageRowsSelected()
+  //       }
+  //       onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+  //       aria-label="Select all"
+  //     />
+  //   ),
+  //   cell: ({ row }) => (
+  //     <Checkbox
+  //       checked={row.getIsSelected()}
+  //       onCheckedChange={(value) => row.toggleSelected(!!value)}
+  //       aria-label="Select row"
+  //     />
+  //   ),
+  //   enableSorting: false,
+  //   enableHiding: false,
+  // }),
   columnHelper.accessor("name", {
     header: ({ column }) => (
       <DataTableColumnHeader
@@ -63,7 +64,11 @@ export const columns = columnHelper.columns([
       <DataTableColumnHeader
         column={column}
         className="flex justify-center"
-        title={NewCategoryButton}
+        title={
+          <PermissionGuard permission="admin.categories:manage">
+            <NewCategoryButton />
+          </PermissionGuard>
+        }
       />
     ),
     cell: ({ row }) => {
@@ -71,9 +76,12 @@ export const columns = columnHelper.columns([
 
       return (
         <div className="flex gap-1">
-          <EditCategoryButton {...category} />
-
-          <DeleteCategoryButton categoryId={category.id} />
+          <PermissionGuard permission="admin.categories:edit">
+            <EditCategoryButton {...category} />
+          </PermissionGuard>
+          <PermissionGuard permission="admin.categories:manage">
+            <DeleteCategoryButton categoryId={category.id} />
+          </PermissionGuard>
         </div>
       );
     },

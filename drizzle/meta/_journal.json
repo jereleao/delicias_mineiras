@@ -15,6 +15,13 @@
       "when": 1786542792526,
       "tag": "0001_ambitious_selene",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1788466211612,
+      "tag": "0002_milky_katie_power",
+      "breakpoints": true
     }
   ]
 }

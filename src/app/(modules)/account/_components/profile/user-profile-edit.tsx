@@ -9,12 +9,12 @@ import { useState, useTransition } from "react";
 import { ImageCropper } from "./image-cropper";
 import { urlToFile } from "~/utils";
 import { api } from "~/libs/trpc/react";
-import type { UserData } from "~/libs/api/routers/user";
+import type { User } from "~/libs/api/routers/user";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { uploadFile } from "~/libs/storage/action/upload-file";
 
-type UserProfileEditProps = Pick<UserData, "id" | "name" | "bio" | "image">;
+type UserProfileEditProps = Pick<User, "id" | "name" | "bio" | "image">;
 
 const userInfoSchema = z.object({
   name: z

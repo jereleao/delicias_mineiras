@@ -8,7 +8,13 @@
         "loading": "Loading",
         "chars": "characters",
         "noResults": "No results.",
-        "submit": "Submit"
+        "submit": "Submit",
+        "invalid": "Invalid",
+        "tables": {
+            "asc": "Asc",
+            "desc": "Desc",
+            "hide": "Hide"
+        }
     },
     "NavigationMenu": {
         "menus": "Menus",
@@ -20,7 +26,9 @@
             "products": "Products",
             "products-description": "Manage all products",
             "categories": "Categories",
-            "users": "Users"
+            "users": "Users",
+            "banners": "Banners",
+            "banners-description": "Edit home page Banners"
         }
     },
     "HomePage": {
@@ -110,6 +118,41 @@
                     }
                 }
             }
+        },
+        "users": {
+            "form": {
+                "title": "User",
+                "description": "Create a new category",
+                "submit": "Submit",
+                "fields": {
+                    "name": {
+                        "label": "Name",
+                        "placeholder": "John Doe"
+                    },
+                    "bio": {
+                        "label": "Bio"
+                    },
+                    "role": {
+                        "label": "Role"
+                    }
+                }
+            },
+            "roles": "{opt, select, user {User} admin {Admin} editor {Editor} other {INVALID}}",
+            "table": {
+                "columns": {
+                    "name": "Name",
+                    "bio": "Bio",
+                    "email": "Email",
+                    "role": "Role"
+                },
+                "actions": {
+                    "delete": "Delete Category",
+                    "edit": {
+                        "title": "Edit User",
+                        "description": "Edit the current user"
+                    }
+                }
+            }
         }
     },
     "AboutPage": {
@@ -136,7 +179,7 @@
         },
         "error": {
             "title": "An error occurred.",
-            "options": "{error, select, AccessDenied {This email address is not authorized to log in.} other {Please try again.}}",
+            "options": "{error, select, AccessDenied {This email address is not authorized to log in.} Forbidden {You don`t have the permissions to access this page.} other {Please try again.}}",
             "back": "Back to home page"
         }
     },
@@ -164,7 +207,11 @@
         "title": "My Account",
         "preferences": "Preferences",
         "profile": {
-            "title": "Profile"
+            "title": "Profile",
+            "description": "Profile information.",
+            "displayName": "Display Name",
+            "bio": "Bio",
+            "edit": "Edit"
         },
         "passkeys": "Passkeys"
     }

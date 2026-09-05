@@ -10,16 +10,20 @@ import { env, PASSKEY_PROVIDER_ID } from "~/env";
 import { db } from "~/libs/db";
 import {
   accounts,
+  permissions,
+  rolePermissions,
   sessions,
   users,
   verificationTokens,
 } from "~/libs/db/schema";
 import { eq } from "drizzle-orm";
+import type { PermissionKey } from "../db/schemas/permissions";
 
 declare module "next-auth/jwt" {
   interface JWT {
     id: string;
     provider: string;
+    permissions: PermissionKey[];
   }
 }
 
@@ -33,20 +37,10 @@ declare module "next-auth" {
   interface Session extends DefaultSession {
     user: {
       id: string;
-      // ...other properties
-      // role: UserRole;
+      permissions: Array<PermissionKey>;
     } & DefaultSession["user"];
     provider: string;
   }
-
-  /**
-   * The shape of the user object returned in the OAuth providers' `profile` callback,
-   * or the second parameter of the `session` callback, when using a database.
-   */
-  // interface User {
-  //   // ...other properties
-  //   // role: UserRole;
-  // }
 }
 
 const zSchema = z.object({
@@ -91,6 +85,17 @@ const PasskeyProvider: Provider = CredentialsProvider({
     return userData ?? null;
   },
 });
+
+const getUserPermissions = async (userId: string): Promise<PermissionKey[]> => {
+  const rows = await db
+    .select({ key: permissions.key })
+    .from(users)
+    .innerJoin(rolePermissions, eq(users.roleId, rolePermissions.roleId))
+    .innerJoin(permissions, eq(rolePermissions.permissionId, permissions.id))
+    .where(eq(users.id, userId));
+
+  return rows.map(({ key }) => key as PermissionKey);
+};
 
 /**
  * Options for NextAuth.js used to configure adapters, providers, callbacks, etc.
@@ -168,6 +173,9 @@ export const authConfig = {
         Object.assign(resultToken, session);
       }
 
+      const userId = user?.id ?? resultToken.sub ?? resultToken.id;
+      resultToken.permissions = userId ? await getUserPermissions(userId) : [];
+
       if (typeof resultToken.image == "string") {
         resultToken.picture = resultToken.image;
       }
@@ -181,6 +189,7 @@ export const authConfig = {
         user: {
           ...session.user,
           id: token.sub || token.id, // Ensure the user ID is included in the session
+          permissions: token.permissions ?? [],
         },
         provider: token.provider,
       };

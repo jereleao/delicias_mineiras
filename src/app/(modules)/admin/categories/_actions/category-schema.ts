@@ -1,6 +1,6 @@
 import * as z from "zod";
 
-export const newCategorySchema = z.object({
+export const categoryFormSchema = z.object({
   id: z.number(),
   name: z
     .string({ error: "Required" })
@@ -8,4 +8,4 @@ export const newCategorySchema = z.object({
     .max(32, "Category name must be at most 32 characters."),
 });
 
-export type NewCategoryType = z.infer<typeof newCategorySchema>;
+export type CategoryFormType = z.infer<typeof categoryFormSchema>;

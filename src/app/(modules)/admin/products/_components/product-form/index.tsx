@@ -15,7 +15,6 @@ import { ImageCropper } from "./image-cropper";
 import type { CreateProductType } from "~/libs/db/schemas/products";
 import { urlToFile } from "~/utils";
 import { uploadFile } from "~/libs/storage/action/upload-file";
-import { useRouter } from "next/navigation";
 import type { Product } from "~/libs/api/routers/product";
 
 type ProductFormProps = {
@@ -49,7 +48,6 @@ export function ProductForm({ setOpen, product }: ProductFormProps) {
   const { mutateAsync: updateProductAsync } = api.product.update.useMutation();
 
   const utils = api.useUtils();
-  const router = useRouter();
 
   function onSubmit(data: NewProductType) {
     const changedImage = data.imageUrl != product?.imageUrl;
@@ -112,7 +110,6 @@ export function ProductForm({ setOpen, product }: ProductFormProps) {
       }
 
       await utils.product.all.invalidate();
-      router.refresh();
 
       setOpen(false);
     });

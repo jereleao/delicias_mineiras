@@ -4,13 +4,9 @@ import { columns } from "./_components/columns";
 import type { GetProductResponse } from "~/libs/api/routers/product";
 
 export default async function ProductsPage() {
-  const products: GetProductResponse = await api.product.all();
+  const data: GetProductResponse = await api.product.all();
 
   console.debug("TODO: make responsible design on columns widths");
 
-  return (
-    <>
-      <DataTable columns={columns} data={products} className="mt-4" />
-    </>
-  );
+  return <DataTable columns={columns} data={data} className="mt-4" />;
 }

@@ -13,6 +13,7 @@ import { ZodError } from "zod";
 
 import { auth } from "~/libs/auth";
 import { db } from "~/libs/db";
+import { isAllowed, type PermissionKey } from "~/libs/auth/menus";
 
 /**
  * 1. CONTEXT
@@ -130,4 +131,17 @@ export const protectedProcedure = t.procedure
         session: { ...ctx.session, user: ctx.session.user },
       },
     });
+  });
+
+export const permissionProcedure = (permission: PermissionKey) =>
+  protectedProcedure.use(async ({ ctx, next }) => {
+    const permissions = ctx.session.user.permissions;
+
+    const grantedPermission = isAllowed(permission, permissions);
+
+    if (!grantedPermission) {
+      throw new TRPCError({ code: "FORBIDDEN" });
+    }
+
+    return next();
   });

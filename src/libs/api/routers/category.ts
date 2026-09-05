@@ -1,10 +1,6 @@
 import { eq } from "drizzle-orm";
 import type { inferRouterOutputs } from "@trpc/server";
-import {
-  createTRPCRouter,
-  protectedProcedure,
-  publicProcedure,
-} from "~/libs/api/trpc";
+import { createTRPCRouter, permissionProcedure } from "~/libs/api/trpc";
 import { categories } from "~/libs/db/schema";
 import {
   createCategorySchema,
@@ -19,7 +15,7 @@ export type Category = CategoryOutputs["all"][number];
 export type GetCategoryResponse = Array<Category>;
 
 export const categoryRouter = createTRPCRouter({
-  all: publicProcedure.query(async ({ ctx }) => {
+  all: permissionProcedure("admin.categories").query(async ({ ctx }) => {
     const categories = await ctx.db.query.categories.findMany({
       columns: {
         id: true,
@@ -30,17 +26,19 @@ export const categoryRouter = createTRPCRouter({
     return categories ?? null;
   }),
 
-  getById: publicProcedure.input(byIdSchema).query(async ({ ctx, input }) => {
-    const category = await ctx.db.query.categories.findFirst({
-      where: (category, { eq }) => eq(category.id, input.id),
-      orderBy: (category, { desc }) => [desc(category.createdAt)],
-    });
-    if (!category) throw new Error("not Found");
+  getById: permissionProcedure("admin.categories")
+    .input(byIdSchema)
+    .query(async ({ ctx, input }) => {
+      const category = await ctx.db.query.categories.findFirst({
+        where: (category, { eq }) => eq(category.id, input.id),
+        orderBy: (category, { desc }) => [desc(category.createdAt)],
+      });
+      if (!category) throw new Error("not Found");
 
-    return category ?? null;
-  }),
+      return category ?? null;
+    }),
 
-  create: protectedProcedure
+  create: permissionProcedure("admin.categories:manage")
     .input(createCategorySchema)
     .mutation(async ({ ctx, input }) => {
       const newCategory = await ctx.db
@@ -57,7 +55,7 @@ export const categoryRouter = createTRPCRouter({
       return newCategory;
     }),
 
-  update: protectedProcedure
+  update: permissionProcedure("admin.categories:edit")
     .input(updateCategorySchema)
     .mutation(async ({ ctx, input }) => {
       const category = await ctx.db.query.categories.findFirst({
@@ -80,7 +78,7 @@ export const categoryRouter = createTRPCRouter({
       return newCategory;
     }),
 
-  delete: protectedProcedure
+  delete: permissionProcedure("admin.categories:manage")
     .input(byIdSchema)
     .mutation(async ({ ctx, input }) => {
       const category = await ctx.db.query.categories.findFirst({

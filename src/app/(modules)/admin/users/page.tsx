@@ -1,16 +1,11 @@
 import { api } from "~/libs/trpc/server";
-import { DataTable } from "~/components/table/data-table";
-// import { columns } from "./_components/columns";
-// import type { GetCategoryResponse } from "~/libs/api/routers/category";
+import { UsersTable } from "./_components/users-table";
 
 export default async function UsersPage() {
-  //   const categories: GetCategoryResponse = await api.category.all();
+  const [data, roleOptions] = await Promise.all([
+    api.user.all(),
+    api.permission.roles(),
+  ]);
 
-  console.debug("TODO: make responsible design on columns widths");
-
-  return (
-    <>
-      <p>UsersPage</p>
-    </>
-  );
+  return <UsersTable data={data} roleOptions={roleOptions ?? []} />;
 }

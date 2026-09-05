@@ -8,7 +8,13 @@
         "loading": "Carregando",
         "chars": "caracteres",
         "noResults": "Nenhum resultado.",
-        "submit": "Enviar"
+        "submit": "Enviar",
+        "invalid": "Inválido",
+        "tables": {
+            "asc": "Asc",
+            "desc": "Desc",
+            "hide": "Esconder"
+        }
     },
     "NavigationMenu": {
         "menus": "Menus",
@@ -20,7 +26,9 @@
             "products": "Produtos",
             "products-description": "Gerenciar todos os produtos",
             "categories": "Categorias",
-            "users": "Usuários"
+            "users": "Usuários",
+            "banners": "Banners",
+            "banners-description": "Edit home page Banners"
         }
     },
     "HomePage": {
@@ -110,6 +118,41 @@
                     }
                 }
             }
+        },
+        "users": {
+            "form": {
+                "title": "Usuário",
+                "description": "Criar um novo usuário",
+                "submit": "Salvar",
+                "fields": {
+                    "name": {
+                        "label": "Nome",
+                        "placeholder": "João da Silva"
+                    },
+                    "bio": {
+                        "label": "Biografia"
+                    },
+                    "role": {
+                        "label": "Função"
+                    }
+                }
+            },
+            "roles": "{opt, select, user {Usuário} admin {Administrador} editor {Editor} other {INVÁLIDO}}",
+            "table": {
+                "columns": {
+                    "name": "Nome",
+                    "bio": "Biografia",
+                    "email": "Email",
+                    "role": "Função"
+                },
+                "actions": {
+                    "delete": "Excluir usuário",
+                    "edit": {
+                        "title": "Editar usuário",
+                        "description": "Editar o usuário atual"
+                    }
+                }
+            }
         }
     },
     "AboutPage": {
@@ -136,7 +179,7 @@
         },
         "error": {
             "title": "Ocorreu um erro.",
-            "options": "{error, select, AccessDenied {Este endereço de email não está autorizado a entrar.} other {Por favor tente novamente.}}",
+            "options": "{error, select, AccessDenied {Este endereço de email não está autorizado a entrar.} Forbidden {Você não possui as permissões para acessar essa página.} other {Por favor tente novamente.}}",
             "back": "Voltar para a página inicial"
         }
     },
@@ -164,7 +207,11 @@
         "title": "Minha Conta",
         "preferences": "Preferências",
         "profile": {
-            "title": "Perfil"
+            "title": "Perfil",
+            "description": "Informações do perfil.",
+            "displayName": "Nome de exibição",
+            "bio": "Biografia",
+            "edit": "Editar"
         },
         "passkeys": "Passkeys"
     }

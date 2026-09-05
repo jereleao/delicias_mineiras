@@ -4,7 +4,6 @@ import { api } from "~/libs/trpc/server";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { UserProfileTab } from "./_components/user-profile-tab";
 import { PasskeyTab } from "./_components/passkey-tab";
-import { PreferencesTab } from "./_components/preferences-tab";
 import { UserProfileEdit } from "./_components/profile/user-profile-edit";
 
 export default async function AccountPage() {

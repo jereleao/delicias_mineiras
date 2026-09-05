@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
 import {
   createTRPCRouter,
-  protectedProcedure,
+  permissionProcedure,
   publicProcedure,
 } from "~/libs/api/trpc";
 import { products, categories } from "~/libs/db/schema";
@@ -63,7 +63,7 @@ export const productRouter = createTRPCRouter({
     return product ?? null;
   }),
 
-  create: protectedProcedure
+  create: permissionProcedure("admin.products:manage")
     .input(createProductSchema)
     .mutation(async ({ ctx, input }) => {
       const newProduct = await ctx.db
@@ -85,7 +85,7 @@ export const productRouter = createTRPCRouter({
       return newProduct;
     }),
 
-  update: protectedProcedure
+  update: permissionProcedure("admin.products:edit")
     .input(updateProductSchema)
     .mutation(async ({ ctx, input: { price: priceAsNumber, ...input } }) => {
       const product = await ctx.db.query.products.findFirst({
@@ -104,7 +104,7 @@ export const productRouter = createTRPCRouter({
         .where(eq(products.id, input.id));
     }),
 
-  delete: protectedProcedure
+  delete: permissionProcedure("admin.products:manage")
     .input(byIdSchema)
     .mutation(async ({ ctx, input }) => {
       const product = await ctx.db.query.products.findFirst({

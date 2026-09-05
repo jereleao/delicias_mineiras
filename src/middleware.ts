@@ -1,6 +1,10 @@
 import { getToken } from "next-auth/jwt";
 import { NextResponse, type NextRequest } from "next/server";
 import { env } from "./env";
+import { getMenuKeyByHref, isAllowed } from "./libs/auth/menus";
+
+// Explicit public routes
+const publicRoutes = ["/"];
 
 export async function middleware(request: NextRequest) {
   const url = request.nextUrl.clone();
@@ -14,15 +18,20 @@ export async function middleware(request: NextRequest) {
       cookieName: `${isProd ? "__Secure-" : ""}authjs.session-token`,
     });
 
-    // Define protected routes
-    const protectedRoutes = ["/admin", "/account"];
-
     // Check if the requested path is protected
-    const isProtectedRoute = protectedRoutes.some((route) =>
-      url.pathname.startsWith(route),
-    );
+    const isPublicRoute = publicRoutes.some((route) => url.pathname == route);
 
-    if (!isProtectedRoute) {
+    if (isPublicRoute) {
+      return NextResponse.next();
+    }
+
+    const menuKey = getMenuKeyByHref(url.pathname);
+
+    if (!menuKey) {
+      console.info(
+        `Menu for ${url.pathname} not found, consider public route.`,
+      );
+
       return NextResponse.next();
     }
 
@@ -30,6 +39,16 @@ export async function middleware(request: NextRequest) {
       console.info("Redirected in the middleware, reason: missing token");
 
       url.pathname = "/login";
+      return NextResponse.redirect(url);
+    }
+
+    const grantedPermission = isAllowed(menuKey, token.permissions);
+
+    if (!grantedPermission) {
+      console.info("User dont have permission for this page");
+
+      url.pathname = "/auth";
+      url.search = "?error=Forbidden";
       return NextResponse.redirect(url);
     }
 
