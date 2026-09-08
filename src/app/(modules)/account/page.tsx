@@ -17,7 +17,7 @@ export default async function AccountPage() {
     <Tabs defaultValue="profile">
       <TabsList variant="line">
         <TabsTrigger value="profile">{t("profile.title")}</TabsTrigger>
-        <TabsTrigger value="passkey">{t("passkeys")}</TabsTrigger>
+        <TabsTrigger value="passkey">{t("passkeys.title")}</TabsTrigger>
       </TabsList>
       <TabsContent value="profile">
         <UserProfileTab {...userData}>

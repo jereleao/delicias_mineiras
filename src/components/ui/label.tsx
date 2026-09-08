@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-no-literals */
 "use client";
 
 import * as React from "react";
@@ -25,7 +26,7 @@ function Label({
       {...props}
     >
       {children}
-      {required && <span className="text-destructive ml-1">{"*"}</span>}
+      {required && <span className="text-destructive ml-1">&ast;</span>}
     </LabelPrimitive.Root>
   );
 }

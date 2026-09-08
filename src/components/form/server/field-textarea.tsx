@@ -15,7 +15,6 @@ import {
 } from "~/components/ui/input-group";
 import { cn } from "~/utils";
 import { useState } from "react";
-import ConditionGuard from "../../condition-guard";
 import { useTranslations } from "next-intl";
 
 type FieldInputProps<TValue> = {
@@ -41,7 +40,7 @@ export function FieldTextarea<TValue>({
 
   const [value, setValue] = useState<string>(defaultValue);
 
-  const t = useTranslations("Common");
+  const t = useTranslations("Common.components.textare");
 
   const { pending } = useFormStatus();
 
@@ -62,13 +61,16 @@ export function FieldTextarea<TValue>({
           aria-invalid={isInvalid}
           {...p}
         />
-        <ConditionGuard condition={!!lengthCounter}>
+        {lengthCounter && (
           <InputGroupAddon align="block-end">
             <InputGroupText className="tabular-nums">
-              {`${value?.length ?? 0}/${lengthCounter} ${t("chars")}`}
+              {t("counter", {
+                current: value?.length ?? 0,
+                lengthCounter,
+              })}
             </InputGroupText>
           </InputGroupAddon>
-        </ConditionGuard>
+        )}
       </InputGroup>
       {formState.errors?.[name] && (
         <FieldError>{formState.errors[name][0]}</FieldError>

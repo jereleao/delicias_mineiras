@@ -5,9 +5,8 @@ import Link from "next/link";
 import { useTranslations } from "next-intl";
 
 export function SignIn({
-  provider,
   ...props
-}: { provider?: string } & React.ComponentPropsWithRef<typeof Button>) {
+}: React.ComponentPropsWithRef<typeof Button>) {
   const t = useTranslations("UserMenu");
   return (
     <Button {...props}>

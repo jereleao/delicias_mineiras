@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Controller, type UseFormReturn } from "react-hook-form";
 import { api } from "~/libs/trpc/react";
@@ -56,7 +56,7 @@ export default function FieldCategorySelect({
 
     const newIdStr = id.toString();
 
-    // This is not synclonous, so I need to add this thing with useEffert to delay the set
+    // This is not syncronous, so I need to add this thing with useEffert to delay the set
     utils.category.all.setData(undefined, (old = []) => [...old, { id, name }]);
 
     setNewCategoryName("");

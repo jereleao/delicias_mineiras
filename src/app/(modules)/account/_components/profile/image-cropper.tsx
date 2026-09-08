@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useState, useTransition } from "react";
 import Cropper, { type Area, type Point } from "react-easy-crop";
 import { toast } from "sonner";
@@ -41,6 +42,8 @@ export function ImageCropper({
     });
   };
 
+  const t = useTranslations("Common.components.imageCropper");
+
   return (
     <div className="flex flex-col gap-4">
       <div className="relative h-[calc(100dvh-290px)]">
@@ -62,10 +65,10 @@ export function ImageCropper({
       </div>
       <div className="flex justify-end gap-2">
         <Button onClick={handleCancel} variant="secondary">
-          Cancel
+          {t("cancel")}
         </Button>
         <Button onClick={handleSaveClick} disabled={isPendingSave}>
-          Save selection
+          {t("save")}
         </Button>
       </div>
     </div>

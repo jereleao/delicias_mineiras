@@ -3,6 +3,7 @@
 import { Suspense, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { createPortal } from "react-dom";
+import DefaultLoading from "../(modules)/loading";
 
 export function Modal({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -25,7 +26,7 @@ export function Modal({ children }: { children: React.ReactNode }) {
       onClose={onDismiss}
       onClick={(e) => e.target === dialogRef.current && onDismiss()}
     >
-      <Suspense fallback={<p className="bg-foreground">Loading...</p>}>
+      <Suspense fallback={<DefaultLoading className="bg-foreground" />}>
         {children}
       </Suspense>
     </dialog>,

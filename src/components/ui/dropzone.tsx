@@ -1,3 +1,5 @@
+"use client";
+
 import { cn } from "~/utils/index";
 import {
   createContext,
@@ -15,6 +17,7 @@ import {
   useDropzone as rootUseDropzone,
 } from "react-dropzone";
 import { Button } from "~/components/ui/button";
+import { useTranslations } from "next-intl";
 
 type DropzoneResult<TUploadRes, TUploadError> =
   | {
@@ -323,6 +326,7 @@ const useDropzone = <TUploadRes, TUploadError = string>(
     accept: validation?.accept,
     minSize: validation?.minSize,
     maxSize: validation?.maxSize,
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     onDropAccepted: async (newFiles) => {
       setRootError(undefined);
 
@@ -385,7 +389,6 @@ const useDropzone = <TUploadRes, TUploadError = string>(
   };
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const DropZoneContext = createContext<UseDropzoneReturn<any, any>>({
   getRootProps: () => ({}) as never,
   getInputProps: () => ({}) as never,
@@ -439,7 +442,6 @@ const DropZoneArea = forwardRef<HTMLDivElement, DropZoneAreaProps>(
 
     return (
       // A11y behavior is handled through Trigger. All of these are only relevant to drag and drop which means this should be fine?
-      // eslint-disable-next-line jsx-a11y/no-static-element-interactions
       <div
         ref={(instance) => {
           // TODO: test if this actually works?
@@ -668,6 +670,9 @@ const DropzoneRemoveFile = forwardRef<
       "DropzoneRemoveFile must be used within a DropzoneFileListItem",
     );
   }
+
+  const t = useTranslations("Common.components.dropzone");
+
   return (
     <Button
       ref={ref}
@@ -681,7 +686,7 @@ const DropzoneRemoveFile = forwardRef<
       )}
     >
       {props.children}
-      <span className="sr-only">Remove file</span>
+      <span className="sr-only">{t("remove")}</span>
     </Button>
   );
 });
@@ -701,6 +706,8 @@ const DropzoneRetryFile = forwardRef<HTMLButtonElement, DropzoneRetryFileProps>(
 
     const canRetry = context.canRetry;
 
+    const t = useTranslations("Common.components.dropzone");
+
     return (
       <Button
         ref={ref}
@@ -716,7 +723,7 @@ const DropzoneRetryFile = forwardRef<HTMLButtonElement, DropzoneRetryFileProps>(
         )}
       >
         {props.children}
-        <span className="sr-only">Retry</span>
+        <span className="sr-only">{t("retry")}</span>
       </Button>
     );
   },

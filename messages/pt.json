@@ -13,7 +13,36 @@
         "tables": {
             "asc": "Asc",
             "desc": "Desc",
-            "hide": "Esconder"
+            "hide": "Esconder",
+            "pagination": {
+                "goToFirst": "Ir para a primeira página",
+                "goToPrevious": "Ir para a página anterior",
+                "goToNext": "Ir para a próxima página",
+                "goToLast": "Ir para a última página",
+                "currentPage": "Página {current} de {pageCount}",
+                "rowsPerPage": "Linhas por página",
+                "selected": "{selectedCount} de {totalRows} linha(s) selecionada(s)."
+            }
+        },
+        "components": {
+            "dropzone": {
+                "retry": "Tentar novamente",
+                "remove": "Remover arquivo"
+            },
+            "dialog": {
+                "close": "Fechar"
+            },
+            "caroucel": {
+                "previousSlide": "Slide anterior",
+                "nextSlide": "Próximo slide"
+            },
+            "imageCropper": {
+                "cancel": "Cancelar",
+                "save": "Salvar seleção"
+            },
+            "textare": {
+                "counter": "{current}/{max} caracteres"
+            }
         }
     },
     "NavigationMenu": {
@@ -119,6 +148,15 @@
                 }
             }
         },
+        "banners": {
+            "table": {
+                "columns": {
+                    "title": "Título",
+                    "description": "Descrição",
+                    "imageUrl": "Imagem"
+                }
+            }
+        },
         "users": {
             "form": {
                 "title": "Usuário",
@@ -211,8 +249,32 @@
             "description": "Informações do perfil.",
             "displayName": "Nome de exibição",
             "bio": "Biografia",
-            "edit": "Editar"
+            "edit": "Editar",
+            "editForm": {
+                "title": "Edite as informações do seu perfil.",
+                "save": "Salvar"
+            }
         },
-        "passkeys": "Passkeys"
+        "passkeys": {
+            "title": "Passkeys",
+            "description": "Os dispositivos configurados estão listados abaixo.",
+            "register": "Registrar passkey neste dispositivo",
+            "details": {
+                "authenticatorType": "Tipo de autenticador",
+                "credentialType": "Tipo de credencial",
+                "transports": "Transportes",
+                "createdAt": "Criado em",
+                "lastUsed": "Último uso"
+            },
+            "authenticatorTypeOptions": "{type, select, platform {Autenticador da plataforma} cross-platform {Autenticador cruzado da plataforma} other {}}",
+            "credentialTypeOptions": "{type, select, singleDevice {Dispositivo único} multiDevice {Múltiplos dispositivos} other {}}",
+            "transportOptions": {
+                "internal": "Interno",
+                "hybrid": "Híbrido",
+                "usb": "USB",
+                "nfc": "NFC",
+                "ble": "Bluetooth"
+            }
+        }
     }
 }

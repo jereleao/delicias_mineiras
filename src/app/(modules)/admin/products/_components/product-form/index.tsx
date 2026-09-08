@@ -32,7 +32,7 @@ export function ProductForm({ setOpen, product }: ProductFormProps) {
       categoryId: product?.categoryId,
       price: product?.price,
       imageUrl: product?.imageUrl,
-      keywords: product?.keywords ?? [{ word: "" }],
+      keywords: product?.keywords ?? [],
     },
   });
 

@@ -1,3 +1,5 @@
+"use client";
+
 import { isoBase64URL } from "@simplewebauthn/server/helpers";
 import {
   MonitorSmartphoneIcon,
@@ -10,7 +12,7 @@ import {
   LaptopMinimalIcon,
   LoaderCircleIcon,
 } from "lucide-react";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useMemo } from "react";
 import { AppleIcon, Windows10Icon } from "~/components/icons";
 import { Button } from "~/components/ui/button";
@@ -32,35 +34,21 @@ type CredentialCardProps = {
 };
 
 type Transport = "internal" | "hybrid" | "usb" | "nfc" | "ble";
-type AuthenticatorAttachment = "platform" | "cross-platform";
-type CredentialDeviceType = "singleDevice" | "multiDevice";
+// type AuthenticatorAttachment = "platform" | "cross-platform";
+// type CredentialDeviceType = "singleDevice" | "multiDevice";
 
 const ALL_TRANSPORTS: Array<{
   key: Transport;
-  label: string;
   icon: typeof MonitorSmartphoneIcon;
 }> = [
-  { key: "internal", label: "Internal", icon: MonitorSmartphoneIcon },
-  { key: "hybrid", label: "Hybrid", icon: WaypointsIcon },
-  { key: "usb", label: "USB", icon: UsbIcon },
-  { key: "nfc", label: "NFC", icon: NfcIcon },
-  { key: "ble", label: "Bluetooth", icon: BluetoothIcon },
-];
-
-const ALL_AUTH_ATTACHMENTS: Array<{
-  key: AuthenticatorAttachment;
-  label: string;
-}> = [
-  { key: "platform", label: "Plataform Authenticator" },
-  { key: "cross-platform", label: "Cross Plataform Authenticator" },
-];
-
-const ALL_DEVICE_TYPES: Array<{
-  key: CredentialDeviceType;
-  label: string;
-}> = [
-  { key: "singleDevice", label: "Single Device" },
-  { key: "multiDevice", label: "Multi Device" },
+  {
+    key: "internal",
+    icon: MonitorSmartphoneIcon,
+  },
+  { key: "hybrid", icon: WaypointsIcon },
+  { key: "usb", icon: UsbIcon },
+  { key: "nfc", icon: NfcIcon },
+  { key: "ble", icon: BluetoothIcon },
 ];
 
 const appleOSRegex = /\b(?:iOS|iPadOS|macOS|tvOS|watchOS|visionOS)\b/;
@@ -104,6 +92,8 @@ export function CredentialCard({ credential }: CredentialCardProps) {
     });
   };
 
+  const t = useTranslations("AccountPage.passkeys");
+
   return (
     <Card className="max-w-1/2 min-w-[32%]">
       <CardHeader>
@@ -138,46 +128,46 @@ export function CredentialCard({ credential }: CredentialCardProps) {
       </CardHeader>
       <CardContent className="flex flex-col gap-2">
         <DetailRow
-          label="Authenticator Type"
-          value={
-            ALL_AUTH_ATTACHMENTS.find(
-              (d) => d.key == credential.authenticatorAttachment,
-            )?.label ?? ""
-          }
+          label={t("details.authenticatorType")}
+          value={t("authenticatorTypeOptions", {
+            type: credential.authenticatorAttachment,
+          })}
         />
         <DetailRow
-          label="Credential Type"
-          value={
-            ALL_DEVICE_TYPES.find(
-              (d) => d.key == credential.credentialDeviceType,
-            )?.label ?? ""
-          }
+          label={t("details.credentialType")}
+          value={t("credentialTypeOptions", {
+            type: credential.credentialDeviceType,
+          })}
         />
         <div>
-          <dt className="text-foreground h-5 text-[15px]">Transports</dt>
+          <dt className="text-foreground h-5 text-[15px]">
+            {t("details.transports")}
+          </dt>
           <dd className="flex flex-wrap gap-3">
             {ALL_TRANSPORTS.filter((t) =>
               credential.transports?.split(",").includes(t.key),
-            ).map((t) => {
-              const Icon = t.icon;
+            ).map((transport) => {
+              const Icon = transport.icon;
               return (
                 <div
-                  key={t.key}
+                  key={transport.key}
                   className="flex items-center gap-1.5"
-                  title={t.label}
+                  title={t(`transportOptions.${transport.key}`)}
                 >
                   <Icon
                     className="text-muted-foreground h-5 w-5"
                     aria-hidden="true"
                   />
-                  <span className="sr-only">{t.label} suportado</span>
+                  <span className="sr-only">
+                    {t(`transportOptions.${transport.key}`)}
+                  </span>
                 </div>
               );
             })}
           </dd>
         </div>
-        <DetailRow label="Created At" value={createdAt} />
-        <DetailRow label="Last Used" value={lastUsed} />
+        <DetailRow label={t("details.createdAt")} value={createdAt} />
+        <DetailRow label={t("details.lastUsed")} value={lastUsed} />
       </CardContent>
     </Card>
   );

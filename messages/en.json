@@ -6,14 +6,42 @@
     },
     "Common": {
         "loading": "Loading",
-        "chars": "characters",
         "noResults": "No results.",
         "submit": "Submit",
         "invalid": "Invalid",
         "tables": {
             "asc": "Asc",
             "desc": "Desc",
-            "hide": "Hide"
+            "hide": "Hide",
+            "pagination": {
+                "goToFirst": "Go to first page",
+                "goToPrevious": "Go to previous page",
+                "goToNext": "Go to next page",
+                "goToLast": "Go to last page",
+                "currentPage": "Page {current} of {pageCount}",
+                "rowsPerPage": "Rows per page",
+                "selected": "{selectedCount} of {totalRows} row(s) selected."
+            }
+        },
+        "components": {
+            "dropzone": {
+                "retry": "Retry",
+                "remove": "Remove file"
+            },
+            "dialog": {
+                "close": "Close"
+            },
+            "caroucel": {
+                "previousSlide": "Previous slide",
+                "nextSlide": "Next slide"
+            },
+            "imageCropper": {
+                "cancel": "Cancel",
+                "save": "Save selection"
+            },
+            "textare": {
+                "counter": "{current}/{max} characters"
+            }
         }
     },
     "NavigationMenu": {
@@ -119,6 +147,15 @@
                 }
             }
         },
+        "banners": {
+            "table": {
+                "columns": {
+                    "title": "Title",
+                    "description": "Description",
+                    "imageUrl": "Image"
+                }
+            }
+        },
         "users": {
             "form": {
                 "title": "User",
@@ -211,8 +248,32 @@
             "description": "Profile information.",
             "displayName": "Display Name",
             "bio": "Bio",
-            "edit": "Edit"
+            "edit": "Edit",
+            "editForm": {
+                "title": "Edit your profile information.",
+                "save": "Save"
+            }
         },
-        "passkeys": "Passkeys"
+        "passkeys": {
+            "title": "Passkeys",
+            "description": "The configured devices are listed below.",
+            "register": "Register passkey on this device",
+            "details": {
+                "authenticatorType": "Authenticator Type",
+                "credentialType": "Credential Type",
+                "transports": "Transports",
+                "createdAt": "Created At",
+                "lastUsed": "Last Used"
+            },
+            "authenticatorTypeOptions": "{type, select, platform {Platform Authenticator} cross-platform {Cross-Platform Authenticator} other {}}",
+            "credentialTypeOptions": "{type, select, singleDevice {Single Device} multiDevice {Multi Device} other {}}",
+            "transportOptions": {
+                "internal": "Internal",
+                "hybrid": "Hybrid",
+                "usb": "USB",
+                "nfc": "NFC",
+                "ble": "Bluetooth"
+            }
+        }
     }
 }

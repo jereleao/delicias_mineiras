@@ -5,7 +5,6 @@ import {
   FieldError,
   FieldLabel,
 } from "~/components/ui/field";
-import { Textarea } from "~/components/ui/textarea";
 import type { FormControlFunc } from "~/components/form/client/types";
 import { FormBase } from "~/components/form/client/form-base";
 import {
@@ -14,7 +13,6 @@ import {
   InputGroupText,
   InputGroupTextarea,
 } from "~/components/ui/input-group";
-import ConditionGuard from "~/components/condition-guard";
 import { useTranslations } from "next-intl";
 
 type TextareaProps = React.ComponentProps<"textarea">;
@@ -28,7 +26,7 @@ export const FormTextarea: FormControlFunc<
 > = ({ control, label, name, description, lengthCounter, ...inputProps }) => {
   const controllerProps = { control, label, name, description };
 
-  const t = useTranslations("Common");
+  const t = useTranslations("Common.components.textare");
 
   return (
     <FormBase
@@ -49,13 +47,16 @@ export const FormTextarea: FormControlFunc<
                 {...field}
                 {...inputProps}
               />
-              <ConditionGuard condition={!!lengthCounter}>
+              {lengthCounter && (
                 <InputGroupAddon align="block-end">
                   <InputGroupText className="tabular-nums">
-                    {`${field.value?.length ?? 0}/${lengthCounter} ${t("chars")}`}
+                    {t("counter", {
+                      current: field.value?.length ?? 0,
+                      lengthCounter,
+                    })}
                   </InputGroupText>
                 </InputGroupAddon>
-              </ConditionGuard>
+              )}
             </InputGroup>
             {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
           </Field>

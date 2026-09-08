@@ -1,8 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { PlusIcon, CheckIcon } from "lucide-react";
-import { useState } from "react";
+// import { PlusIcon, CheckIcon } from "lucide-react";
+// import { useState } from "react";
 import { formatPrice } from "./products";
 import type { Product } from "~/libs/api/routers/product";
 
@@ -13,13 +13,13 @@ export function ProductCard({
   product: Product;
   // onAdd: (product: Product) => void;
 }) {
-  const [added, setAdded] = useState(false);
+  // const [added, setAdded] = useState(false);
 
-  function handleAdd() {
-    // onAdd(product);
-    setAdded(true);
-    window.setTimeout(() => setAdded(false), 1000);
-  }
+  // function handleAdd() {
+  //   // onAdd(product);
+  //   setAdded(true);
+  //   window.setTimeout(() => setAdded(false), 1000);
+  // }
 
   return (
     <article className="group border-border bg-card flex gap-4 rounded-2xl border p-4 shadow-sm transition-shadow hover:shadow-md">

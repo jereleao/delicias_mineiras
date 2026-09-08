@@ -6,12 +6,14 @@ import ConditionGuard from "~/components/condition-guard";
 import { usePasskeyAvailable } from "~/hooks/use-passkey-available";
 import { useWebauthnRegister } from "~/hooks/use-webauthn-register";
 import { FingerprintPatternIcon, LoaderCircleIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { api } from "~/libs/trpc/react";
 import { CredentialCard } from "./passkeys/credential-card";
 import { CredentialArraySkeleton } from "./passkeys/credential-card-skeleton";
 
 export function PasskeyTab() {
   const passkeyAvailable = usePasskeyAvailable();
+  const t = useTranslations("AccountPage.passkeys");
 
   const [isRegistering, handleRegisterPasskey] = useWebauthnRegister();
 
@@ -20,9 +22,7 @@ export function PasskeyTab() {
   return (
     <FieldSet className="pt-2 pl-1">
       <div className="flex justify-between">
-        <FieldDescription>
-          The configured devices are listed below.
-        </FieldDescription>
+        <FieldDescription>{t("description")}</FieldDescription>
         <ConditionGuard condition={passkeyAvailable}>
           <div className="flex justify-end">
             <Button
@@ -37,7 +37,7 @@ export function PasskeyTab() {
               >
                 <FingerprintPatternIcon className="mr-2" />
               </ConditionGuard>
-              <span>Register passkey on this devide</span>
+              <span>{t("register")}</span>
             </Button>
           </div>
         </ConditionGuard>

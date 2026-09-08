@@ -1,12 +1,19 @@
 import { LoaderCircleIcon } from "lucide-react";
 import { getTranslations } from "next-intl/server";
+import { cn } from "~/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 
-export default async function DefaultLoading() {
+type DefaultLoadingProps = {
+  className?: string;
+};
+
+export default async function DefaultLoading({
+  className,
+}: DefaultLoadingProps) {
   const t = await getTranslations("Common");
 
   return (
-    <div className="flex h-full items-center justify-center">
+    <div className={cn("flex h-full items-center justify-center", className)}>
       <Card className="min-w-35">
         <CardHeader>
           <CardTitle className="flex justify-center">{t("loading")}</CardTitle>

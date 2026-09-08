@@ -6,7 +6,13 @@ import tseslint from "typescript-eslint";
 import drizzle from "eslint-plugin-drizzle";
 
 export default defineConfig([
-  globalIgnores([".next/**", "out/**", "build/**", "next-env.d.ts"]),
+  globalIgnores([
+    ".next/**",
+    "out/**",
+    "build/**",
+    "next-env.d.ts",
+    "drizzle/schema.ts",
+  ]),
   {
     files: ["**/*.{js,jsx,ts,tsx}"],
     plugins: {

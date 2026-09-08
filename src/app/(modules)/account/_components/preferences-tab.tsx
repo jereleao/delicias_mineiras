@@ -1,23 +1,11 @@
-import Link from "next/link";
-import { Form } from "~/components/form";
 import LocaleDropdown from "~/components/locale-dropdown";
-import { Button, LoadingButton } from "~/components/ui/button";
-import {
-  Field,
-  FieldContent,
-  FieldDescription,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-  FieldSet,
-} from "~/components/ui/field";
-import { Input } from "~/components/ui/input";
+import { FieldSet } from "~/components/ui/field";
 import UserAvatar from "~/components/user-avatar";
-import type { UserData } from "~/libs/api/routers/user";
+import type { User } from "~/libs/api/routers/user";
 
-type PreferencesTabProps = Pick<UserData, "id" | "name" | "bio" | "image">;
+type PreferencesTabProps = Pick<User, "id" | "name" | "bio" | "image">;
 
-export function PreferencesTab({ id, name, bio, image }: PreferencesTabProps) {
+export function PreferencesTab({ name, image }: PreferencesTabProps) {
   return (
     <div className="flex w-full flex-col-reverse md:flex-row">
       <FieldSet className="w-full max-w-lg pt-2 pl-1">
