@@ -44,6 +44,7 @@ export default function RootLayout({
     <html
       lang="en"
       className={cn(geist.variable, "font-sans", roboto.variable)}
+      suppressHydrationWarning // supress error caused by 'color-scheme'
     >
       <body>
         <TRPCReactProvider>
