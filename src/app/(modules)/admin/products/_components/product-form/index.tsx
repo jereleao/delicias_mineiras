@@ -1,30 +1,32 @@
 "use client";
 
-import {
-  newProductSchema,
-  type NewProductFormType,
-  type NewProductType,
-} from "../../_actions/new-product-schema";
 import { useForm } from "react-hook-form";
+import { useState, useTransition, type Dispatch } from "react";
+import { del } from "@vercel/blob";
+import * as Sentry from "@sentry/nextjs";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { api } from "~/libs/trpc/react";
-import { useState, useTransition, type Dispatch } from "react";
-import ProductFormFields from "./product-form-fields";
-import { ProductImageField } from "./product-image-field";
-import { ImageCropper } from "./image-cropper";
 import type { CreateProductType } from "~/libs/db/schemas/products";
 import { urlToFile } from "~/utils";
 import { uploadFile } from "~/libs/storage/action/upload-file";
 import type { Product } from "~/libs/api/routers/product";
+import {
+  productSchema,
+  type ProductType,
+  type ProductFormType,
+} from "../../_actions/schema";
+import { ProductImageField } from "./product-image-field";
+import ProductFormFields from "./product-form-fields";
+import { ImageCropper } from "./image-cropper";
 
 type ProductFormProps = {
   setOpen: Dispatch<boolean>;
-  product?: NewProductFormType;
+  product?: ProductFormType;
 };
 
 export function ProductForm({ setOpen, product }: ProductFormProps) {
   const form = useForm({
-    resolver: zodResolver(newProductSchema),
+    resolver: zodResolver(productSchema),
     defaultValues: {
       id: product?.id ?? 0,
       name: product?.name,
@@ -49,7 +51,7 @@ export function ProductForm({ setOpen, product }: ProductFormProps) {
 
   const utils = api.useUtils();
 
-  function onSubmit(data: NewProductType) {
+  function onSubmit(data: ProductType) {
     const changedImage = data.imageUrl != product?.imageUrl;
 
     startSaveTransition(async () => {
@@ -62,8 +64,6 @@ export function ProductForm({ setOpen, product }: ProductFormProps) {
       };
 
       if (changedImage) {
-        console.debug("TODO: Delete previous asset from this user");
-
         const sanitizedName = data.name.replace(/[#-.]|[[-^]|[?|{}]| /g, "");
 
         const file = await urlToFile(
@@ -72,6 +72,14 @@ export function ProductForm({ setOpen, product }: ProductFormProps) {
         );
 
         const uploadedFile = await uploadFile(file);
+
+        if (product?.imageUrl) {
+          try {
+            await del(product.imageUrl);
+          } catch (error) {
+            Sentry.captureException(error);
+          }
+        }
 
         productData.imageUrl = uploadedFile.url;
       }

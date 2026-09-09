@@ -8,7 +8,7 @@ import { useTransition, type Dispatch } from "react";
 import {
   categoryFormSchema,
   type CategoryFormType,
-} from "../../_actions/category-schema";
+} from "../../_actions/schema";
 import { updateCategoryAction } from "../../_actions/update-category-action";
 import { addNewCategory } from "../../_actions/add-new-category-action";
 import { LoadingButton } from "~/components/ui/button";

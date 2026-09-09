@@ -3,11 +3,12 @@
 import { DataTableColumnHeader } from "~/components/table/data-table-column-header";
 import { createColumnHelper } from "~/components/table/data-table-features";
 import { Checkbox } from "~/components/ui/checkbox";
-import { NewCategoryButton } from "./new-category-button";
-import type { Category } from "~/libs/api/routers/category";
-import { EditCategoryButton } from "./buttons/edit-button";
-import { DeleteCategoryButton } from "./buttons/delete-button";
 import PermissionGuard from "~/components/permission-guard";
+import type { Category } from "~/libs/api/routers/category";
+
+import { NewButton } from "./new-button";
+import { EditButton } from "./buttons/edit-button";
+import { DeleteButton } from "./buttons/delete-button";
 
 const columnHelper = createColumnHelper<Category>();
 
@@ -66,7 +67,7 @@ export const columns = columnHelper.columns([
         className="flex justify-center"
         title={
           <PermissionGuard permission="admin.categories:manage">
-            <NewCategoryButton />
+            <NewButton />
           </PermissionGuard>
         }
       />
@@ -77,10 +78,10 @@ export const columns = columnHelper.columns([
       return (
         <div className="flex gap-1">
           <PermissionGuard permission="admin.categories:edit">
-            <EditCategoryButton {...category} />
+            <EditButton {...category} />
           </PermissionGuard>
           <PermissionGuard permission="admin.categories:manage">
-            <DeleteCategoryButton categoryId={category.id} />
+            <DeleteButton categoryId={category.id} />
           </PermissionGuard>
         </div>
       );

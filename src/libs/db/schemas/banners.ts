@@ -5,12 +5,24 @@ import { byIdSchema, createTable } from "~/libs/db/schemas/common";
 export const createBannerSchema = z.object({
   title: z.string().min(1),
   description: z.string().min(1),
-  imageUrl: z.string().url(),
-  actionLabel: z.string().min(1),
-  actionUrl: z.string().url(),
+  imageUrl: z.url(),
+  actionLabel: z.string().optional(),
+  actionUrl: z.url().optional(),
 });
 
-export const updateBannerSchema = byIdSchema.merge(createBannerSchema);
+export type CreateBannerType = z.infer<typeof createBannerSchema>;
+
+const updatePropertiesSchema = createBannerSchema
+  .merge(
+    z.object({
+      active: z.boolean(),
+    }),
+  )
+  .partial();
+
+export const updateBannerSchema = byIdSchema.merge(updatePropertiesSchema);
+
+export type UpdateBannerType = z.infer<typeof updateBannerSchema>;
 
 export const banners = createTable(
   "banner",
@@ -21,6 +33,7 @@ export const banners = createTable(
     imageUrl: d.varchar({ length: 256 }),
     actionLabel: d.varchar({ length: 256 }),
     actionUrl: d.varchar({ length: 256 }),
+    active: d.boolean().default(true),
     createdAt: d
       .timestamp({ withTimezone: true })
       .$defaultFn(() => /* @__PURE__ */ new Date())

@@ -1,23 +1,24 @@
 import { useTranslations } from "next-intl";
 import { useTransition } from "react";
+import { deleteAction } from "../../_actions/delete-action";
 import { Tooltip } from "~/components/ui/tooltip";
 import { LoadingButton } from "~/components/ui/button";
-import { BanIcon } from "lucide-react";
-import { inactivateAction } from "../../_actions/inactivate-action";
+import { Trash2Icon } from "lucide-react";
 
-type InactivateButtonProps = {
-  productId: number | string;
+type DeleteButtonProps = {
+  bannerId: number | string;
 };
 
-export function InactivateButton({ productId }: InactivateButtonProps) {
-  const t = useTranslations("AdminPage.products.table");
+export function DeleteButton({ bannerId }: DeleteButtonProps) {
+  const t = useTranslations("AdminPage.banners.table");
+
   const [isPending, startTransition] = useTransition();
 
   const handleClick = () =>
-    startTransition(async () => await inactivateAction(productId));
+    startTransition(async () => await deleteAction(bannerId));
 
   return (
-    <Tooltip content={t("actions.inactivate")}>
+    <Tooltip content={t("actions.delete")}>
       <LoadingButton
         variant="ghost"
         size="icon-sm"
@@ -26,8 +27,8 @@ export function InactivateButton({ productId }: InactivateButtonProps) {
         replace
         onClick={handleClick}
       >
-        <BanIcon className="size-4" />
-        <span className="sr-only">{t("actions.inactivate")}</span>
+        <Trash2Icon className="stroke-destructive size-4" />
+        <span className="sr-only">{t("actions.delete")}</span>
       </LoadingButton>
     </Tooltip>
   );

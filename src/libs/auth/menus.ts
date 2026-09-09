@@ -1,5 +1,14 @@
 export const MENUS = [
   {
+    menuGroup: "navbar.home",
+    menus: [
+      {
+        menuKey: "admin.banners",
+        href: "/admin/banners",
+      },
+    ],
+  },
+  {
     menuGroup: "navbar.products",
     menus: [
       {
@@ -9,10 +18,6 @@ export const MENUS = [
       {
         menuKey: "admin.categories",
         href: "/admin/categories",
-      },
-      {
-        menuKey: "admin.banners",
-        href: "/admin/banners",
       },
     ],
   },

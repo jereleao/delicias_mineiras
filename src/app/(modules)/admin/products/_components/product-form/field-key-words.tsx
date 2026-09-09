@@ -20,13 +20,13 @@ import {
 } from "~/components/ui/input-group";
 import {
   MAX_KEYWORD_COUNT,
-  type NewProductFormType,
-  type NewProductType,
-} from "../../_actions/new-product-schema";
+  type ProductType,
+  type ProductFormType,
+} from "../../_actions/schema";
 import { Button } from "~/components/ui/button";
 
 type FieldKeyWordsProps = {
-  form: UseFormReturn<NewProductFormType, unknown, NewProductType>;
+  form: UseFormReturn<ProductFormType, unknown, ProductType>;
 };
 
 export function FieldKeyWords({ form }: FieldKeyWordsProps) {

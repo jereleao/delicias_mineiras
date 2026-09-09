@@ -14,14 +14,14 @@ import { ScrollArea } from "~/components/ui/scroll-area";
 
 interface IDialogButtonProps<T = { setOpen: Dispatch<SetStateAction<boolean>> }>
   extends React.PropsWithChildren {
-  ContentComponent: React.FC<T>;
+  content: React.FC<T> | React.ReactNode;
   title: string;
   description?: string;
   className?: string;
 }
 
 export function DialogButton<T>({
-  ContentComponent,
+  content: ContentComponent,
   title,
   description,
   children,
@@ -48,7 +48,11 @@ export function DialogButton<T>({
           )}
         </DialogHeader>
         <ScrollArea className="max-h-[80vh] px-3">
-          <ContentComponent setOpen={setOpen} {...(props as T)} />
+          {typeof ContentComponent == "function" ? (
+            <ContentComponent setOpen={setOpen} {...(props as T)} />
+          ) : (
+            ContentComponent
+          )}
         </ScrollArea>
       </DialogContent>
     </Dialog>

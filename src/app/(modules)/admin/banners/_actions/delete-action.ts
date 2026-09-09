@@ -5,8 +5,8 @@ import * as Sentry from "@sentry/nextjs";
 import { revalidatePath } from "next/cache";
 import { api } from "~/libs/trpc/server";
 
-export async function deleteAction(productId: number | string) {
-  const { imageUrl } = await api.product.delete({ id: Number(productId) });
+export async function deleteAction(bannerId: number | string) {
+  const { imageUrl } = await api.banner.delete({ id: Number(bannerId) });
 
   if (imageUrl) {
     try {
@@ -16,5 +16,5 @@ export async function deleteAction(productId: number | string) {
     }
   }
 
-  revalidatePath("/admin/products");
+  revalidatePath("/admin/banners");
 }

@@ -52,7 +52,7 @@ export const FormTextarea: FormControlFunc<
                   <InputGroupText className="tabular-nums">
                     {t("counter", {
                       current: field.value?.length ?? 0,
-                      lengthCounter,
+                      max: lengthCounter,
                     })}
                   </InputGroupText>
                 </InputGroupAddon>

@@ -1,5 +1,10 @@
+import type { inferRouterOutputs } from "@trpc/server";
 import { eq } from "drizzle-orm";
-import { createTRPCRouter, permissionProcedure } from "~/libs/api/trpc";
+import {
+  createTRPCRouter,
+  permissionProcedure,
+  publicProcedure,
+} from "~/libs/api/trpc";
 import { banners } from "~/libs/db/schema";
 import {
   createBannerSchema,
@@ -7,8 +12,14 @@ import {
 } from "~/libs/db/schemas/banners";
 import { byIdSchema } from "~/libs/db/schemas/common";
 
+type BannerOutputs = inferRouterOutputs<typeof bannerRouter>;
+
+export type Banner = BannerOutputs["all"][number];
+
+export type GetBannerResponse = Array<Banner>;
+
 export const bannerRouter = createTRPCRouter({
-  all: permissionProcedure("admin.banners").query(async ({ ctx }) => {
+  all: publicProcedure.query(async ({ ctx }) => {
     const banners = await ctx.db.query.banners.findMany({
       columns: {
         id: true,
@@ -17,8 +28,28 @@ export const bannerRouter = createTRPCRouter({
         imageUrl: true,
         actionLabel: true,
         actionUrl: true,
+        active: true,
       },
       where: (banner, { isNotNull }) => isNotNull(banner.imageUrl),
+      orderBy: (banner, { desc }) => [desc(banner.createdAt)],
+    });
+
+    return banners ?? null;
+  }),
+
+  active: publicProcedure.query(async ({ ctx }) => {
+    const banners = await ctx.db.query.banners.findMany({
+      columns: {
+        id: true,
+        title: true,
+        description: true,
+        imageUrl: true,
+        actionLabel: true,
+        actionUrl: true,
+        active: true,
+      },
+      where: (banner, { isNotNull, and }) =>
+        and(isNotNull(banner.imageUrl), banner.active),
       orderBy: (banner, { desc }) => [desc(banner.createdAt)],
     });
 
@@ -40,7 +71,7 @@ export const bannerRouter = createTRPCRouter({
   create: permissionProcedure("admin.banners:manage")
     .input(createBannerSchema)
     .mutation(async ({ ctx, input }) => {
-      const newBanner = {
+      const bannerData = {
         title: input.title,
         description: input.description,
         imageUrl: input.imageUrl,
@@ -49,7 +80,20 @@ export const bannerRouter = createTRPCRouter({
         createdById: ctx.session.user.id,
       };
 
-      await ctx.db.insert(banners).values(newBanner);
+      const newBanner = await ctx.db
+        .insert(banners)
+        .values(bannerData)
+        .returning({
+          id: banners.id,
+          title: banners.title,
+          description: banners.description,
+          imageUrl: banners.imageUrl,
+          actionLabel: banners.actionLabel,
+          actionUrl: banners.actionUrl,
+          active: banners.active,
+        });
+
+      return newBanner;
     }),
 
   update: permissionProcedure("admin.banners:edit")
@@ -61,16 +105,23 @@ export const bannerRouter = createTRPCRouter({
 
       if (!banner) throw new Error("not Found");
 
-      await ctx.db
+      const updated = { ...banner, ...input };
+
+      const newBanner = await ctx.db
         .update(banners)
-        .set({
-          title: input.title,
-          description: input.description,
-          imageUrl: input.imageUrl,
-          actionLabel: input.actionLabel,
-          actionUrl: input.actionUrl,
-        })
-        .where(eq(banners.id, input.id));
+        .set(updated)
+        .where(eq(banners.id, input.id))
+        .returning({
+          id: banners.id,
+          title: banners.title,
+          description: banners.description,
+          imageUrl: banners.imageUrl,
+          actionLabel: banners.actionLabel,
+          actionUrl: banners.actionUrl,
+          active: banners.active,
+        });
+
+      return newBanner;
     }),
 
   delete: permissionProcedure("admin.banners:manage")
@@ -83,5 +134,7 @@ export const bannerRouter = createTRPCRouter({
       if (!banner) throw new Error("not Found");
 
       await ctx.db.delete(banners).where(eq(banners.id, input.id));
+
+      return { imageUrl: banner.imageUrl };
     }),
 });

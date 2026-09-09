@@ -37,7 +37,7 @@ export function EditUserButton({
         title={t("actions.edit.title")}
         description={t("actions.edit.description")}
         className="md:max-w-3xl"
-        ContentComponent={UserForm}
+        content={UserForm}
         user={user}
         roleOptions={roleOptions}
       >

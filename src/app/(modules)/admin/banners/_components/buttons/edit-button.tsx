@@ -2,18 +2,30 @@ import { useTranslations } from "next-intl";
 import { Tooltip } from "~/components/ui/tooltip";
 import { Button } from "~/components/ui/button";
 import { PencilIcon } from "lucide-react";
+import type { BannerFormType } from "../../_actions/schema";
 import { DialogButton } from "~/components/dialog-button";
-import type { Category } from "~/libs/api/routers/category";
-import { CategoryForm } from "../category-form";
+import { BannerForm } from "../banner-form";
 
-type EditButtonProps = Category;
+type EditButtonProps = {
+  id: number;
+  title: string | null;
+  description: string | null;
+  imageUrl: string | null;
+};
 
-export function EditButton({ id, name }: EditButtonProps) {
-  const t = useTranslations("AdminPage.categories.table");
+export function EditButton({
+  id,
+  title,
+  description,
+  imageUrl,
+}: EditButtonProps) {
+  const t = useTranslations("AdminPage.banners.table");
 
-  const category = {
+  const banner: BannerFormType = {
     id,
-    name,
+    title: title ?? "",
+    description: description ?? null,
+    imageUrl: imageUrl ?? "",
   };
 
   return (
@@ -22,8 +34,8 @@ export function EditButton({ id, name }: EditButtonProps) {
         title={t("actions.edit.title")}
         description={t("actions.edit.description")}
         className="md:max-w-3xl"
-        content={CategoryForm}
-        category={category}
+        content={BannerForm}
+        banner={banner}
       >
         <Button variant="ghost" size="icon-sm" className="hover:bg-primary/10">
           <PencilIcon className="size-4" />

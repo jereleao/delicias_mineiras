@@ -808,7 +808,7 @@ const InfiniteProgress = forwardRef<HTMLDivElement, InfiniteProgressProps>(
         )}
       >
         <div
-          //   TODO: add proper done transition
+          // TODO: add proper done transition
           className={cn(
             "bg-primary h-full w-full rounded-full",
             done ? "translate-x-0" : "animate-infinite-progress",

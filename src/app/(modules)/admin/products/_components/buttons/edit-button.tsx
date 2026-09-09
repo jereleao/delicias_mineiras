@@ -2,11 +2,11 @@ import { useTranslations } from "next-intl";
 import { Tooltip } from "~/components/ui/tooltip";
 import { Button } from "~/components/ui/button";
 import { PencilIcon } from "lucide-react";
-import type { NewProductFormType } from "../../_actions/new-product-schema";
+import type { ProductFormType } from "../../_actions/schema";
 import { DialogButton } from "~/components/dialog-button";
 import { ProductForm } from "../product-form";
 
-type EditProductButtonProps = {
+type EditButtonProps = {
   id: number;
   categoryId: number;
   name: string;
@@ -18,7 +18,7 @@ type EditProductButtonProps = {
   active: boolean | null;
 };
 
-export function EditProductButton({
+export function EditButton({
   id,
   categoryId,
   name,
@@ -26,10 +26,10 @@ export function EditProductButton({
   price,
   imageUrl,
   keywords,
-}: EditProductButtonProps) {
+}: EditButtonProps) {
   const t = useTranslations("AdminPage.products.table");
 
-  const product: NewProductFormType = {
+  const product: ProductFormType = {
     id,
     categoryId: categoryId.toString(),
     name,
@@ -45,7 +45,7 @@ export function EditProductButton({
         title={t("actions.edit.title")}
         description={t("actions.edit.description")}
         className="md:max-w-3xl"
-        ContentComponent={ProductForm}
+        content={ProductForm}
         product={product}
       >
         <Button variant="ghost" size="icon-sm" className="hover:bg-primary/10">

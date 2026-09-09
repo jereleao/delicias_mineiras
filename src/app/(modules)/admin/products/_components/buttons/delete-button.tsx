@@ -5,11 +5,11 @@ import { Tooltip } from "~/components/ui/tooltip";
 import { LoadingButton } from "~/components/ui/button";
 import { Trash2Icon } from "lucide-react";
 
-type DeleteProductButtonProps = {
+type DeleteButtonProps = {
   productId: number | string;
 };
 
-export function DeleteProductButton({ productId }: DeleteProductButtonProps) {
+export function DeleteButton({ productId }: DeleteButtonProps) {
   const t = useTranslations("AdminPage.products.table");
 
   const [isPending, startTransition] = useTransition();

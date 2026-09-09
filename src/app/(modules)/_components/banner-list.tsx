@@ -5,9 +5,9 @@ import { BannerCard } from "./banner-card";
 import { BannerCarousel } from "./banner-carousel";
 
 export async function BannerList() {
-  const banners = await api.banner.all();
+  const banners = await api.banner.active();
 
-  if (banners.length === 0) return null;
+  if (banners.length === 0) return <div className="mb-4" />;
 
   if (banners.length === 1) {
     const banner = banners.at(0);

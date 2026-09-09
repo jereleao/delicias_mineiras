@@ -1,9 +1,6 @@
 "use client";
 
-import type {
-  NewProductFormType,
-  NewProductType,
-} from "../../_actions/new-product-schema";
+import type { ProductType, ProductFormType } from "../../_actions/schema";
 import { type SubmitHandler, type UseFormReturn } from "react-hook-form";
 import { Form, FormInput, FormTextarea } from "~/components/form/client";
 import { LoadingButton } from "~/components/ui/button";
@@ -12,9 +9,9 @@ import { FieldKeyWords } from "./field-key-words";
 import FieldCategorySelect from "./field-category-select";
 
 type ProductFormFieldsProps = {
-  form: UseFormReturn<NewProductFormType, unknown, NewProductType>;
+  form: UseFormReturn<ProductFormType, unknown, ProductType>;
   isPending: boolean;
-  onSubmit: SubmitHandler<NewProductType>;
+  onSubmit: SubmitHandler<ProductType>;
 };
 
 export default function ProductFormFields({

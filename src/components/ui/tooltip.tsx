@@ -47,8 +47,8 @@ function TooltipContent({
         )}
         {...props}
       >
-        {children}
-        <TooltipPrimitive.Arrow className="bg-foreground fill-foreground z-50 size-2.5 translate-y-[calc(-50%-2px)] rotate-45 rounded-xs" />
+        <div className="z-60">{children}</div>
+        <TooltipPrimitive.Arrow className="bg-foreground fill-foreground z-50 size-2.5 translate-y-[calc(-50%_-_2px)] rotate-45 rounded-[2px]" />
       </TooltipPrimitive.Content>
     </TooltipPrimitive.Portal>
   );
@@ -65,7 +65,7 @@ function TooltipWithChildren({
   delayDuration = 300,
   ...props
 }: TooltipWithChildrenProps &
-  React.ComponentProps<typeof TooltipPrimitive.Content>) {
+  Omit<React.ComponentProps<typeof TooltipPrimitive.Content>, "content">) {
   return (
     <Tooltip delayDuration={delayDuration}>
       <TooltipTrigger asChild>{children}</TooltipTrigger>

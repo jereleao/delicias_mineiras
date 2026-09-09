@@ -66,7 +66,7 @@ export function FieldTextarea<TValue>({
             <InputGroupText className="tabular-nums">
               {t("counter", {
                 current: value?.length ?? 0,
-                lengthCounter,
+                max: lengthCounter,
               })}
             </InputGroupText>
           </InputGroupAddon>

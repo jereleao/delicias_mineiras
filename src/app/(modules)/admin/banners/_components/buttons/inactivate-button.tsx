@@ -6,15 +6,15 @@ import { BanIcon } from "lucide-react";
 import { inactivateAction } from "../../_actions/inactivate-action";
 
 type InactivateButtonProps = {
-  productId: number | string;
+  bannerId: number | string;
 };
 
-export function InactivateButton({ productId }: InactivateButtonProps) {
-  const t = useTranslations("AdminPage.products.table");
+export function InactivateButton({ bannerId }: InactivateButtonProps) {
+  const t = useTranslations("AdminPage.banners.table");
   const [isPending, startTransition] = useTransition();
 
   const handleClick = () =>
-    startTransition(async () => await inactivateAction(productId));
+    startTransition(async () => await inactivateAction(bannerId));
 
   return (
     <Tooltip content={t("actions.inactivate")}>

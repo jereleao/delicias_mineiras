@@ -114,5 +114,7 @@ export const productRouter = createTRPCRouter({
       if (!product) throw new Error("not Found");
 
       await ctx.db.delete(products).where(eq(products.id, input.id));
+
+      return { imageUrl: product.imageUrl };
     }),
 });

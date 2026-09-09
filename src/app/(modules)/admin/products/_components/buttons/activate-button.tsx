@@ -5,13 +5,11 @@ import { LoadingButton } from "~/components/ui/button";
 import { CircleCheckBigIcon } from "lucide-react";
 import { activateAction } from "../../_actions/activate-action";
 
-type ActivateProductButtonProps = {
+type ActivateButtonProps = {
   productId: number | string;
 };
 
-export function ActivateProductButton({
-  productId,
-}: ActivateProductButtonProps) {
+export function ActivateButton({ productId }: ActivateButtonProps) {
   const t = useTranslations("AdminPage.products.table");
   const [isPending, startTransition] = useTransition();
 

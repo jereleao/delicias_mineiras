@@ -1,18 +1,22 @@
 "use client";
 
 import z from "zod";
-import { UserFormFields } from "./user-form-fields";
-import { UserAvatarField } from "./user-avatar-field";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useState, useTransition } from "react";
-import { ImageCropper } from "./image-cropper";
+import { useForm } from "react-hook-form";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import * as Sentry from "@sentry/nextjs";
+import { del } from "@vercel/blob";
+import { zodResolver } from "@hookform/resolvers/zod";
+
 import { urlToFile } from "~/utils";
 import { api } from "~/libs/trpc/react";
 import type { User } from "~/libs/api/routers/user";
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import { uploadFile } from "~/libs/storage/action/upload-file";
+
+import { UserFormFields } from "./user-form-fields";
+import { UserAvatarField } from "./user-avatar-field";
+import { ImageCropper } from "./image-cropper";
 
 type UserProfileEditProps = Pick<User, "id" | "name" | "bio" | "image">;
 
@@ -66,11 +70,17 @@ export function UserProfileEdit({
 
     startSaveTransition(async () => {
       if (changedImage) {
-        console.debug("TODO: Delete previous asset from this user");
-
         const file = await urlToFile(data.image!, `user-img-${id}.jpg`);
 
         const uploadedFile = await uploadFile(file);
+
+        if (image) {
+          try {
+            await del(image);
+          } catch (error) {
+            Sentry.captureException(error);
+          }
+        }
 
         data.image = uploadedFile.url;
       }

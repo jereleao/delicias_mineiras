@@ -16,7 +16,7 @@ const europeanNumberSchema = z.preprocess(
 
 export const MAX_KEYWORD_COUNT = 11;
 
-export const newProductSchema = z.object({
+export const productSchema = z.object({
   id: z.number(),
   categoryId: z.coerce.number({ error: "Required" }),
   name: z
@@ -39,12 +39,9 @@ export const newProductSchema = z.object({
     .nullable(),
 });
 
-export type NewProductType = z.infer<typeof newProductSchema>;
+export type ProductType = z.infer<typeof productSchema>;
 
-export type NewProductFormType = Omit<
-  NewProductType,
-  "price" | "categoryId"
-> & {
+export type ProductFormType = Omit<ProductType, "price" | "categoryId"> & {
   categoryId: unknown;
   price: unknown;
 };

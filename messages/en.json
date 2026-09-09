@@ -45,10 +45,11 @@
         }
     },
     "NavigationMenu": {
-        "menus": "Menus",
+        "menuLabel": "Menus",
         "navbar": {
             "products": "Products",
-            "administration": "Administration"
+            "administration": "Administration",
+            "home": "Home Page"
         },
         "admin": {
             "products": "Products",
@@ -148,11 +149,36 @@
             }
         },
         "banners": {
+            "form": {
+                "title": "Banner",
+                "description": "Create a new banner",
+                "submit": "Submit",
+                "fields": {
+                    "title": {
+                        "label": "Title",
+                        "placeholder": "Main campaign"
+                    },
+                    "description": {
+                        "label": "Description",
+                        "description": "This description won`t apper in the UI."
+                    }
+                }
+            },
             "table": {
                 "columns": {
                     "title": "Title",
                     "description": "Description",
                     "imageUrl": "Image"
+                },
+                "actions": {
+                    "view": "View Banner",
+                    "delete": "Delete Banner",
+                    "inactivate": "Inactivate Banner",
+                    "activate": "Activate Banner",
+                    "edit": {
+                        "title": "Edit Banner",
+                        "description": "Edit the current banner"
+                    }
                 }
             }
         },

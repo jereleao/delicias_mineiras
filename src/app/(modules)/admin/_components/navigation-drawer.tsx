@@ -44,7 +44,7 @@ export async function AdminDrawerMenu({ className }: AdminDrawerMenuProps) {
         </DrawerTrigger>
         <DrawerContent className="data-[vaul-drawer-direction=bottom]:max-h-[50vh] data-[vaul-drawer-direction=top]:max-h-[50vh]">
           <DrawerHeader>
-            <DrawerTitle>{t("menus")}</DrawerTitle>
+            <DrawerTitle>{t("menuLabel")}</DrawerTitle>
           </DrawerHeader>
           <div className="no-scrollbar overflow-y-auto px-4">
             <Accordion type="multiple">

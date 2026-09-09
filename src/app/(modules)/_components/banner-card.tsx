@@ -25,8 +25,8 @@ export function BannerCard({ banner }: BannerCardProps) {
         <Image
           src={banner.imageUrl!}
           alt={banner.description ?? "Banner Image"}
-          width={600}
-          height={400}
+          width={1024}
+          height={256}
           className="h-30 w-full object-cover"
           unoptimized
         />

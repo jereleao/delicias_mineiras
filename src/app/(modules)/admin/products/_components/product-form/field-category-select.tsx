@@ -21,13 +21,10 @@ import {
   FieldError,
   FieldLabel,
 } from "~/components/ui/field";
-import type {
-  NewProductFormType,
-  NewProductType,
-} from "../../_actions/new-product-schema";
+import type { ProductType, ProductFormType } from "../../_actions/schema";
 
 type FieldCategorySelectProps = {
-  form: UseFormReturn<NewProductFormType, unknown, NewProductType>;
+  form: UseFormReturn<ProductFormType, unknown, ProductType>;
 };
 
 export default function FieldCategorySelect({

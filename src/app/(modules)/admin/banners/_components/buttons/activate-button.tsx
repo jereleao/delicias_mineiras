@@ -2,22 +2,22 @@ import { useTranslations } from "next-intl";
 import { useTransition } from "react";
 import { Tooltip } from "~/components/ui/tooltip";
 import { LoadingButton } from "~/components/ui/button";
-import { BanIcon } from "lucide-react";
-import { inactivateAction } from "../../_actions/inactivate-action";
+import { CircleCheckBigIcon } from "lucide-react";
+import { activateAction } from "../../_actions/activate-action";
 
-type InactivateButtonProps = {
-  productId: number | string;
+type ActivateButtonProps = {
+  bannerId: number | string;
 };
 
-export function InactivateButton({ productId }: InactivateButtonProps) {
-  const t = useTranslations("AdminPage.products.table");
+export function ActivateButton({ bannerId }: ActivateButtonProps) {
+  const t = useTranslations("AdminPage.banners.table");
   const [isPending, startTransition] = useTransition();
 
   const handleClick = () =>
-    startTransition(async () => await inactivateAction(productId));
+    startTransition(async () => await activateAction(bannerId));
 
   return (
-    <Tooltip content={t("actions.inactivate")}>
+    <Tooltip content={t("actions.activate")}>
       <LoadingButton
         variant="ghost"
         size="icon-sm"
@@ -26,8 +26,8 @@ export function InactivateButton({ productId }: InactivateButtonProps) {
         replace
         onClick={handleClick}
       >
-        <BanIcon className="size-4" />
-        <span className="sr-only">{t("actions.inactivate")}</span>
+        <CircleCheckBigIcon className="size-4" />
+        <span className="sr-only">{t("actions.activate")}</span>
       </LoadingButton>
     </Tooltip>
   );

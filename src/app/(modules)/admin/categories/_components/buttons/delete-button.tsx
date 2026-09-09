@@ -7,13 +7,11 @@ import { LoadingButton } from "~/components/ui/button";
 import { Trash2Icon } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-type DeleteCategoryButtonProps = {
+type DeleteButtonProps = {
   categoryId: number | string;
 };
 
-export function DeleteCategoryButton({
-  categoryId,
-}: DeleteCategoryButtonProps) {
+export function DeleteButton({ categoryId }: DeleteButtonProps) {
   const t = useTranslations("AdminPage.categories.table");
 
   const [isPending, startTransition] = useTransition();

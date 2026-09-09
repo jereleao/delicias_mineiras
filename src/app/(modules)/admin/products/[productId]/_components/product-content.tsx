@@ -3,7 +3,7 @@
 import type { Product } from "~/libs/api/routers/product";
 import { ProductForm } from "../../_components/product-form";
 import { useRouter } from "next/navigation";
-import type { NewProductType } from "../../_actions/new-product-schema";
+import type { ProductFormType } from "../../_actions/schema";
 
 type ProductContentProps = {
   product: Product;
@@ -15,7 +15,7 @@ export default function ProductContent({
 }: ProductContentProps) {
   const router = useRouter();
 
-  const product: NewProductType = {
+  const product: ProductFormType = {
     id,
     categoryId,
     name,

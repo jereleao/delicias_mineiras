@@ -8,23 +8,23 @@ import {
   DropzoneTrigger,
   useDropzone,
 } from "~/components/ui/dropzone";
-import type { ProductType, ProductFormType } from "../../_actions/schema";
 import Image from "next/image";
 import { useState, type Dispatch, type SetStateAction } from "react";
 import { createImage } from "~/hooks/use-cropper";
 import { FieldError } from "~/components/ui/field";
+import type { BannerFormType } from "../../_actions/schema";
 
 type UserAvatarEditProps = {
-  form: UseFormReturn<ProductFormType, unknown, ProductType>;
+  form: UseFormReturn<BannerFormType>;
   setUnformattedImageSrc: Dispatch<SetStateAction<string | null>>;
 };
 
-export function ProductImageField({
+export function BannerImageField({
   form,
   setUnformattedImageSrc,
 }: UserAvatarEditProps) {
   const [loading, setLoading] = useState(false);
-  const { name, imageUrl } = form.getValues();
+  const { title, imageUrl } = form.getValues();
 
   const onFileUploadedCallback = async (imageSrc: string) => {
     const image = await createImage(imageSrc);
@@ -64,15 +64,15 @@ export function ProductImageField({
 
   return (
     <Dropzone {...dropzone}>
-      <div className="mx-auto flex w-fit flex-col">
-        <DropZoneArea className="relative mx-auto flex size-40 items-center justify-center border-0">
+      <div className="-mb-4 flex w-full flex-col">
+        <DropZoneArea className="relative flex h-32 w-full items-center justify-center border-0">
           <DropzoneTrigger className="bg-transparent p-0 hover:bg-transparent">
             <Image
-              src={imageUrl ?? `/assets/placeholder.png`}
-              alt={name ?? "Product Image"}
-              width={400}
-              height={400}
-              className="size-36 rounded-xl"
+              src={imageUrl ?? `/assets/banner-placeholder.png`}
+              alt={title ?? "Banner image"}
+              width={1024}
+              height={256}
+              className="h-30 w-full rounded-xl"
               unoptimized
             />
 
@@ -89,7 +89,7 @@ export function ProductImageField({
             </Button>
           </DropzoneTrigger>
         </DropZoneArea>
-        <div className="flex justify-between p-2">
+        <div className="flex justify-between">
           <DropzoneMessage />
           <FieldError errors={[formState.errors.imageUrl]} />
         </div>
