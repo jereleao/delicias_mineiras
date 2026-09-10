@@ -32,7 +32,7 @@ const configWithSentry = withSentryConfig(coreConfig, {
   // For all available options, see:
   // https://www.npmjs.com/package/@sentry/webpack-plugin#options
 
-  org: "jeremias-consultting-ltda",
+  org: "craft-dev",
   project: "delicias-mineiras",
 
   // Only print logs for uploading source maps in CI

@@ -1,4 +1,4 @@
-import type { DefaultSession, NextAuthConfig } from "next-auth";
+import type { DefaultSession, NextAuthConfig, Profile } from "next-auth";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import GoogleProvider from "next-auth/providers/google";
 import NodemailerProvider from "next-auth/providers/nodemailer";
@@ -55,6 +55,33 @@ const getUserPermissions = async (userId: string): Promise<PermissionKey[]> => {
     .where(eq(users.id, userId));
 
   return rows.map(({ key }) => key as PermissionKey);
+};
+
+type CurrentUser = {
+  email: string;
+  id: string;
+  name: string | null;
+  active: boolean;
+  roleId: number;
+  bio: string | null;
+  image: string | null;
+  emailVerified: Date | null;
+  signedIn: boolean;
+  offerPasskey: boolean;
+};
+
+const updateUserInfo = async (user: CurrentUser, profile: Profile) => {
+  const { email, email_verified, name, picture } = profile;
+
+  if (user.email !== email) throw new Error("E-mail Mismatch");
+
+  const updatedUser = {
+    name: user.name ?? name,
+    image: user.image ?? picture,
+    emailVerified: user.emailVerified ?? (email_verified ? new Date() : null),
+  };
+
+  await db.update(users).set(updatedUser).where(eq(users.id, user.id));
 };
 
 /**
@@ -130,24 +157,9 @@ export const authConfig = {
       }
 
       // This will get the property from Google, for exemple to set 'emailVerified'
-      if (
-        existingUser &&
-        !existingUser.emailVerified &&
-        profile?.email_verified
-      ) {
-        try {
-          await db
-            .update(users)
-            .set({ emailVerified: new Date() })
-            .where(eq(users.id, existingUser.id));
-        } catch (error) {
-          console.error("Failed to update signedIn", {
-            error,
-            cause: error instanceof Error ? error.cause : undefined,
-          });
 
-          throw error;
-        }
+      if (existingUser && profile) {
+        await updateUserInfo(existingUser, profile);
       }
 
       return true;
