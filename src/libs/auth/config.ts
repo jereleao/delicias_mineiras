@@ -93,7 +93,9 @@ export const authConfig = {
   secret: env.AUTH_SECRET,
   trustHost: true,
   providers: [
-    GoogleProvider,
+    GoogleProvider({
+      allowDangerousEmailAccountLinking: true,
+    }),
     NodemailerProvider({
       server: {
         host: env.EMAIL_SERVER_HOST,
