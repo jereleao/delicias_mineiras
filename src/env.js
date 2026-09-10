@@ -37,10 +37,6 @@ export const env = createEnv({
 
     POSTGRES_URL: z.url(),
 
-    BLOB_STORE_ID:
-      process.env.NODE_ENV === "production"
-        ? z.string()
-        : z.string().optional(),
     BLOB_READ_WRITE_TOKEN: z.string(),
   },
 
@@ -84,7 +80,6 @@ export const env = createEnv({
 
     POSTGRES_URL: process.env.POSTGRES_URL,
 
-    BLOB_STORE_ID: process.env.BLOB_STORE_ID,
     BLOB_READ_WRITE_TOKEN: process.env.BLOB_READ_WRITE_TOKEN,
 
     NEXT_PUBLIC_SENTRY_DSN: process.env.NEXT_PUBLIC_SENTRY_DSN,

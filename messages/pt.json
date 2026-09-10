@@ -46,10 +46,12 @@
         }
     },
     "NavigationMenu": {
+        "menuLabel": "Menus",
         "menus": "Menus",
         "navbar": {
             "products": "Produtos",
-            "administration": "Adiminstração"
+            "administration": "Administração",
+            "home": "Página inicial"
         },
         "admin": {
             "products": "Produtos",
@@ -149,11 +151,36 @@
             }
         },
         "banners": {
+            "form": {
+                "title": "Banner",
+                "description": "Criar um novo banner",
+                "submit": "Salvar",
+                "fields": {
+                    "title": {
+                        "label": "Título",
+                        "placeholder": "Campanha principal"
+                    },
+                    "description": {
+                        "label": "Descrição",
+                        "description": "Esta descrição não aparecerá na interface."
+                    }
+                }
+            },
             "table": {
                 "columns": {
                     "title": "Título",
                     "description": "Descrição",
                     "imageUrl": "Imagem"
+                },
+                "actions": {
+                    "view": "Ver banner",
+                    "delete": "Excluir banner",
+                    "inactivate": "Inativar banner",
+                    "activate": "Ativar banner",
+                    "edit": {
+                        "title": "Editar banner",
+                        "description": "Editar o banner atual"
+                    }
                 }
             }
         },
@@ -163,6 +190,10 @@
                 "description": "Criar um novo usuário",
                 "submit": "Salvar",
                 "fields": {
+                    "email": {
+                        "label": "Email",
+                        "placeholder": "exemplo@email.com"
+                    },
                     "name": {
                         "label": "Nome",
                         "placeholder": "João da Silva"

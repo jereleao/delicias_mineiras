@@ -7,7 +7,7 @@ import { UserForm } from "../user-form";
 import type { UserFormType } from "../../_actions/user-schema";
 import type { Role } from "~/libs/api/routers/permissions";
 
-type EditUserButtonProps = {
+type EditButtonProps = {
   id: string;
   name: string | null;
   bio: string | null;
@@ -15,13 +15,13 @@ type EditUserButtonProps = {
   roleOptions: Array<Role>;
 };
 
-export function EditUserButton({
+export function EditButton({
   id,
   name,
   bio,
   roleId,
   roleOptions,
-}: EditUserButtonProps) {
+}: EditButtonProps) {
   const t = useTranslations("AdminPage.users.table");
 
   const user: UserFormType = {

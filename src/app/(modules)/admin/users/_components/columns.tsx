@@ -10,7 +10,10 @@ import type { User } from "~/libs/api/routers/user";
 import { RoleCell } from "./role-cell";
 import type { Role } from "~/libs/api/routers/permissions";
 
-import { EditUserButton } from "./buttons/edit-button";
+import { EditButton } from "./buttons/edit-button";
+import { DeleteButton } from "./buttons/delete-button";
+import UserAvatar from "~/components/user-avatar";
+import { InviteNewUser } from "./invite-button";
 
 const columnHelper = createColumnHelper<User>();
 
@@ -43,6 +46,22 @@ export const getColums = (roleOptions: Array<Role>) => {
     //   enableSorting: false,
     //   enableHiding: false,
     // }),
+    columnHelper.accessor("image", {
+      meta: {
+        classNames: {
+          header: "w-11",
+          cell: "flex justify-end",
+        },
+      },
+      header: () => null,
+      cell: ({ row }) => (
+        <UserAvatar
+          image={row.original.image}
+          name={row.original.name}
+          className="size-5"
+        />
+      ),
+    }),
     columnHelper.accessor("name", {
       header: ({ column }) => (
         <DataTableColumnHeader
@@ -123,20 +142,22 @@ export const getColums = (roleOptions: Array<Role>) => {
         <DataTableColumnHeader
           column={column}
           className="flex justify-center"
+          title={<InviteNewUser roleOptions={roleOptions} />}
         />
       ),
       cell: ({ row }) => {
         const userId = row.original.id;
         return (
           <div>
-            <EditUserButton {...row.original} roleOptions={roleOptions} />
+            <EditButton {...row.original} roleOptions={roleOptions} />
             {/* 
             {isActive ? (
               <InactivateUserButton productId={productId} />
-            ) : (
+              ) : (
               <ActivateUserButton productId={productId} />
             )}
-            <DeleteUserButton productId={productId} /> */}
+            */}
+            <DeleteButton userId={userId} />
           </div>
         );
       },

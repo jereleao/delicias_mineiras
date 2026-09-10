@@ -1,5 +1,7 @@
+"use client";
+
 import { LoaderCircleIcon } from "lucide-react";
-import { getTranslations } from "next-intl/server";
+import { useTranslations } from "next-intl";
 import { cn } from "~/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 
@@ -7,10 +9,8 @@ type DefaultLoadingProps = {
   className?: string;
 };
 
-export default async function DefaultLoading({
-  className,
-}: DefaultLoadingProps) {
-  const t = await getTranslations("Common");
+export default function DefaultLoading({ className }: DefaultLoadingProps) {
+  const t = useTranslations("Common");
 
   return (
     <div className={cn("flex h-full items-center justify-center", className)}>

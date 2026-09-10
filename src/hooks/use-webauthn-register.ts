@@ -8,9 +8,9 @@ import { skipToken } from "@tanstack/react-query";
 
 export function useWebauthnRegister(enabled: boolean = true) {
   const { data: makeCredentialOptions, isPending: isPendingOptions } =
-    api.webauthn.makeCredentialOptions.useQuery(
-      enabled ? undefined : skipToken,
-    );
+    api.webauthn.makeCredentialOptions.useQuery(skipToken, {
+      enabled,
+    });
 
   const utils = api.useUtils();
 

@@ -110,7 +110,7 @@ export function BannerForm({ setOpen, banner }: BannerFormProps) {
       <Form
         form={form}
         onValid={onSubmit}
-        onInvalid={(errors, _event) => console.log("onInvalid: ", errors)}
+        onInvalid={(errors, _event) => console.warn("onInvalid: ", errors)}
       >
         <FormInput
           control={form.control}

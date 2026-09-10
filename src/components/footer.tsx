@@ -1,16 +1,23 @@
-"use client";
-
-import { useSession } from "next-auth/react";
-import { useTranslations } from "next-intl";
+import type { Session } from "next-auth";
+import { getTranslations } from "next-intl/server";
 import Link from "next/link";
-import { useMemo } from "react";
 import { LogoLinkHome } from "~/components/logo-link-home";
+import { auth } from "~/libs/auth";
+import { isAllowed, type PermissionKey } from "~/libs/auth/menus";
 
-type FooterLink = {
+type AuthenticatedFooterLink = {
   label: string;
   href: string;
   requiresAuth?: boolean;
 };
+
+type AuthorizedFooterLink = {
+  label: string;
+  href: string;
+  authTag: PermissionKey;
+};
+
+type FooterLink = AuthenticatedFooterLink | AuthorizedFooterLink;
 
 type FooterColumn = {
   title: string;
@@ -18,41 +25,38 @@ type FooterColumn = {
   links: FooterLink[];
 };
 
-export default function Footer() {
-  const t = useTranslations();
+export default async function Footer() {
+  const t = await getTranslations();
 
-  const { status } = useSession();
+  const session = await auth();
 
-  const columns: FooterColumn[] = useMemo(() => {
-    return [
-      {
-        title: t("Footer.institutional"),
-        links: [
-          { label: t("AboutPage.title"), href: "/about" },
-          { label: t("ContactPage.title"), href: "/contact" },
-        ],
-      },
-      {
-        title:
-          status === "authenticated"
-            ? t("Footer.restricted")
-            : t("UserMenu.login"),
-        href: "/login",
-        links: [
-          {
-            label: t("AccountPage.title"),
-            href: "/account",
-            requiresAuth: true,
-          },
-          {
-            label: t("AdminPage.title"),
-            href: "/admin",
-            requiresAuth: true,
-          },
-        ],
-      },
-    ];
-  }, [t, status]);
+  const isAuthenticated = !!session?.user;
+
+  const columns: FooterColumn[] = [
+    {
+      title: t("Footer.institutional"),
+      links: [
+        { label: t("AboutPage.title"), href: "/about" },
+        { label: t("ContactPage.title"), href: "/contact" },
+      ],
+    },
+    {
+      title: isAuthenticated ? t("Footer.restricted") : t("UserMenu.login"),
+      href: "/login",
+      links: [
+        {
+          label: t("AccountPage.title"),
+          href: "/account",
+          requiresAuth: true,
+        },
+        {
+          label: t("AdminPage.title"),
+          href: "/admin",
+          authTag: "admin",
+        },
+      ],
+    },
+  ];
 
   return (
     <footer className="bg-muted w-dvw">
@@ -72,9 +76,7 @@ export default function Footer() {
             />
             <ul className="mt-6 flex flex-col gap-4">
               {column.links
-                .filter(
-                  (link) => !link.requiresAuth || status === "authenticated",
-                )
+                .filter((link) => checkPermission(link, session?.user))
                 .map((link) => (
                   <li key={link.label}>
                     <Link
@@ -94,4 +96,19 @@ export default function Footer() {
       </div>
     </footer>
   );
+}
+
+function checkPermission(link: FooterLink, user: Session["user"] | undefined) {
+  const requiredAuth = "requiresAuth" in link && link.requiresAuth;
+
+  const hasAuthTag = "authTag" in link;
+
+  if (!requiredAuth && !hasAuthTag) return true;
+
+  if (requiredAuth && !!user) return true;
+
+  if (hasAuthTag && isAllowed(link.authTag, user?.permissions ?? []))
+    return true;
+
+  return false;
 }

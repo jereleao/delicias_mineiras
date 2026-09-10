@@ -1,3 +1,5 @@
+"use client";
+
 import { MenuIcon } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import {
@@ -14,18 +16,19 @@ import {
   AccordionTrigger,
 } from "~/components/ui/accordion";
 import { isAllowed, MENUS } from "~/libs/auth/menus";
-import { getTranslations } from "next-intl/server";
+import { useTranslations } from "next-intl";
 import CustomLink from "~/components/custom-link";
-import { auth } from "~/libs/auth";
+import { useSession } from "next-auth/react";
+import { useState } from "react";
 
 type AdminDrawerMenuProps = Readonly<{
   className?: string;
 }>;
 
-export async function AdminDrawerMenu({ className }: AdminDrawerMenuProps) {
-  const t = await getTranslations("NavigationMenu");
+export function AdminDrawerMenu({ className }: AdminDrawerMenuProps) {
+  const t = useTranslations("NavigationMenu");
 
-  const session = await auth();
+  const { data: session } = useSession();
 
   const allowedMenus = MENUS.map(({ menuGroup, menus }) => ({
     menuGroup,
@@ -34,9 +37,11 @@ export async function AdminDrawerMenu({ className }: AdminDrawerMenuProps) {
     ),
   })).filter(({ menus }) => menus.length > 0);
 
+  const [open, setOpen] = useState(false);
+
   return (
     <div className={className}>
-      <Drawer direction="left">
+      <Drawer direction="left" open={open} onOpenChange={setOpen}>
         <DrawerTrigger asChild>
           <Button variant="outline" className="capitalize">
             <MenuIcon className="" />
@@ -67,6 +72,7 @@ export async function AdminDrawerMenu({ className }: AdminDrawerMenuProps) {
                           <CustomLink
                             href={subMenu.href}
                             className="w-full no-underline!"
+                            onClick={() => setOpen(false)}
                           >
                             <div className="border-b pb-1 leading-none font-medium">
                               {t(subMenu.menuKey)}

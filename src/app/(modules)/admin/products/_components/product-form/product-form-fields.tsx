@@ -25,7 +25,7 @@ export default function ProductFormFields({
     <Form
       form={form}
       onValid={onSubmit}
-      onInvalid={(errors, _event) => console.log("onInvalid: ", errors)}
+      onInvalid={(errors, _event) => console.warn("onInvalid: ", errors)}
     >
       <FormInput
         control={form.control}

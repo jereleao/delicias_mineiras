@@ -1,37 +1,30 @@
 "use client";
 
-import {
-  Form,
-  FormInput,
-  FormSelect,
-  FormTextarea,
-} from "~/components/form/client";
+import { Form, FormInput, FormSelect } from "~/components/form/client";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { api } from "~/libs/trpc/react";
 import { useTransition, type Dispatch } from "react";
 import { LoadingButton } from "~/components/ui/button";
 import { useTranslations } from "next-intl";
-import { userFormSchema, type UserFormType } from "../../_actions/user-schema";
-import { updateUserAction } from "../../_actions/update-user-action";
 import type { Role } from "~/libs/api/routers/permissions";
+import { inviteSchema, type InviteType } from "~/libs/db/schemas/users";
+import { newUserAction } from "../_actions/new-user-action";
 
 type UserFormProps = {
   setOpen: Dispatch<boolean>;
-  user: UserFormType;
   roleOptions: Array<Role>;
 };
 
-export function UserForm({ setOpen, user, roleOptions }: UserFormProps) {
+export function InviteForm({ setOpen, roleOptions }: UserFormProps) {
   const t = useTranslations("AdminPage.users");
 
+  const defaultRoleId = roleOptions.find((opt) => opt.name == "user")?.id;
+
   const form = useForm({
-    resolver: zodResolver(userFormSchema),
+    resolver: zodResolver(inviteSchema),
     defaultValues: {
-      id: user.id,
-      name: user.name,
-      bio: user.bio ?? "",
-      roleId: user.roleId.toString(),
+      roleId: defaultRoleId?.toString(),
     },
   });
 
@@ -39,16 +32,13 @@ export function UserForm({ setOpen, user, roleOptions }: UserFormProps) {
 
   const utils = api.useUtils();
 
-  function onSubmit(data: UserFormType) {
+  function onSubmit(data: InviteType) {
     startSaveTransition(async () => {
-      const changedUser = await updateUserAction(user.id, data);
+      const newUser = await newUserAction(data);
 
-      utils.user.all.setData(undefined, (old = []) =>
-        old.map((o) => (o.id == changedUser?.id ? changedUser : o)),
-      );
+      utils.user.all.setData(undefined, (old = []) => [...old]);
 
       await utils.user.all.invalidate();
-
       setOpen(false);
     });
   }
@@ -57,20 +47,14 @@ export function UserForm({ setOpen, user, roleOptions }: UserFormProps) {
     <Form
       form={form}
       onValid={onSubmit}
-      onInvalid={(errors, _event) => console.log("onInvalid: ", errors)}
+      onInvalid={(errors, _event) => console.warn("onInvalid: ", errors)}
     >
       <FormInput
         control={form.control}
-        name="name"
-        label={t("form.fields.name.label")}
-        placeholder={t("form.fields.name.placeholder")}
+        name="email"
+        label={t("form.fields.email.label")}
+        placeholder={t("form.fields.email.placeholder")}
         autoComplete="off"
-      />
-
-      <FormTextarea
-        control={form.control}
-        name="bio"
-        label={t("form.fields.bio.label")}
       />
 
       <FormSelect

@@ -185,9 +185,13 @@
         "users": {
             "form": {
                 "title": "User",
-                "description": "Create a new category",
+                "description": "Invite new user to access the app",
                 "submit": "Submit",
                 "fields": {
+                    "email": {
+                        "label": "Email",
+                        "placeholder": "example@email.com"
+                    },
                     "name": {
                         "label": "Name",
                         "placeholder": "John Doe"
@@ -242,7 +246,7 @@
         },
         "error": {
             "title": "An error occurred.",
-            "options": "{error, select, AccessDenied {This email address is not authorized to log in.} Forbidden {You don`t have the permissions to access this page.} other {Please try again.}}",
+            "options": "{error, select, AccessDenied {This email address is not authorized to log in.} Forbidden {You don`t have the permissions to access this page.} Configuration {Configuration error. Contact support to correct.} other {Please try again.}}",
             "back": "Back to home page"
         }
     },

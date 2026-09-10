@@ -13,52 +13,48 @@ import {
 } from "~/components/ui/dialog";
 import { PASSKEY_PROVIDER_ID } from "~/env";
 import { usePasskeyAvailable } from "~/hooks/use-passkey-available";
-import { usePasskeyPromptDismissed } from "~/hooks/use-passkey-prompt-dismissed";
 import { useWebauthnRegister } from "~/hooks/use-webauthn-register";
 import { api } from "~/libs/trpc/react";
 import { useTranslations } from "next-intl";
 
 export default function PasskeyAvailability() {
   const passkeyAvailable = usePasskeyAvailable();
-  const { isDismissed, dismiss } = usePasskeyPromptDismissed();
 
   const session = useSession();
 
   const { data: userData, isPending: isPendingQuery } = api.user.me.useQuery();
 
   const enabled =
-    !userData?.disablePasskey &&
+    userData?.offerPasskey &&
     !isPendingQuery &&
     passkeyAvailable &&
     session.status == "authenticated" &&
     session.data?.provider !== PASSKEY_PROVIDER_ID;
 
   useEffect(() => {
-    if (enabled && !isDismissed) {
+    if (enabled) {
       setPasskeyDialogOpen(true);
     }
-  }, [enabled, isDismissed]);
+  }, [enabled]);
 
   const [passkeyDialogOpen, setPasskeyDialogOpen] = useState<boolean>(false);
 
   const [isRegistering, registerPasskey] = useWebauthnRegister(enabled);
 
-  const { mutate: disablePasskey, isPending: isPendingMutation } =
-    api.user.disablePasskey.useMutation({
+  const { mutate: dismissPasskey, isPending: isPendingMutation } =
+    api.user.dismissPasskey.useMutation({
       onSuccess: () => {
         setPasskeyDialogOpen(false);
       },
     });
 
-  const handleDisablePasskey = () => {
-    dismiss();
-    disablePasskey();
+  const handleDismissPasskey = () => {
+    dismissPasskey();
   };
 
   const handleRegisterPasskey = async () => {
     await registerPasskey();
 
-    dismiss();
     setPasskeyDialogOpen(false);
   };
 
@@ -74,7 +70,7 @@ export default function PasskeyAvailability() {
         <DialogFooter>
           <Button
             variant="outline"
-            onClick={handleDisablePasskey}
+            onClick={handleDismissPasskey}
             disabled={isPendingMutation}
           >
             {t("dismiss")}

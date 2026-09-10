@@ -1,7 +1,15 @@
+import z from "zod";
 import { customType, index, primaryKey } from "drizzle-orm/pg-core";
 import { type AdapterAccount } from "next-auth/adapters";
 import { createTable } from "~/libs/db/schemas/common";
 import { roles } from "~/libs/db/schemas/permissions";
+
+export const inviteSchema = z.object({
+  email: z.email(),
+  roleId: z.coerce.number(),
+});
+
+export type InviteType = z.infer<typeof inviteSchema>;
 
 export const users = createTable("user", (d) => ({
   id: d
@@ -15,15 +23,15 @@ export const users = createTable("user", (d) => ({
     .notNull(),
   name: d.varchar({ length: 255 }),
   bio: d.varchar({ length: 255 }),
-  email: d.varchar({ length: 255 }).notNull(),
-  emailVerified: d
-    .timestamp({
-      mode: "date",
-      withTimezone: true,
-    })
-    .$defaultFn(() => /* @__PURE__ */ new Date()),
   image: d.varchar({ length: 255 }),
-  disablePasskey: d.boolean(),
+  email: d.varchar({ length: 255 }).notNull(),
+  emailVerified: d.timestamp({
+    mode: "date",
+    withTimezone: true,
+  }),
+  signedIn: d.boolean().default(false).notNull(),
+  active: d.boolean().default(true).notNull(),
+  offerPasskey: d.boolean().default(true).notNull(),
 }));
 
 export const accounts = createTable(

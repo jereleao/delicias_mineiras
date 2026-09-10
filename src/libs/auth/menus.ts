@@ -42,6 +42,12 @@ export type Menu = MenuGroup["menus"][number];
 
 export type MenuKey = Menu["menuKey"];
 
+type PrefixOfMenuKey<T extends string> = T extends `${infer Prefix}.${string}`
+  ? Prefix
+  : never;
+
+export type MenuKeyPrefix = PrefixOfMenuKey<MenuKey>;
+
 export function getMenuKeyByHref(href: string): MenuKey | undefined {
   const subMenus = MENUS.flatMap((menuGroup) =>
     menuGroup.menus.map((menu) => menu),
@@ -58,7 +64,8 @@ const permissionsAddons = ["edit", "manage"] as const;
 
 type PermissionAddon = (typeof permissionsAddons)[number];
 
-export type PermissionKey = MenuKey | `${MenuKey}:${PermissionAddon}`;
+export type PermissionKey =
+  MenuKeyPrefix | MenuKey | `${MenuKey}:${PermissionAddon}`;
 
 export const permissionKeys = MENU_KEYS.flatMap((menuKey) => [
   menuKey,
@@ -75,8 +82,10 @@ export function isAllowed(
 
   return (
     !permission.includes(":") &&
-    permissions.some((grantedPermission) =>
-      grantedPermission.startsWith(`${permission}:`),
+    permissions.some(
+      (grantedPermission) =>
+        grantedPermission.startsWith(`${permission}.`) ||
+        grantedPermission.startsWith(`${permission}:`),
     )
   );
 }
