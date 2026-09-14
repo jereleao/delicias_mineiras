@@ -5,7 +5,7 @@ import { getPathByMenuKey } from "~/libs/auth/menus";
 import type { UpdateProductType } from "~/libs/db/schemas/products";
 import { api } from "~/libs/trpc/server";
 
-export async function productUpdateAction(data: UpdateProductType) {
+export async function updateAction(data: UpdateProductType) {
   const banners = await api.product.update({
     ...data,
   });

@@ -5,6 +5,7 @@ import { categoryRouter } from "./routers/category";
 import { userRouter } from "./routers/user";
 import { webauthnRouter } from "./routers/webauthn";
 import { permissionRouter } from "./routers/permissions";
+import { configRouter } from "./routers/config";
 
 /**
  * This is the primary router for your server.
@@ -12,6 +13,7 @@ import { permissionRouter } from "./routers/permissions";
  * All routers added in /api/routers should be manually added here.
  */
 export const appRouter = createTRPCRouter({
+  config: configRouter,
   banner: bannerRouter,
   product: productRouter,
   category: categoryRouter,

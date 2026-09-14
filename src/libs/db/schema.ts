@@ -9,8 +9,10 @@ import {
   users,
   verificationTokens,
 } from "./schemas/users";
+import { configs } from "./schemas/config";
 
 export {
+  configs,
   banners,
   categories,
   products,

@@ -56,6 +56,7 @@
             "products-description": "Manage all products",
             "categories": "Categories",
             "users": "Users",
+            "configs": "Configurations",
             "banners": "Banners",
             "banners-description": "Edit home page Banners"
         }
@@ -218,6 +219,19 @@
                         "title": "Edit User",
                         "description": "Edit the current user"
                     }
+                }
+            }
+        },
+        "configs": {
+            "table": {
+                "columns": {
+                    "code": "Code",
+                    "description": "Description",
+                    "value": "Value"
+                },
+                "values": {
+                    "WHATS_NUMBER": "WhatsApp phone number",
+                    "invalid": "Invalid"
                 }
             }
         }

@@ -24,6 +24,9 @@ export const MENUS = [
       {
         menuKey: "admin.users",
       },
+      {
+        menuKey: "admin.configs",
+      },
     ],
   },
 ] as const;

@@ -5,7 +5,7 @@ import { getPathByMenuKey } from "~/libs/auth/menus";
 import type { CreateProductType } from "~/libs/db/schemas/products";
 import { api } from "~/libs/trpc/server";
 
-export async function productNewAction(data: CreateProductType) {
+export async function newAction(data: CreateProductType) {
   const categories = await api.product.create(data);
 
   revalidatePath(getPathByMenuKey("admin.products"));

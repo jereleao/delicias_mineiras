@@ -18,8 +18,8 @@ import {
 import { ProductImageField } from "./product-image-field";
 import ProductFormFields from "./product-form-fields";
 import { ImageCropper } from "./image-cropper";
-import { productNewAction } from "../../_actions/product-new-action";
-import { productUpdateAction } from "../../_actions/product-update-action";
+import { newAction } from "../../_actions/new-action";
+import { updateAction } from "../../_actions/update-action";
 
 type ProductFormProps = {
   setOpen: Dispatch<boolean>;
@@ -83,7 +83,7 @@ export function ProductForm({ setOpen, product }: ProductFormProps) {
 
       if (data.id > 0) {
         const updatedProduct = { id: data.id, ...productData };
-        const newProduct = await productUpdateAction(updatedProduct);
+        const newProduct = await updateAction(updatedProduct);
 
         if (newProduct) {
           const changedProduct: Product = {
@@ -99,7 +99,7 @@ export function ProductForm({ setOpen, product }: ProductFormProps) {
           );
         }
       } else {
-        const newProduct = await productNewAction(productData);
+        const newProduct = await newAction(productData);
 
         if (newProduct) {
           const changedProduct: Product = {

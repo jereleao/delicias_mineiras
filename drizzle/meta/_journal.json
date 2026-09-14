@@ -43,6 +43,13 @@
       "when": 1789052178561,
       "tag": "0005_round_spectrum",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1789411980047,
+      "tag": "0006_curious_onslaught",
+      "breakpoints": true
     }
   ]
 }

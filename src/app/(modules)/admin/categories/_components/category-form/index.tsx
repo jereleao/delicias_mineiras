@@ -9,8 +9,8 @@ import {
   categoryFormSchema,
   type CategoryFormType,
 } from "../../_actions/schema";
-import { updateCategoryAction } from "../../_actions/update-category-action";
-import { addNewCategory } from "../../_actions/add-new-category-action";
+import { updateAction } from "../../_actions/update-action";
+import { newAction } from "../../_actions/new-action";
 import { LoadingButton } from "~/components/ui/button";
 import { useTranslations } from "next-intl";
 
@@ -37,16 +37,13 @@ export function CategoryForm({ setOpen, category }: CategoryFormProps) {
   function onSubmit(data: CategoryFormType) {
     startSaveTransition(async () => {
       if (category) {
-        const changedCategory = await updateCategoryAction(
-          category.id,
-          data.name,
-        );
+        const changedCategory = await updateAction(category.id, data.name);
 
         utils.category.all.setData(undefined, (old = []) =>
           old.map((o) => (o.id == changedCategory?.id ? changedCategory : o)),
         );
       } else {
-        const newCategory = await addNewCategory(data.name);
+        const newCategory = await newAction(data.name);
 
         if (newCategory) {
           utils.category.all.setData(undefined, (old = []) => [

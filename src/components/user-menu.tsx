@@ -19,6 +19,7 @@ import { logoutAction } from "~/libs/auth/actions";
 import UserAvatar from "~/components/user-avatar";
 import UserMenuLanguage from "~/components/user-menu-language";
 import UserMenuTheme from "~/components/user-menu-theme";
+import { Skeleton } from "~/components/ui/skeleton";
 
 type UserMenuProps = { session: Session };
 
@@ -31,8 +32,9 @@ export default function UserMenu({ session }: UserMenuProps) {
 
   if (isLogingOut)
     return (
-      <div className="border-foreground flex size-8 items-center justify-center rounded-full border p-0">
-        <LoaderCircleIcon className="animate-spin" />
+      <div className="flex items-center gap-2">
+        {/* <Skeleton className="bg-muted-foreground h-3 w-16" /> */}
+        <Skeleton className="bg-muted-foreground size-8 rounded-full" />
       </div>
     );
 

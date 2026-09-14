@@ -5,18 +5,12 @@ import { getPathByMenuKey } from "~/libs/auth/menus";
 import type { CreateBannerType } from "~/libs/db/schemas/banners";
 import { api } from "~/libs/trpc/server";
 
-export async function updateBannerAction(
-  bannerId: number,
-  bannerData: CreateBannerType,
-) {
-  const banners = await api.banner.update({
-    id: Number(bannerId),
-    ...bannerData,
-  });
+export async function newAction(bannerData: CreateBannerType) {
+  const categories = await api.banner.create(bannerData);
 
   revalidatePath(getPathByMenuKey("admin.banners"));
 
-  if (banners.length !== 1) return null;
+  if (categories.length !== 1) return null;
 
-  return banners.at(0);
+  return categories.at(0);
 }

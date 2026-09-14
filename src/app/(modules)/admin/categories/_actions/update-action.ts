@@ -4,8 +4,14 @@ import { revalidatePath } from "next/cache";
 import { getPathByMenuKey } from "~/libs/auth/menus";
 import { api } from "~/libs/trpc/server";
 
-export async function addNewCategory(categoryName: string) {
-  const categories = await api.category.create({ name: categoryName });
+export async function updateAction(
+  categoryId: number | string,
+  categoryName: string,
+) {
+  const categories = await api.category.update({
+    id: Number(categoryId),
+    name: categoryName,
+  });
 
   revalidatePath(getPathByMenuKey("admin.categories"));
 

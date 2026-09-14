@@ -89,7 +89,11 @@ export const userRouter = createTRPCRouter({
         })
         .returning({
           id: users.id,
+          bio: users.bio,
+          name: users.name,
           email: users.email,
+          image: users.image,
+          emailVerified: users.emailVerified,
           roleId: users.roleId,
         });
       return newUser;

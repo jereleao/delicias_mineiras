@@ -9,7 +9,7 @@ import { LoadingButton } from "~/components/ui/button";
 import { useTranslations } from "next-intl";
 import type { Role } from "~/libs/api/routers/permissions";
 import { inviteSchema, type InviteType } from "~/libs/db/schemas/users";
-import { newUserAction } from "../_actions/new-user-action";
+import { newAction } from "../_actions/new-action";
 
 type UserFormProps = {
   setOpen: Dispatch<boolean>;
@@ -34,9 +34,10 @@ export function InviteForm({ setOpen, roleOptions }: UserFormProps) {
 
   function onSubmit(data: InviteType) {
     startSaveTransition(async () => {
-      const newUser = await newUserAction(data);
+      const newUser = await newAction(data);
 
-      utils.user.all.setData(undefined, (old = []) => [...old]);
+      if (newUser)
+        utils.user.all.setData(undefined, (old = []) => [...old, newUser]);
 
       await utils.user.all.invalidate();
       setOpen(false);

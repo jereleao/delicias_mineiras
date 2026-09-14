@@ -13,7 +13,7 @@ import { useTransition, type Dispatch } from "react";
 import { LoadingButton } from "~/components/ui/button";
 import { useTranslations } from "next-intl";
 import { userFormSchema, type UserFormType } from "../_actions/user-schema";
-import { updateUserAction } from "../_actions/update-user-action";
+import { updateAction } from "../_actions/update-action";
 import type { Role } from "~/libs/api/routers/permissions";
 
 type UserFormProps = {
@@ -41,7 +41,7 @@ export function UserForm({ setOpen, user, roleOptions }: UserFormProps) {
 
   function onSubmit(data: UserFormType) {
     startSaveTransition(async () => {
-      const changedUser = await updateUserAction(user.id, data);
+      const changedUser = await updateAction(user.id, data);
 
       utils.user.all.setData(undefined, (old = []) =>
         old.map((o) => (o.id == changedUser?.id ? changedUser : o)),

@@ -10,8 +10,8 @@ import { ImageCropper } from "./image-cropper";
 import type { CreateBannerType } from "~/libs/db/schemas/banners";
 import { urlToFile } from "~/utils";
 import { uploadFile } from "~/libs/storage/action/upload-file";
-import { newBannerAction } from "../../_actions/new-banner-action";
-import { updateBannerAction } from "../../_actions/update-banner-action";
+import { newAction } from "../../_actions/new-action";
+import { updateAction } from "../../_actions/update-action";
 import { Form, FormInput, FormTextarea } from "~/components/form/client";
 import { LoadingButton } from "~/components/ui/button";
 import { useTranslations } from "next-intl";
@@ -66,13 +66,13 @@ export function BannerForm({ setOpen, banner }: BannerFormProps) {
       }
 
       if (banner) {
-        const changedBanner = await updateBannerAction(banner.id, bannerData);
+        const changedBanner = await updateAction(banner.id, bannerData);
 
         utils.banner.all.setData(undefined, (old = []) =>
           old.map((o) => (o.id == changedBanner?.id ? changedBanner : o)),
         );
       } else {
-        const newBanner = await newBannerAction(bannerData);
+        const newBanner = await newAction(bannerData);
 
         if (newBanner) {
           utils.banner.all.setData(undefined, (old = []) => [
