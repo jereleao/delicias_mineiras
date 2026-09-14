@@ -11,7 +11,7 @@ CREATE INDEX "config_code_idx" ON "de_mi_config" USING btree ("code");
 INSERT INTO "de_mi_permission" ("key", "description") VALUES
 	('admin.configs', 'Read Configurations'),
 	('admin.configs:edit', 'Edit Configurations'),
-	('admin.configs:manage', 'Manage Configurations'),
+	('admin.configs:manage', 'Manage Configurations')
 ON CONFLICT ("key") DO NOTHING;
 --> statement-breakpoint
 INSERT INTO "de_mi_role_permission" ("roleId", "permissionId")
@@ -19,7 +19,7 @@ SELECT role."id", permission."id"
 FROM "de_mi_role" role
 JOIN "de_mi_permission" permission ON permission."key" IN (
 	'admin.configs:edit',
-	'admin.configs:manage',
+	'admin.configs:manage'
 )
 WHERE role."name" = 'admin'
 ON CONFLICT DO NOTHING;
