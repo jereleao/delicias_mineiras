@@ -58,6 +58,7 @@
             "products-description": "Gerenciar todos os produtos",
             "categories": "Categorias",
             "users": "Usuários",
+            "configs": "Configurações",
             "banners": "Banners",
             "banners-description": "Edit home page Banners"
         }
@@ -222,6 +223,20 @@
                     }
                 }
             }
+        },
+        "configs": {
+            "table": {
+                "columns": {
+                    "code": "Código",
+                    "description": "Descrição",
+                    "value": "Valor"
+                },
+                "values": {
+                    "WHATS_NUMBER": "Número de telefone do WhatsApp",
+                    "WHATS_GREETING": "Mensagem de saudação do WhatsApp",
+                    "invalid": "Inválido"
+                }
+            }
         }
     },
     "AboutPage": {
@@ -248,7 +263,7 @@
         },
         "error": {
             "title": "Ocorreu um erro.",
-            "options": "{error, select, AccessDenied {Este endereço de email não está autorizado a entrar.} Forbidden {Você não possui as permissões para acessar essa página.} other {Por favor tente novamente.}}",
+            "options": "{error, select, AccessDenied {Este endereço de email não está autorizado a entrar.} Forbidden {Você não possui as permissões para acessar essa página.} Configuration {Erro de configuração. Entre em contato com o suporte para corrigir.} other {Por favor tente novamente.}}",
             "back": "Voltar para a página inicial"
         }
     },

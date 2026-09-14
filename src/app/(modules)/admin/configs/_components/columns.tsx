@@ -59,7 +59,7 @@ export const columns = columnHelper.columns([
   columnHelper.accessor("value", {
     meta: {
       classNames: {
-        header: "w-75",
+        header: "w-100",
       },
     },
     header: ({ column }) => (

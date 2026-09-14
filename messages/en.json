@@ -231,6 +231,7 @@
                 },
                 "values": {
                     "WHATS_NUMBER": "WhatsApp phone number",
+                    "WHATS_GREETING": "WhatsApp greeting message",
                     "invalid": "Invalid"
                 }
             }

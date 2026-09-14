@@ -24,9 +24,9 @@ JOIN "de_mi_permission" permission ON permission."key" IN (
 WHERE role."name" = 'admin'
 ON CONFLICT DO NOTHING;
 --> statement-breakpoint
-INSERT INTO "de_mi_config" ("code", "description", "value") VALUES
-	('WHATS_NUMBER', 'Configured phone number to call via whats app', '11920135602')
+INSERT INTO "de_mi_config" ("code", "description", "value", "createdAt") VALUES
+	('WHATS_NUMBER', 'Configured phone number to call via whats app', '11920135602', CURRENT_TIMESTAMP)
 ON CONFLICT ("code") DO NOTHING;
-INSERT INTO "de_mi_config" ("code", "description", "value") VALUES
-	('WHATS_GREETING', 'Greenting message to call via whats', 'Olá como posso te ajudar?')
+INSERT INTO "de_mi_config" ("code", "description", "value", "createdAt") VALUES
+	('WHATS_GREETING', 'Greenting message to call via whats', 'Olá como posso te ajudar?', CURRENT_TIMESTAMP)                 
 ON CONFLICT ("code") DO NOTHING;

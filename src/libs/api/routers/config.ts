@@ -29,6 +29,26 @@ export const configRouter = createTRPCRouter({
     return configs ?? null;
   }),
 
+  whatsConfig: publicProcedure.query(async ({ ctx }) => {
+    const configs = await ctx.db.query.configs.findMany({
+      columns: {
+        code: true,
+        value: true,
+      },
+      where: (config, { inArray }) =>
+        inArray(config.code, ["WHATS_NUMBER", "WHATS_GREETING"]),
+      orderBy: (config, { desc }) => [desc(config.createdAt)],
+    });
+
+    const phoneNumber = configs.find((c) => c.code == "WHATS_NUMBER")?.value;
+    const greeting = configs.find((c) => c.code == "WHATS_GREETING")?.value;
+
+    if (!phoneNumber || !greeting)
+      throw new Error("Application misconfigured. Contact support.");
+
+    return { phoneNumber, greeting };
+  }),
+
   update: permissionProcedure("admin.banners:edit")
     .input(
       z.object({
