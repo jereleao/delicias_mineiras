@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { api } from "~/libs/trpc/server";
 import type { UserFormType } from "./user-schema";
+import { getPathByMenuKey } from "~/libs/auth/menus";
 
 export async function updateUserAction(userId: string, user: UserFormType) {
   const newUsers = await api.user.update({
@@ -12,7 +13,7 @@ export async function updateUserAction(userId: string, user: UserFormType) {
     roleId: user.roleId,
   });
 
-  revalidatePath("/admin/users");
+  revalidatePath(getPathByMenuKey("admin.users"));
 
   if (newUsers.length !== 1) return null;
 

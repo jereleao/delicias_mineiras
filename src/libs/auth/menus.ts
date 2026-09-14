@@ -4,7 +4,6 @@ export const MENUS = [
     menus: [
       {
         menuKey: "admin.banners",
-        href: "/admin/banners",
       },
     ],
   },
@@ -13,11 +12,9 @@ export const MENUS = [
     menus: [
       {
         menuKey: "admin.products",
-        href: "/admin/products",
       },
       {
         menuKey: "admin.categories",
-        href: "/admin/categories",
       },
     ],
   },
@@ -26,7 +23,6 @@ export const MENUS = [
     menus: [
       {
         menuKey: "admin.users",
-        href: "/admin/users",
       },
     ],
   },
@@ -53,7 +49,7 @@ export function getMenuKeyByHref(href: string): MenuKey | undefined {
     menuGroup.menus.map((menu) => menu),
   );
 
-  const menu = subMenus.find((menu) => menu.href === href);
+  const menu = subMenus.find((menu) => menu.menuKey === getMenuKeyByPath(href));
 
   if (menu) return menu.menuKey;
 
@@ -88,4 +84,14 @@ export function isAllowed(
         grantedPermission.startsWith(`${permission}:`),
     )
   );
+}
+
+export function getPathByMenuKey(menuKey: MenuKey): string {
+  return `/${menuKey.replace(".", "/")}`;
+}
+
+export function getMenuKeyByPath(path: string): MenuKey | undefined {
+  const menuKey = path.split("/").filter(Boolean).join(".") as MenuKey;
+
+  return MENU_KEYS.includes(menuKey) ? menuKey : undefined;
 }

@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { getPathByMenuKey } from "~/libs/auth/menus";
 import type { CreateBannerType } from "~/libs/db/schemas/banners";
 import { api } from "~/libs/trpc/server";
 
@@ -13,7 +14,7 @@ export async function updateBannerAction(
     ...bannerData,
   });
 
-  revalidatePath("/admin/banners");
+  revalidatePath(getPathByMenuKey("admin.banners"));
 
   if (banners.length !== 1) return null;
 

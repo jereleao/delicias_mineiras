@@ -10,7 +10,6 @@ import {
 } from "~/components/ui/dropzone";
 import Image from "next/image";
 import { useState, type Dispatch, type SetStateAction } from "react";
-import { createImage } from "~/hooks/use-cropper";
 import { FieldError } from "~/components/ui/field";
 import type { BannerFormType } from "../../_actions/schema";
 
@@ -27,17 +26,8 @@ export function BannerImageField({
   const { title, imageUrl } = form.getValues();
 
   const onFileUploadedCallback = async (imageSrc: string) => {
-    const image = await createImage(imageSrc);
+    setUnformattedImageSrc(imageSrc);
 
-    const decimalRatio = image.naturalWidth / image.naturalHeight;
-
-    if (decimalRatio == 1) {
-      form.setValue("imageUrl", imageSrc, {
-        shouldDirty: true,
-      });
-    } else {
-      setUnformattedImageSrc(imageSrc);
-    }
     setLoading(false);
   };
 

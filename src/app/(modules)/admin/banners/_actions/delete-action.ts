@@ -4,6 +4,7 @@ import { del } from "@vercel/blob";
 import * as Sentry from "@sentry/nextjs";
 import { revalidatePath } from "next/cache";
 import { api } from "~/libs/trpc/server";
+import { getPathByMenuKey } from "~/libs/auth/menus";
 
 export async function deleteAction(bannerId: number | string) {
   const { imageUrl } = await api.banner.delete({ id: Number(bannerId) });
@@ -16,5 +17,5 @@ export async function deleteAction(bannerId: number | string) {
     }
   }
 
-  revalidatePath("/admin/banners");
+  revalidatePath(getPathByMenuKey("admin.banners"));
 }

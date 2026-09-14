@@ -95,6 +95,7 @@ export const columns = columnHelper.columns([
     //     header: "w-32",
     //   },
     // },
+    enableSorting: false,
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}

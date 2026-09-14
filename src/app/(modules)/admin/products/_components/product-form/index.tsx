@@ -18,6 +18,8 @@ import {
 import { ProductImageField } from "./product-image-field";
 import ProductFormFields from "./product-form-fields";
 import { ImageCropper } from "./image-cropper";
+import { productNewAction } from "../../_actions/product-new-action";
+import { productUpdateAction } from "../../_actions/product-update-action";
 
 type ProductFormProps = {
   setOpen: Dispatch<boolean>;
@@ -43,11 +45,6 @@ export function ProductForm({ setOpen, product }: ProductFormProps) {
   );
 
   const [isPendingSave, startSaveTransition] = useTransition();
-
-  const { mutateAsync: createNewProductAsync } =
-    api.product.create.useMutation();
-
-  const { mutateAsync: updateProductAsync } = api.product.update.useMutation();
 
   const utils = api.useUtils();
 
@@ -86,35 +83,38 @@ export function ProductForm({ setOpen, product }: ProductFormProps) {
 
       if (data.id > 0) {
         const updatedProduct = { id: data.id, ...productData };
-        await updateProductAsync(updatedProduct);
+        const newProduct = await productUpdateAction(updatedProduct);
 
-        const changedProduct: Product = {
-          ...updatedProduct,
-          price: updatedProduct.price.toString(),
-          active: true,
-          categoryName: "",
-        };
+        if (newProduct) {
+          const changedProduct: Product = {
+            ...updatedProduct,
+            price: updatedProduct.price.toString(),
+            active: true,
+            categoryName: "",
+            ...newProduct,
+          };
 
-        utils.product.all.setData(undefined, (old = []) =>
-          old.map((o) => (o.id == changedProduct.id ? changedProduct : o)),
-        );
+          utils.product.all.setData(undefined, (old = []) =>
+            old.map((o) => (o.id == changedProduct.id ? changedProduct : o)),
+          );
+        }
       } else {
-        const insertResult = await createNewProductAsync(productData);
+        const newProduct = await productNewAction(productData);
 
-        const newProduct = insertResult.at(0)!;
+        if (newProduct) {
+          const changedProduct: Product = {
+            ...productData,
+            price: data.price.toString(),
+            active: true,
+            categoryName: "",
+            ...newProduct,
+          };
 
-        const changedProduct: Product = {
-          ...productData,
-          price: data.price.toString(),
-          active: true,
-          categoryName: "",
-          ...newProduct,
-        };
-
-        utils.product.all.setData(undefined, (old = []) => [
-          ...old,
-          changedProduct,
-        ]);
+          utils.product.all.setData(undefined, (old = []) => [
+            ...old,
+            changedProduct,
+          ]);
+        }
       }
 
       await utils.product.all.invalidate();

@@ -98,10 +98,16 @@ export const productRouter = createTRPCRouter({
 
       const updated = { ...product, ...input, price };
 
-      await ctx.db
+      const newProduct = await ctx.db
         .update(products)
         .set(updated)
-        .where(eq(products.id, input.id));
+        .where(eq(products.id, input.id))
+        .returning({
+          id: products.id,
+          name: products.name,
+        });
+
+      return newProduct;
     }),
 
   delete: permissionProcedure("admin.products:manage")

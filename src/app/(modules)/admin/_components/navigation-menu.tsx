@@ -8,7 +8,12 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "~/components/ui/navigation-menu";
-import { isAllowed, MENUS, type MenuKey } from "~/libs/auth/menus";
+import {
+  getPathByMenuKey,
+  isAllowed,
+  MENUS,
+  type MenuKey,
+} from "~/libs/auth/menus";
 import { getTranslations } from "next-intl/server";
 import { auth } from "~/libs/auth";
 
@@ -32,14 +37,14 @@ export async function AdminNavigationMenu({
 
   return (
     <NavigationMenu className={className}>
-      <NavigationMenuList>
+      <NavigationMenuList className="gap-1">
         {allowedMenus.map((menu) => (
           <NavigationMenuItem key={menu.menuGroup}>
             <NavigationMenuTrigger>{t(menu.menuGroup)}</NavigationMenuTrigger>
             <NavigationMenuContent>
               <ul className="w-96 py-1">
-                {menu.menus.map((subMenu) => (
-                  <SubMenu key={subMenu.menuKey + subMenu.href} {...subMenu} />
+                {menu.menus.map(({ menuKey }) => (
+                  <SubMenu key={menuKey} menuKey={menuKey} />
                 ))}
               </ul>
             </NavigationMenuContent>
@@ -52,10 +57,9 @@ export async function AdminNavigationMenu({
 
 type SubMenuProps = Readonly<{
   menuKey: MenuKey;
-  href: string;
 }>;
 
-async function SubMenu({ menuKey, href }: SubMenuProps) {
+async function SubMenu({ menuKey }: SubMenuProps) {
   const t = await getTranslations("NavigationMenu");
 
   type tKeys = Parameters<typeof t>[0];
@@ -63,7 +67,7 @@ async function SubMenu({ menuKey, href }: SubMenuProps) {
   const tKeyDescription = `${menuKey}-description` as tKeys;
 
   return (
-    <ListItem href={href} title={t(menuKey)}>
+    <ListItem href={getPathByMenuKey(menuKey)} title={t(menuKey)}>
       {t.has(tKeyDescription) ? t(tKeyDescription) : null}
     </ListItem>
   );

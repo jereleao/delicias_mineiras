@@ -460,7 +460,7 @@ const DropZoneArea = forwardRef<HTMLDivElement, DropZoneAreaProps>(
         {...props}
         aria-label="dropzone"
         className={cn(
-          "border-input bg-background ring-offset-background focus-visible:ring-ring flex items-center justify-center rounded-md border px-4 py-2 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none",
+          "border-input ring-offset-background focus-visible:ring-ring flex items-center justify-center rounded-md border bg-transparent px-4 py-2 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none",
           context.isDragActive && "animate-pulse bg-black/5",
           context.isInvalid && "border-destructive",
           className,

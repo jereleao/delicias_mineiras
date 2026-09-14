@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { getPathByMenuKey } from "~/libs/auth/menus";
 import { api } from "~/libs/trpc/server";
 
 export async function updateCategoryAction(
@@ -12,7 +13,7 @@ export async function updateCategoryAction(
     name: categoryName,
   });
 
-  revalidatePath("/admin/categories");
+  revalidatePath(getPathByMenuKey("admin.categories"));
 
   if (categories.length !== 1) return null;
 

@@ -15,7 +15,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "~/components/ui/accordion";
-import { isAllowed, MENUS } from "~/libs/auth/menus";
+import { getPathByMenuKey, isAllowed, MENUS } from "~/libs/auth/menus";
 import { useTranslations } from "next-intl";
 import CustomLink from "~/components/custom-link";
 import { useSession } from "next-auth/react";
@@ -64,18 +64,18 @@ export function AdminDrawerMenu({ className }: AdminDrawerMenuProps) {
                   </AccordionTrigger>
                   <AccordionContent className="pb-0">
                     <ul className="pt-1">
-                      {menu.menus.map((subMenu) => (
+                      {menu.menus.map(({ menuKey }) => (
                         <li
-                          key={subMenu.menuKey + subMenu.href}
+                          key={menuKey}
                           className="ml-4 flex flex-1 items-start pb-2 text-left text-sm font-medium not-last:pb-3 disabled:pointer-events-none disabled:opacity-50"
                         >
                           <CustomLink
-                            href={subMenu.href}
+                            href={getPathByMenuKey(menuKey)}
                             className="w-full no-underline!"
                             onClick={() => setOpen(false)}
                           >
                             <div className="border-b pb-1 leading-none font-medium">
-                              {t(subMenu.menuKey)}
+                              {t(menuKey)}
                             </div>
                           </CustomLink>
                         </li>
