@@ -6,6 +6,7 @@ import { userRouter } from "./routers/user";
 import { webauthnRouter } from "./routers/webauthn";
 import { permissionRouter } from "./routers/permissions";
 import { configRouter } from "./routers/config";
+import { userObjectRouter } from "./routers/user-object";
 
 /**
  * This is the primary router for your server.
@@ -14,6 +15,7 @@ import { configRouter } from "./routers/config";
  */
 export const appRouter = createTRPCRouter({
   config: configRouter,
+  userObject: userObjectRouter,
   banner: bannerRouter,
   product: productRouter,
   category: categoryRouter,

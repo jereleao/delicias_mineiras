@@ -10,9 +10,11 @@ import {
   verificationTokens,
 } from "./schemas/users";
 import { configs } from "./schemas/config";
+import { userObjects } from "./schemas/user-objects";
 
 export {
   configs,
+  userObjects,
   banners,
   categories,
   products,

@@ -50,6 +50,13 @@
       "when": 1789411980047,
       "tag": "0006_curious_onslaught",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1791900485777,
+      "tag": "0007_exotic_ultimatum",
+      "breakpoints": true
     }
   ]
 }
