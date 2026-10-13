@@ -7,7 +7,7 @@ import {
   type TableConfiguration,
 } from "~/components/table/data-table";
 
-const DEFAULT_TABLE_CONFIGURATION: TableConfiguration = {
+export const DEFAULT_TABLE_CONFIGURATION: TableConfiguration = {
   sorting: [],
   columnVisibility: {},
 };

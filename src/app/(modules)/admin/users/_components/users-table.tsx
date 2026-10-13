@@ -1,19 +1,29 @@
 "use client";
 
-import { DataTable } from "~/components/table/data-table-whapper";
 import type { Role } from "~/libs/api/routers/permissions";
 import type { User } from "~/libs/api/routers/user";
 import { getColums } from "./columns";
+import {
+  DataTableComponent,
+  type TableConfiguration,
+} from "~/components/table/data-table";
 
 type UsersTableProps = {
   data: User[];
   roleOptions: Role[];
+  config: TableConfiguration;
 };
 
-export function UsersTable({ data, roleOptions }: UsersTableProps) {
+export function UsersTable({ data, roleOptions, config }: UsersTableProps) {
   const columns = getColums(roleOptions);
 
   return (
-    <DataTable id="users" columns={columns} data={data} className="mt-4" />
+    <DataTableComponent
+      id="users"
+      config={config}
+      columns={columns}
+      data={data}
+      className="mt-4"
+    />
   );
 }
