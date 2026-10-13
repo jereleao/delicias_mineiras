@@ -11,7 +11,7 @@ export default async function WhatsAppButton() {
   return (
     <Link href={whatsAppLink} target="_blank">
       <Button
-        className="size-11 rounded-full p-1.5"
+        className="size-12 rounded-full p-1.5"
         style={{
           backgroundColor: WhatsAppColor,
         }}

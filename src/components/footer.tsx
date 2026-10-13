@@ -4,6 +4,7 @@ import Link from "next/link";
 import { LogoLinkHome } from "~/components/logo-link-home";
 import { auth } from "~/libs/auth";
 import { isAllowed, type PermissionKey } from "~/libs/auth/menus";
+import { env } from "~/env";
 
 type AuthenticatedFooterLink = {
   label: string;
@@ -58,6 +59,8 @@ export default async function Footer() {
     },
   ];
 
+  const appVersion = `v${env.NEXT_PUBLIC_APP_VERSION}`;
+
   return (
     <footer className="bg-muted w-dvw">
       <div className="container mx-auto grid max-w-6xl grid-cols-1 gap-10 px-4 py-8 sm:grid-cols-2 sm:px-6 lg:grid-cols-3">
@@ -90,8 +93,9 @@ export default async function Footer() {
             </ul>
           </nav>
         ))}
-        <div>
+        <div className="flex flex-col items-end justify-between gap-2">
           <LogoLinkHome />
+          <p className="text-xs">{appVersion}</p>
         </div>
       </div>
     </footer>

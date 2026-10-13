@@ -31,14 +31,22 @@ export function ImageCropper({
 
   const handleSaveClick = () => {
     startSaveTransition(async () => {
-      const croppedImgSrc = await getCroppedFile(image);
+      try {
+        const croppedImgSrc = await getCroppedFile(image);
 
-      if (!croppedImgSrc) {
-        toast("An error occur when trying to convert the image. Try again.");
-        return;
+        if (!croppedImgSrc) {
+          toast("An error occur when trying to convert the image. Try again.");
+          return;
+        }
+
+        saveCroppedImg(croppedImgSrc);
+      } catch (error) {
+        toast(
+          error instanceof Error
+            ? error.message
+            : "An error occur when trying to convert the image. Try again.",
+        );
       }
-
-      saveCroppedImg(croppedImgSrc);
     });
   };
 

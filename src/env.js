@@ -47,6 +47,7 @@ export const env = createEnv({
    */
   client: {
     NEXT_PUBLIC_BASE_URL: z.url().default("http://localhost:3000"),
+    NEXT_PUBLIC_APP_VERSION: z.string(),
     NEXT_PUBLIC_SENTRY_DSN: z.url().optional(),
   },
 
@@ -84,6 +85,7 @@ export const env = createEnv({
 
     NEXT_PUBLIC_SENTRY_DSN: process.env.NEXT_PUBLIC_SENTRY_DSN,
     NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
+    NEXT_PUBLIC_APP_VERSION: process.env.NEXT_PUBLIC_APP_VERSION,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

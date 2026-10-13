@@ -3,6 +3,11 @@
 import { useState } from "react";
 import type { Area } from "react-easy-crop";
 
+const MAX_IMAGE_SIZE = 900 * 1024;
+const MAX_IMAGE_DIMENSION = 1600;
+const MIN_IMAGE_DIMENSION = 256;
+const JPEG_QUALITIES = [0.85, 0.7, 0.55, 0.4];
+
 export function useCropper() {
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
 
@@ -61,8 +66,14 @@ export async function getCroppedImg(
     return null;
   }
 
-  croppedCanvas.width = pixelCrop.width;
-  croppedCanvas.height = pixelCrop.height;
+  const outputScale = Math.min(
+    1,
+    MAX_IMAGE_DIMENSION / Math.max(pixelCrop.width, pixelCrop.height),
+  );
+  let outputWidth = Math.max(1, Math.round(pixelCrop.width * outputScale));
+  let outputHeight = Math.max(1, Math.round(pixelCrop.height * outputScale));
+  croppedCanvas.width = outputWidth;
+  croppedCanvas.height = outputHeight;
 
   croppedCtx.drawImage(
     canvas,
@@ -72,14 +83,59 @@ export async function getCroppedImg(
     pixelCrop.height,
     0,
     0,
-    pixelCrop.width,
-    pixelCrop.height,
+    outputWidth,
+    outputHeight,
   );
 
-  return new Promise<string | null>((resolve) => {
-    croppedCanvas.toBlob((file) => {
-      resolve(file ? URL.createObjectURL(file) : null);
-    }, "image/jpeg");
+  while (true) {
+    for (const quality of JPEG_QUALITIES) {
+      const file = await canvasToBlob(croppedCanvas, quality);
+
+      if (file.size <= MAX_IMAGE_SIZE) {
+        return URL.createObjectURL(file);
+      }
+    }
+
+    if (Math.max(outputWidth, outputHeight) <= MIN_IMAGE_DIMENSION) {
+      throw new Error("Image could not be compressed below 900 KiB.");
+    }
+
+    const scale = Math.max(
+      MIN_IMAGE_DIMENSION / Math.max(outputWidth, outputHeight),
+      0.8,
+    );
+    outputWidth = Math.max(1, Math.round(outputWidth * scale));
+    outputHeight = Math.max(1, Math.round(outputHeight * scale));
+    croppedCanvas.width = outputWidth;
+    croppedCanvas.height = outputHeight;
+
+    croppedCtx.drawImage(
+      canvas,
+      pixelCrop.x,
+      pixelCrop.y,
+      pixelCrop.width,
+      pixelCrop.height,
+      0,
+      0,
+      outputWidth,
+      outputHeight,
+    );
+  }
+}
+
+function canvasToBlob(canvas: HTMLCanvasElement, quality: number) {
+  return new Promise<Blob>((resolve, reject) => {
+    canvas.toBlob(
+      (blob) => {
+        if (blob) {
+          resolve(blob);
+        } else {
+          reject(new Error("Image conversion failed."));
+        }
+      },
+      "image/jpeg",
+      quality,
+    );
   });
 }
 
