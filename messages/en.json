@@ -6,6 +6,7 @@
     },
     "Common": {
         "loading": "Loading",
+        "chars": "characters",
         "noResults": "No results.",
         "submit": "Submit",
         "invalid": "Invalid",
@@ -13,6 +14,7 @@
             "asc": "Asc",
             "desc": "Desc",
             "hide": "Hide",
+            "toggleColumns": "Columns",
             "pagination": {
                 "goToFirst": "Go to first page",
                 "goToPrevious": "Go to previous page",

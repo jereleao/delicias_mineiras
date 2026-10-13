@@ -1,8 +1,10 @@
 import z from "zod";
 import { customType, index, primaryKey } from "drizzle-orm/pg-core";
-import { type AdapterAccount } from "next-auth/adapters";
+// import { type AdapterAccountType } from "next-auth/adapters";
 import { createTable } from "~/libs/db/schemas/common";
 import { roles } from "~/libs/db/schemas/permissions";
+
+type AdapterAccountType = "oauth" | "oidc" | "email" | "webauthn";
 
 export const inviteSchema = z.object({
   email: z.email(),
@@ -41,7 +43,7 @@ export const accounts = createTable(
       .varchar({ length: 255 })
       .notNull()
       .references(() => users.id),
-    type: d.varchar({ length: 255 }).$type<AdapterAccount["type"]>().notNull(),
+    type: d.varchar({ length: 255 }).$type<AdapterAccountType>().notNull(),
     provider: d.varchar({ length: 255 }).notNull(),
     providerAccountId: d.varchar({ length: 255 }).notNull(),
     refresh_token: d.text(),

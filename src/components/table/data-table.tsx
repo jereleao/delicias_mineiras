@@ -2,10 +2,12 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
+import { toast } from "sonner";
 import {
   useTable,
   type ColumnDef,
   type ColumnFiltersState,
+  type ColumnVisibilityState,
   type RowData,
   type SortingState,
 } from "@tanstack/react-table";
@@ -19,23 +21,38 @@ import {
   TableRow,
 } from "~/components/ui/table";
 import { Input } from "~/components/ui/input";
+import { api } from "~/libs/trpc/react";
 import { cn } from "~/utils";
 
 import { features, type DataTableFeatures } from "./data-table-features";
 import { DataTablePagination } from "./data-table-pagination";
 
+export interface TableConfiguration {
+  sorting: SortingState;
+  columnVisibility: ColumnVisibilityState;
+}
+
 interface DataTableProps<TData extends RowData> {
+  id: string;
   columns: ColumnDef<DataTableFeatures, TData>[];
   data: TData[];
   className?: string;
+  config: TableConfiguration;
 }
 
-export function DataTable<TData extends RowData>({
+export function DataTableComponent<TData extends RowData>({
+  id: tableId,
   columns,
   data,
   className,
+  config,
 }: DataTableProps<TData>) {
-  const [sorting, setSorting] = useState<SortingState>([]);
+  const { mutate: saveConfig } = api.userObject.createOrUpdate.useMutation({
+    onError: (error) => toast.error(error.message),
+  });
+  const [sorting, setSorting] = useState<SortingState>(config.sorting);
+  const [columnVisibility, setColumnVisibility] =
+    useState<ColumnVisibilityState>(config.columnVisibility);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [rowSelection, setRowSelection] = useState({});
 
@@ -43,8 +60,25 @@ export function DataTable<TData extends RowData>({
     features,
     data,
     columns,
-    onSortingChange: setSorting,
+    onSortingChange: (updater) => {
+      const nextSorting =
+        typeof updater === "function" ? updater(sorting) : updater;
+      setSorting(nextSorting);
+      saveConfig({
+        key: `table_${tableId}`,
+        value: { sorting: nextSorting, columnVisibility },
+      });
+    },
     onColumnFiltersChange: setColumnFilters,
+    onColumnVisibilityChange: (updater) => {
+      const nextColumnVisibility =
+        typeof updater === "function" ? updater(columnVisibility) : updater;
+      setColumnVisibility(nextColumnVisibility);
+      saveConfig({
+        key: `table_${tableId}`,
+        value: { columnVisibility: nextColumnVisibility, sorting },
+      });
+    },
     onRowSelectionChange: setRowSelection,
     defaultColumn: {
       enableHiding: false,
@@ -53,6 +87,10 @@ export function DataTable<TData extends RowData>({
       sorting,
       columnFilters,
       rowSelection,
+      columnVisibility,
+    },
+    meta: {
+      id: tableId,
     },
   });
 

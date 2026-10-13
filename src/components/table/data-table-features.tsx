@@ -15,6 +15,7 @@ import {
   tableFeatures,
   type RowData,
 } from "@tanstack/react-table";
+import type { useTranslations } from "next-intl";
 
 // New in v9: declare the features this table uses — anything you don't
 // register is tree-shaken out of the bundle.
@@ -42,6 +43,7 @@ export function createColumnHelper<TData extends RowData>() {
 export type DataTableFeatures = typeof features;
 
 interface TableMeta {
+  id: string;
   classNames?: {
     table?: string;
     body?: string;
@@ -50,7 +52,10 @@ interface TableMeta {
   // updateData: (rowIndex: number, columnId: string, value: unknown) => void;
 }
 
+type MessageKey = Parameters<ReturnType<typeof useTranslations<never>>>[0];
+
 interface ColumnMeta {
+  tKey?: MessageKey;
   classNames?: {
     header?: string;
     cell?: string;

@@ -17,7 +17,7 @@ export function NewButton() {
       content={ProductForm}
       product={undefined}
     >
-      <Button size="sm" className="h-6 px-2 text-xs">
+      <Button size="sm" className="h-7 px-2 text-xs">
         <PlusIcon />
         {t("products.form.title")}
       </Button>

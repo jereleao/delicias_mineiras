@@ -32,7 +32,7 @@ interface DataTableColumnHeaderTranlationKey<
   TData extends RowData,
   TValue,
 > extends BaseDataTableColumnHeaderProps<TData, TValue> {
-  tKey: MessageKey;
+  tKey?: MessageKey;
 }
 
 interface DataTableColumnHeaderTitle<
@@ -55,17 +55,27 @@ export function DataTableColumnHeader<TData extends RowData, TValue>({
 }: DataTableColumnHeaderProps<TData, TValue>) {
   const t = useTranslations();
 
+  const tranlatedPropTitle =
+    "tKey" in otherProps && otherProps.tKey ? t(otherProps.tKey) : undefined;
+
+  const translatedMetaTitle = column.columnDef.meta?.tKey
+    ? t(column.columnDef.meta.tKey)
+    : undefined;
+
   const resolvedTitle =
-    "tKey" in otherProps ? (
-      t(otherProps.tKey)
-    ) : typeof otherProps.title == "function" ? (
-      <otherProps.title column={column} />
-    ) : (
-      (otherProps.title ?? "")
-    );
+    "title" in otherProps ? (
+      typeof otherProps.title == "function" ? (
+        <otherProps.title column={column} />
+      ) : (
+        otherProps.title
+      )
+    ) : undefined;
+
+  const title =
+    resolvedTitle ?? tranlatedPropTitle ?? translatedMetaTitle ?? "";
 
   if (!column.getCanSort()) {
-    return <div className={cn(className)}>{resolvedTitle}</div>;
+    return <div className={cn(className)}>{title}</div>;
   }
 
   return (
@@ -77,7 +87,7 @@ export function DataTableColumnHeader<TData extends RowData, TValue>({
             size="sm"
             className="data-[state=open]:bg-accent -ml-3 h-8"
           >
-            <span>{resolvedTitle}</span>
+            <span>{title}</span>
             {column.getIsSorted() === "desc" ? (
               <ArrowDownIcon />
             ) : column.getIsSorted() === "asc" ? (

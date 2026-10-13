@@ -1,5 +1,5 @@
 import { api } from "~/libs/trpc/server";
-import { DataTable } from "~/components/table/data-table";
+import { DataTable } from "~/components/table/data-table-whapper";
 import { columns } from "./_components/columns";
 import type { GetCategoryResponse } from "~/libs/api/routers/category";
 
@@ -8,5 +8,7 @@ export default async function CategoriesPage() {
 
   console.debug("TODO: make responsible design on columns widths");
 
-  return <DataTable columns={columns} data={data} className="mt-4" />;
+  return (
+    <DataTable id="categories" columns={columns} data={data} className="mt-4" />
+  );
 }

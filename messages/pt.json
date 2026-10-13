@@ -14,6 +14,7 @@
             "asc": "Asc",
             "desc": "Desc",
             "hide": "Esconder",
+            "toggleColumns": "Colunas",
             "pagination": {
                 "goToFirst": "Ir para a primeira página",
                 "goToPrevious": "Ir para a página anterior",

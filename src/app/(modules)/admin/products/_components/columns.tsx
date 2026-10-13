@@ -12,6 +12,7 @@ import { DeleteButton } from "./buttons/delete-button";
 import { EditButton } from "./buttons/edit-button";
 import { ActivateButton } from "./buttons/activate-button";
 import { InactivateButton } from "./buttons/inactivate-button";
+import { DataTableColumnOptions } from "~/components/table/data-table-column-options";
 
 const columnHelper = createColumnHelper<Product>();
 
@@ -48,13 +49,9 @@ export const columns = columnHelper.columns([
       classNames: {
         header: "w-36",
       },
+      tKey: "AdminPage.products.table.columns.name",
     },
-    header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        tKey="AdminPage.products.table.columns.name"
-      />
-    ),
+    header: ({ column }) => <DataTableColumnHeader column={column} />,
     cell: ({ cell, row }) => {
       const isActive = row.original.active;
       const cellValue = cell.getValue();
@@ -67,12 +64,12 @@ export const columns = columnHelper.columns([
     },
   }),
   columnHelper.accessor("description", {
+    meta: {
+      tKey: "AdminPage.products.table.columns.description",
+    },
+    enableHiding: true,
     header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        tKey="AdminPage.products.table.columns.description"
-        className="w-full"
-      />
+      <DataTableColumnHeader column={column} className="w-full" />
     ),
     cell: ({ cell, row }) => {
       const isActive = row.original.active;
@@ -86,17 +83,14 @@ export const columns = columnHelper.columns([
     },
   }),
   columnHelper.accessor("categoryName", {
+    enableHiding: true,
     meta: {
       classNames: {
         header: "w-32",
       },
+      tKey: "AdminPage.products.table.columns.categoryName",
     },
-    header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        tKey="AdminPage.products.table.columns.categoryName"
-      />
-    ),
+    header: ({ column }) => <DataTableColumnHeader column={column} />,
     cell: ({ cell, row }) => {
       const isActive = row.original.active;
       const cellValue = cell.getValue();
@@ -113,13 +107,10 @@ export const columns = columnHelper.columns([
       classNames: {
         header: "w-24",
       },
+      tKey: "AdminPage.products.table.columns.price",
     },
     header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        tKey="AdminPage.products.table.columns.price"
-        className="flex justify-end"
-      />
+      <DataTableColumnHeader column={column} className="flex justify-end" />
     ),
     cell: ({ row }) => {
       const amount = parseFloat(row.getValue("price"));
@@ -150,10 +141,9 @@ export const columns = columnHelper.columns([
         header: "w-24",
       },
     },
-    header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        className="flex justify-center"
+    header: ({ table }) => (
+      <DataTableColumnOptions
+        table={table}
         title={
           <PermissionGuard permission="admin.products:manage">
             <NewButton />
