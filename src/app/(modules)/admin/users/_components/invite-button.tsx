@@ -22,7 +22,7 @@ export function InviteNewUser(p: InviteNewUserProps) {
       content={InviteForm}
       {...p}
     >
-      <Button size="sm" className="h-6 px-2 text-xs">
+      <Button size="sm" className="h-7 px-2 text-xs">
         <PlusIcon />
         {t("users.form.title")}
       </Button>

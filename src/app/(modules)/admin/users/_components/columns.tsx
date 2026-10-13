@@ -14,6 +14,7 @@ import { EditButton } from "./buttons/edit-button";
 import { DeleteButton } from "./buttons/delete-button";
 import UserAvatar from "~/components/user-avatar";
 import { InviteNewUser } from "./invite-button";
+import { DataTableColumnOptions } from "~/components/table/data-table-column-options";
 
 const columnHelper = createColumnHelper<User>();
 
@@ -71,21 +72,20 @@ export const getColums = (roleOptions: Array<Role>) => {
       ),
     }),
     columnHelper.accessor("bio", {
+      enableHiding: true,
+      meta: {
+        tKey: "AdminPage.users.table.columns.bio",
+      },
       header: ({ column }) => (
-        <DataTableColumnHeader
-          column={column}
-          tKey="AdminPage.users.table.columns.bio"
-          className="w-full"
-        />
+        <DataTableColumnHeader column={column} className="w-full" />
       ),
     }),
     columnHelper.accessor("email", {
-      header: ({ column }) => (
-        <DataTableColumnHeader
-          column={column}
-          tKey="AdminPage.users.table.columns.email"
-        />
-      ),
+      enableHiding: true,
+      meta: {
+        tKey: "AdminPage.users.table.columns.email",
+      },
+      header: ({ column }) => <DataTableColumnHeader column={column} />,
       cell: ({ cell, row }) => {
         const isVerified = row.original.emailVerified;
         const cellValue = cell.getValue();
@@ -103,18 +103,15 @@ export const getColums = (roleOptions: Array<Role>) => {
       },
     }),
     columnHelper.accessor("roleId", {
+      enableHiding: true,
       meta: {
         classNames: {
           header: "w-36",
           cell: "py-0",
         },
+        tKey: "AdminPage.users.table.columns.role",
       },
-      header: ({ column }) => (
-        <DataTableColumnHeader
-          column={column}
-          tKey="AdminPage.users.table.columns.role"
-        />
-      ),
+      header: ({ column }) => <DataTableColumnHeader column={column} />,
       cell: ({ cell, row }) => {
         const userId = row.original.id;
         const cellValue = cell.getValue();
@@ -138,10 +135,9 @@ export const getColums = (roleOptions: Array<Role>) => {
           header: "w-24",
         },
       },
-      header: ({ column }) => (
-        <DataTableColumnHeader
-          column={column}
-          className="flex justify-center"
+      header: ({ table }) => (
+        <DataTableColumnOptions
+          table={table}
           title={<InviteNewUser roleOptions={roleOptions} />}
         />
       ),

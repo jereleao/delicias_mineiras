@@ -18,6 +18,7 @@ import { ImageIcon } from "lucide-react";
 import { useTouchDevice } from "~/hooks/use-touch-devide";
 import { DialogButton } from "~/components/dialog-button";
 import { useTranslations } from "next-intl";
+import { DataTableColumnOptions } from "~/components/table/data-table-column-options";
 
 const columnHelper = createColumnHelper<Banner>();
 
@@ -54,13 +55,9 @@ export const columns = columnHelper.columns([
       classNames: {
         header: "w-36",
       },
+      tKey: "AdminPage.banners.table.columns.title",
     },
-    header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        tKey="AdminPage.banners.table.columns.title"
-      />
-    ),
+    header: ({ column }) => <DataTableColumnHeader column={column} />,
     cell: ({ cell, row }) => {
       const isActive = row.original.active;
       const cellValue = cell.getValue();
@@ -72,12 +69,12 @@ export const columns = columnHelper.columns([
     },
   }),
   columnHelper.accessor("description", {
+    enableHiding: true,
+    meta: {
+      tKey: "AdminPage.banners.table.columns.description",
+    },
     header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        tKey="AdminPage.banners.table.columns.description"
-        className="w-full"
-      />
+      <DataTableColumnHeader column={column} className="w-full" />
     ),
     cell: ({ cell, row }) => {
       const isActive = row.original.active;
@@ -90,18 +87,12 @@ export const columns = columnHelper.columns([
     },
   }),
   columnHelper.accessor("imageUrl", {
-    // meta: {
-    //   classNames: {
-    //     header: "w-32",
-    //   },
-    // },
+    enableHiding: true,
+    meta: {
+      tKey: "AdminPage.banners.table.columns.imageUrl",
+    },
     enableSorting: false,
-    header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        tKey="AdminPage.banners.table.columns.imageUrl"
-      />
-    ),
+    header: ({ column }) => <DataTableColumnHeader column={column} />,
     cell: ({ cell, row }) => {
       const isActive = row.original.active;
       const cellValue = cell.getValue();
@@ -152,10 +143,9 @@ export const columns = columnHelper.columns([
         header: "w-24",
       },
     },
-    header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        className="flex justify-center"
+    header: ({ table }) => (
+      <DataTableColumnOptions
+        table={table}
         title={
           <PermissionGuard permission="admin.banners:manage">
             <NewButton />

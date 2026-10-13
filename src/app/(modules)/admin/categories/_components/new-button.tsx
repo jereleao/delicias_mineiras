@@ -16,7 +16,7 @@ export function NewButton() {
       className="md:max-w-3xl"
       content={CategoryForm}
     >
-      <Button size="sm" className="h-6 px-2 text-xs">
+      <Button size="sm" className="h-7 px-2 text-xs">
         <PlusIcon />
         {t("categories.form.title")}
       </Button>
