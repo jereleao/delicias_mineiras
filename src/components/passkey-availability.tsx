@@ -24,12 +24,13 @@ export default function PasskeyAvailability() {
 
   const { data: userData, isPending: isPendingQuery } = api.user.me.useQuery();
 
-  const enabled =
+  const enabled = Boolean(
     userData?.offerPasskey &&
     !isPendingQuery &&
     passkeyAvailable &&
     session.status == "authenticated" &&
-    session.data?.provider !== PASSKEY_PROVIDER_ID;
+    session.data?.provider !== PASSKEY_PROVIDER_ID,
+  );
 
   useEffect(() => {
     if (enabled) {
