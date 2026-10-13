@@ -55,16 +55,13 @@ export default function LoginForm() {
 
   return (
     <div className="bg-background border-border w-full max-w-xl rounded-3xl border p-10 shadow-2xl">
-      <h1 className="text-center text-4xl font-semibold">{t("title")}</h1>
-      <p className="text-muted-foreground mt-4 text-center">
-        {t("description")}
-      </p>
-
+      <h1 className="text-3xl font-semibold">{t("title")}</h1>
+      <p className="text-muted-foreground mt-4">{t("description")}</p>
       <div className="mt-10 flex flex-col gap-4">
-        <div className="flex justify-evenly">
+        <div className="flex flex-col items-center justify-between gap-1 sm:flex-row">
           <Button
             variant="outline"
-            className="h-10 max-w-100 rounded-full"
+            className="h-10 w-full max-w-70 rounded-full sm:w-[49%]"
             onClick={() => signIn("google", { callbackUrl: "/" })}
           >
             <GoogleIcon className="mr-2" />
@@ -73,7 +70,7 @@ export default function LoginForm() {
           <ConditionGuard condition={passkeyAvailable}>
             <Button
               variant="outline"
-              className="h-10 max-w-100 rounded-full"
+              className="h-10 w-full max-w-70 rounded-full sm:w-[49%]"
               onClick={manuallyStartAuthentication}
               disabled={isAsserting}
             >

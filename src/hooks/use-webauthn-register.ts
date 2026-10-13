@@ -4,11 +4,10 @@ import { api } from "~/libs/trpc/react";
 import { toast } from "sonner";
 import { useUserAgentData } from "./use-user-agent-data";
 import { startRegistration } from "@simplewebauthn/browser";
-import { skipToken } from "@tanstack/react-query";
 
 export function useWebauthnRegister(enabled: boolean = true) {
-  const { data: makeCredentialOptions, isPending: isPendingOptions } =
-    api.webauthn.makeCredentialOptions.useQuery(skipToken, {
+  const { data: makeCredentialOptions, isFetching: isFetchingOptions } =
+    api.webauthn.makeCredentialOptions.useQuery(undefined, {
       enabled,
     });
 
@@ -61,7 +60,7 @@ export function useWebauthnRegister(enabled: boolean = true) {
     }
   };
 
-  const isPending = isPendingOptions || isPendingMutation;
+  const isPending = isFetchingOptions || isPendingMutation;
 
   return [isPending, handleRegisterPasskey] as const;
 }
