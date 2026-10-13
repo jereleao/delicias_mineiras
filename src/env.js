@@ -1,6 +1,6 @@
 import { createEnv } from "@t3-oss/env-nextjs";
 import { z } from "zod";
-import packageJson from "../package.json";
+import packageJson from "../package.json" with { type: "json" };
 
 export const env = createEnv({
   /**
