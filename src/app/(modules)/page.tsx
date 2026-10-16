@@ -31,7 +31,7 @@ export default async function Home() {
       {categoriesWithProducts.map((category) => (
         <MenuSection key={category.id} {...category} />
       ))}
-      <div className="absolute right-6 bottom-0">
+      <div className="absolute right-6 -bottom-10">
         <WhatsAppButton />
       </div>
     </>
