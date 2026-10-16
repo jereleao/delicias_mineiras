@@ -124,6 +124,7 @@
                 "columns": {
                     "name": "Produto",
                     "description": "Descrição",
+                    "imageUrl": "Imagem",
                     "categoryName": "Categoria",
                     "price": "Preço"
                 },

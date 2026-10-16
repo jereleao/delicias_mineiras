@@ -13,6 +13,12 @@ import { EditButton } from "./buttons/edit-button";
 import { ActivateButton } from "./buttons/activate-button";
 import { InactivateButton } from "./buttons/inactivate-button";
 import { DataTableColumnOptions } from "~/components/table/data-table-column-options";
+import { useTouchDevice } from "~/hooks/use-touch-devide";
+import { useTranslations } from "next-intl";
+import Image from "next/image";
+import { ImageIcon } from "lucide-react";
+import { DialogButton } from "~/components/dialog-button";
+import { Tooltip } from "~/components/ui/tooltip";
 
 const columnHelper = createColumnHelper<Product>();
 
@@ -79,6 +85,55 @@ export const columns = columnHelper.columns([
         <span className={cn(!isActive && "text-muted-foreground")}>
           {cellValue}
         </span>
+      );
+    },
+  }),
+  columnHelper.accessor("imageUrl", {
+    enableHiding: true,
+    meta: {
+      tKey: "AdminPage.products.table.columns.imageUrl",
+    },
+    enableSorting: false,
+    header: ({ column }) => <DataTableColumnHeader column={column} />,
+    cell: ({ cell, row }) => {
+      const isActive = row.original.active;
+      const cellValue = cell.getValue();
+
+      const isTouch = useTouchDevice();
+      const t = useTranslations("AdminPage");
+
+      const image = (
+        <Image
+          src={cellValue!}
+          alt={row.original.description ?? "Product Image"}
+          width={1024}
+          height={256}
+          className="h-20 w-full rounded-sm object-cover"
+          unoptimized
+        />
+      );
+
+      const icon = (
+        <ImageIcon
+          className={cn("size-4", !isActive && "text-muted-foreground")}
+        />
+      );
+
+      if (isTouch)
+        return (
+          <DialogButton
+            title={t("banners.form.title")}
+            className="md:max-w-3xl"
+            content={image}
+          >
+            {icon}
+          </DialogButton>
+        );
+
+      return (
+        <Tooltip className="px-1.5" content={image}>
+          {icon}
+        </Tooltip>
       );
     },
   }),
