@@ -64,7 +64,20 @@
         }
     },
     "HomePage": {
-        "title": "Home Page"
+        "title": "Home Page",
+        "cart": {
+            "title": "Your cart",
+            "itemCount": "{count} items",
+            "edit": "Edit",
+            "close": "Close cart",
+            "unavailableProduct": "Unavailable product",
+            "decreaseQuantity": "Decrease quantity of {product}",
+            "increaseQuantity": "Increase quantity of {product}",
+            "removeProduct": "Remove {product}",
+            "total": "Total",
+            "clear": "Clear cart",
+            "whatsapp": "Continue on WhatsApp"
+        }
     },
     "AdminPage": {
         "title": "Admin Dashboard",

@@ -3,7 +3,8 @@ import { api } from "~/libs/trpc/server";
 import { MenuSection } from "./_components/menu-section";
 import { BannerList } from "./_components/banner-list";
 import { type MenuCategory } from "./_components/products";
-import WhatsAppButton from "./_components/whats-app-button";
+import { FloaterCartButton } from "./_components/floater-cart-button";
+import { WhatsAppButton } from "./_components/whats-app-button";
 
 export default async function Home() {
   const products = await api.product.all();
@@ -32,7 +33,9 @@ export default async function Home() {
         <MenuSection key={category.id} {...category} />
       ))}
       <div className="absolute right-6 -bottom-10">
-        <WhatsAppButton />
+        <FloaterCartButton products={products ?? []}>
+          <WhatsAppButton />
+        </FloaterCartButton>
       </div>
     </>
   );

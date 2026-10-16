@@ -1,25 +1,21 @@
 "use client";
 
 import Image from "next/image";
-// import { PlusIcon, CheckIcon } from "lucide-react";
-// import { useState } from "react";
+import { PlusIcon, CheckIcon } from "lucide-react";
+import { useState } from "react";
 import { formatPrice } from "./products";
 import type { Product } from "~/libs/api/routers/product";
+import { useCart } from "../_contexts/cart-context";
 
-export function ProductCard({
-  product,
-  // onAdd,
-}: {
-  product: Product;
-  // onAdd: (product: Product) => void;
-}) {
-  // const [added, setAdded] = useState(false);
+export function ProductCard({ product }: { product: Product }) {
+  const { addProduct } = useCart();
+  const [added, setAdded] = useState(false);
 
-  // function handleAdd() {
-  //   // onAdd(product);
-  //   setAdded(true);
-  //   window.setTimeout(() => setAdded(false), 1000);
-  // }
+  function handleAdd() {
+    addProduct(product.id);
+    setAdded(true);
+    setTimeout(() => setAdded(false), 1000);
+  }
 
   return (
     <article className="group border-border bg-card flex gap-4 rounded-2xl border p-4 shadow-sm transition-shadow hover:shadow-md">
@@ -34,7 +30,7 @@ export function ProductCard({
           <span className="font-display text-primary text-xl font-extrabold">
             {formatPrice(+product.price)}
           </span>
-          {/* <button
+          <button
             type="button"
             onClick={handleAdd}
             aria-label={`Adicionar ${product.name} ao pedido`}
@@ -45,7 +41,7 @@ export function ProductCard({
             ) : (
               <PlusIcon className="size-5" />
             )}
-          </button> */}
+          </button>
         </div>
       </div>
 

@@ -65,7 +65,20 @@
         }
     },
     "HomePage": {
-        "title": "Página Inicial"
+        "title": "Página Inicial",
+        "cart": {
+            "title": "Seu carrinho",
+            "itemCount": "{count} itens",
+            "edit": "Editar",
+            "close": "Fechar carrinho",
+            "unavailableProduct": "Produto indisponível",
+            "decreaseQuantity": "Diminuir quantidade de {product}",
+            "increaseQuantity": "Aumentar quantidade de {product}",
+            "removeProduct": "Remover {product}",
+            "total": "Total",
+            "clear": "Limpar carrinho",
+            "whatsapp": "Continuar pelo WhatsApp"
+        }
     },
     "AdminPage": {
         "title": "Painel Administrativo",
