@@ -4,7 +4,7 @@ import { byIdSchema, createTable } from "~/libs/db/schemas/common";
 
 export const createBannerSchema = z.object({
   title: z.string().min(1),
-  description: z.string().min(1),
+  description: z.string().optional(),
   imageUrl: z.url(),
   actionLabel: z.string().optional(),
   actionUrl: z.url().optional(),
