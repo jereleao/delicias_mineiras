@@ -106,9 +106,9 @@ export const columns = columnHelper.columns([
         <Image
           src={cellValue!}
           alt={row.original.description ?? "Product Image"}
-          width={1024}
+          width={256}
           height={256}
-          className="h-20 w-full rounded-sm object-cover"
+          className="size-20 rounded-sm object-cover"
           unoptimized
         />
       );
