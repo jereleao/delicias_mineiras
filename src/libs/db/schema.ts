@@ -11,9 +11,13 @@ import {
 } from "./schemas/users";
 import { configs } from "./schemas/config";
 import { userObjects } from "./schemas/user-objects";
+import { stores } from "./schemas/stores";
+import { storeDomains } from "./schemas/store-domains";
 
 export {
   configs,
+  stores,
+  storeDomains,
   userObjects,
   banners,
   categories,

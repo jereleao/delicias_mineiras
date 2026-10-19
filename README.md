@@ -4,7 +4,7 @@ Delícias Mineiras is a multilingual product catalog for a food business. The pu
 
 ## Features
 
-- Product catalog with category sections, images, descriptions, prices, and keywords
+- Store-hosted product catalogs with store-specific categories, banners, and business settings; each store can be mapped to multiple domains
 - Promotional banner management
 - Administration dashboard with protected routes and permission guards
 - Email and Google authentication, plus WebAuthn/passkey support

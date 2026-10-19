@@ -1,7 +1,8 @@
 import z from "zod";
-import { index } from "drizzle-orm/pg-core";
+import { index, uniqueIndex } from "drizzle-orm/pg-core";
 import { users } from "~/libs/db/schema";
 import { byIdSchema, createTable } from "~/libs/db/schemas/common";
+import { stores } from "~/libs/db/schemas/stores";
 
 export const createCategorySchema = z.object({
   name: z.string().min(1),
@@ -14,6 +15,10 @@ export const categories = createTable(
   (d) => ({
     id: d.integer().primaryKey().generatedByDefaultAsIdentity(),
     name: d.varchar({ length: 256 }).notNull(),
+    storeId: d
+      .integer()
+      .notNull()
+      .references(() => stores.id, { onDelete: "cascade" }),
     createdById: d
       .varchar({ length: 255 })
       .notNull()
@@ -25,7 +30,9 @@ export const categories = createTable(
     updatedAt: d.timestamp({ withTimezone: true }).$onUpdate(() => new Date()),
   }),
   (t) => [
+    uniqueIndex("category_id_store_idx").on(t.id, t.storeId),
+    index("category_store_idx").on(t.storeId),
     index("category_created_by_idx").on(t.createdById),
-    index("category_name_idx").on(t.name),
+    index("category_store_name_idx").on(t.storeId, t.name),
   ],
 );

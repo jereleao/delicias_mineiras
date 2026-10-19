@@ -1,6 +1,7 @@
 import z from "zod";
 import { index } from "drizzle-orm/pg-core";
 import { byIdSchema, createTable } from "~/libs/db/schemas/common";
+import { stores } from "~/libs/db/schemas/stores";
 
 export const createBannerSchema = z.object({
   title: z.string().min(1),
@@ -28,6 +29,10 @@ export const banners = createTable(
   "banner",
   (d) => ({
     id: d.integer().primaryKey().generatedByDefaultAsIdentity(),
+    storeId: d
+      .integer()
+      .notNull()
+      .references(() => stores.id, { onDelete: "cascade" }),
     title: d.varchar({ length: 256 }),
     description: d.varchar({ length: 256 }),
     imageUrl: d.varchar({ length: 256 }),
@@ -40,5 +45,8 @@ export const banners = createTable(
       .notNull(),
     updatedAt: d.timestamp({ withTimezone: true }).$onUpdate(() => new Date()),
   }),
-  (t) => [index("banner_title_idx").on(t.title)],
+  (t) => [
+    index("banner_store_idx").on(t.storeId),
+    index("banner_store_title_idx").on(t.storeId, t.title),
+  ],
 );

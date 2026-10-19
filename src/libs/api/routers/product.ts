@@ -1,8 +1,8 @@
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import {
   createTRPCRouter,
-  permissionProcedure,
-  publicProcedure,
+  storePermissionProcedure,
+  storePublicProcedure,
 } from "~/libs/api/trpc";
 import { products, categories } from "~/libs/db/schema";
 import {
@@ -19,7 +19,7 @@ export type Product = ProductOutputs["all"][number];
 export type GetProductResponse = Array<Product>;
 
 export const productRouter = createTRPCRouter({
-  all: publicProcedure.query(async ({ ctx }) => {
+  all: storePublicProcedure.query(async ({ ctx }) => {
     const productsWithCategory = await ctx.db
       .select({
         id: products.id,
@@ -33,43 +33,72 @@ export const productRouter = createTRPCRouter({
         active: products.active,
       })
       .from(products)
-      .leftJoin(categories, eq(products.categoryId, categories.id))
+      .leftJoin(
+        categories,
+        and(
+          eq(products.categoryId, categories.id),
+          eq(products.storeId, categories.storeId),
+        ),
+      )
+      .where(eq(products.storeId, ctx.store.id))
       .orderBy(products.createdAt);
 
     return productsWithCategory ?? null;
   }),
 
-  getById: publicProcedure.input(byIdSchema).query(async ({ ctx, input }) => {
-    const product = await ctx.db
-      .select({
-        id: products.id,
-        categoryId: products.categoryId,
-        name: products.name,
-        description: products.description,
-        price: products.price,
-        imageUrl: products.imageUrl,
-        keywords: products.keywords,
-        categoryName: categories.name,
-        active: products.active,
-      })
-      .from(products)
-      .leftJoin(categories, eq(products.categoryId, categories.id))
-      .where(eq(products.id, input.id))
-      .orderBy(products.createdAt)
-      .then((rows) => rows[0]);
+  getById: storePublicProcedure
+    .input(byIdSchema)
+    .query(async ({ ctx, input }) => {
+      const product = await ctx.db
+        .select({
+          id: products.id,
+          categoryId: products.categoryId,
+          name: products.name,
+          description: products.description,
+          price: products.price,
+          imageUrl: products.imageUrl,
+          keywords: products.keywords,
+          categoryName: categories.name,
+          active: products.active,
+        })
+        .from(products)
+        .leftJoin(
+          categories,
+          and(
+            eq(products.categoryId, categories.id),
+            eq(products.storeId, categories.storeId),
+          ),
+        )
+        .where(
+          and(eq(products.id, input.id), eq(products.storeId, ctx.store.id)),
+        )
+        .orderBy(products.createdAt)
+        .then((rows) => rows[0]);
 
-    if (!product) throw new Error("not Found");
+      if (!product) throw new Error("not Found");
 
-    return product ?? null;
-  }),
+      return product ?? null;
+    }),
 
-  create: permissionProcedure("admin.products:manage")
+  create: storePermissionProcedure("admin.products:manage")
     .input(createProductSchema)
     .mutation(async ({ ctx, input }) => {
+      const category = await ctx.db.query.categories.findFirst({
+        where: (category, { and, eq }) =>
+          and(
+            eq(category.id, input.categoryId),
+            eq(category.storeId, ctx.store.id),
+          ),
+        columns: { id: true },
+      });
+
+      if (!category) throw new Error("Category not found in current store");
+
       const newProduct = await ctx.db
         .insert(products)
         .values({
           categoryId: input.categoryId,
+          storeId: ctx.store.id,
           name: input.name,
           description: input.description,
           price: input.price.toString(),
@@ -85,14 +114,29 @@ export const productRouter = createTRPCRouter({
       return newProduct;
     }),
 
-  update: permissionProcedure("admin.products:edit")
+  update: storePermissionProcedure("admin.products:edit")
     .input(updateProductSchema)
     .mutation(async ({ ctx, input: { price: priceAsNumber, ...input } }) => {
       const product = await ctx.db.query.products.findFirst({
-        where: (product, { eq }) => eq(product.id, input.id),
+        where: (product, { and, eq }) =>
+          and(eq(product.id, input.id), eq(product.storeId, ctx.store.id)),
       });
 
       if (!product) throw new Error("not Found");
+
+      const categoryId = input.categoryId;
+      if (categoryId !== undefined) {
+        const category = await ctx.db.query.categories.findFirst({
+          where: (category, { and, eq }) =>
+            and(
+              eq(category.id, categoryId),
+              eq(category.storeId, ctx.store.id),
+            ),
+          columns: { id: true },
+        });
+
+        if (!category) throw new Error("Category not found in current store");
+      }
 
       const price = priceAsNumber?.toString() || product.price;
 
@@ -101,7 +145,9 @@ export const productRouter = createTRPCRouter({
       const newProduct = await ctx.db
         .update(products)
         .set(updated)
-        .where(eq(products.id, input.id))
+        .where(
+          and(eq(products.id, input.id), eq(products.storeId, ctx.store.id)),
+        )
         .returning({
           id: products.id,
           name: products.name,
@@ -110,16 +156,21 @@ export const productRouter = createTRPCRouter({
       return newProduct;
     }),
 
-  delete: permissionProcedure("admin.products:manage")
+  delete: storePermissionProcedure("admin.products:manage")
     .input(byIdSchema)
     .mutation(async ({ ctx, input }) => {
       const product = await ctx.db.query.products.findFirst({
-        where: (product, { eq }) => eq(product.id, input.id),
+        where: (product, { and, eq }) =>
+          and(eq(product.id, input.id), eq(product.storeId, ctx.store.id)),
       });
 
       if (!product) throw new Error("not Found");
 
-      await ctx.db.delete(products).where(eq(products.id, input.id));
+      await ctx.db
+        .delete(products)
+        .where(
+          and(eq(products.id, input.id), eq(products.storeId, ctx.store.id)),
+        );
 
       return { imageUrl: product.imageUrl };
     }),

@@ -10,10 +10,11 @@
 import { initTRPC, TRPCError } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
-
 import { auth } from "~/libs/auth";
 import { db } from "~/libs/db";
 import { isAllowed, type PermissionKey } from "~/libs/auth/menus";
+import { storeDomains, stores } from "~/libs/db/schema";
+import { and, eq, sql } from "drizzle-orm";
 
 /**
  * 1. CONTEXT
@@ -145,3 +146,63 @@ export const permissionProcedure = (permission: PermissionKey) =>
 
     return next();
   });
+
+const storeContextMiddleware = t.middleware(async ({ ctx, next }) => {
+  const rawHost = ctx.headers.get("host");
+
+  if (!rawHost) {
+    throw new TRPCError({
+      code: "BAD_REQUEST",
+      message: "A request host is required to resolve the current store.",
+    });
+  }
+
+  let hostname: string;
+  try {
+    hostname = new URL(`http://${rawHost}`).hostname
+      .toLowerCase()
+      .replace(/\.$/, "");
+  } catch {
+    throw new TRPCError({
+      code: "BAD_REQUEST",
+      message: "The request host is invalid.",
+    });
+  }
+
+  const store = await ctx.db
+    .select({
+      id: stores.id,
+      name: stores.name,
+      slug: stores.slug,
+      active: stores.active,
+      createdAt: stores.createdAt,
+      updatedAt: stores.updatedAt,
+    })
+    .from(storeDomains)
+    .innerJoin(stores, eq(storeDomains.storeId, stores.id))
+    .where(
+      and(
+        sql`lower(${storeDomains.domain}) = ${hostname}`,
+        eq(stores.active, true),
+      ),
+    )
+    .then((rows) => rows[0]);
+
+  if (!store) {
+    throw new TRPCError({
+      code: "NOT_FOUND",
+      message: `No active store is configured for host "${hostname}".`,
+    });
+  }
+
+  return next({
+    ctx: {
+      store,
+    },
+  });
+});
+
+export const storePublicProcedure = publicProcedure.use(storeContextMiddleware);
+
+export const storePermissionProcedure = (permission: PermissionKey) =>
+  permissionProcedure(permission).use(storeContextMiddleware);

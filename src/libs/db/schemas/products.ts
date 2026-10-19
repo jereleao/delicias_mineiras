@@ -1,7 +1,8 @@
-import { index } from "drizzle-orm/pg-core";
+import { foreignKey, index } from "drizzle-orm/pg-core";
 import z from "zod";
 import { categories, users } from "~/libs/db/schema";
 import { byIdSchema, createTable } from "~/libs/db/schemas/common";
+import { stores } from "~/libs/db/schemas/stores";
 
 export const createProductSchema = z.object({
   categoryId: z.number(),
@@ -30,10 +31,11 @@ export const products = createTable(
   "product",
   (d) => ({
     id: d.integer().primaryKey().generatedByDefaultAsIdentity(),
-    categoryId: d
+    categoryId: d.integer().notNull(),
+    storeId: d
       .integer()
       .notNull()
-      .references(() => categories.id),
+      .references(() => stores.id, { onDelete: "cascade" }),
     name: d.varchar({ length: 256 }).notNull(),
     description: d.varchar({ length: 256 }),
     price: d.numeric({ precision: 10, scale: 2 }).notNull(),
@@ -51,7 +53,13 @@ export const products = createTable(
     updatedAt: d.timestamp({ withTimezone: true }).$onUpdate(() => new Date()),
   }),
   (t) => [
+    foreignKey({
+      columns: [t.categoryId, t.storeId],
+      foreignColumns: [categories.id, categories.storeId],
+      name: "product_category_store_fk",
+    }),
+    index("product_store_category_idx").on(t.storeId, t.categoryId),
     index("product_created_by_idx").on(t.createdById),
-    index("product_name_idx").on(t.name),
+    index("product_store_name_idx").on(t.storeId, t.name),
   ],
 );
