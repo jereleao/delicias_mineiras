@@ -35,13 +35,6 @@ export default async function Footer() {
 
   const columns: FooterColumn[] = [
     {
-      title: t("Footer.institutional"),
-      links: [
-        { label: t("AboutPage.title"), href: "/about" },
-        { label: t("ContactPage.title"), href: "/contact" },
-      ],
-    },
-    {
       title: isAuthenticated ? t("Footer.restricted") : t("UserMenu.login"),
       href: "/login",
       links: [
@@ -63,7 +56,7 @@ export default async function Footer() {
 
   return (
     <footer className="bg-muted w-dvw">
-      <div className="container mx-auto grid max-w-6xl grid-cols-1 gap-10 px-4 py-8 sm:grid-cols-2 sm:px-6 lg:grid-cols-3">
+      <div className="container mx-auto grid max-w-6xl grid-cols-1 gap-10 px-4 py-8 sm:grid-cols-2 sm:px-6">
         {columns.map((column) => (
           <nav key={column.title} aria-label={column.title}>
             <h2 className="text-foreground text-sm font-bold tracking-wide uppercase">
