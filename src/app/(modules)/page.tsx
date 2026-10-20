@@ -11,6 +11,8 @@ export default async function Home() {
 
   const session = await auth();
 
+  console.log("session", session);
+
   console.warn("TODO: Remove this check for admin access.");
   const hasAdminAccess = session != null;
 

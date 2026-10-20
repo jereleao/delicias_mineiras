@@ -31,6 +31,8 @@ export default async function Footer() {
 
   const session = await auth();
 
+  console.log("session in footer", session);
+
   const isAuthenticated = !!session?.user;
 
   const columns: FooterColumn[] = [

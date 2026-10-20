@@ -10,12 +10,13 @@ export async function middleware(request: NextRequest) {
   const url = request.nextUrl.clone();
 
   const isProd = env.NODE_ENV === "production";
+  const cookiePrefix = isProd ? "__Secure-" : "";
 
   try {
     const token = await getToken({
       req: request,
       secret: env.AUTH_SECRET,
-      cookieName: `${isProd ? "__Secure-" : ""}authjs.session-token`,
+      cookieName: `${cookiePrefix}authjs.session-token`,
     });
 
     // Check if the requested path is protected
