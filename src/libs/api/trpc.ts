@@ -13,8 +13,10 @@ import { ZodError } from "zod";
 import { auth } from "~/libs/auth";
 import { db } from "~/libs/db";
 import { isAllowed, type PermissionKey } from "~/libs/auth/menus";
-import { storeDomains, stores } from "~/libs/db/schema";
-import { and, eq, sql } from "drizzle-orm";
+import {
+  getStoreForHostname,
+  normalizeHostname,
+} from "~/libs/stores/server";
 
 /**
  * 1. CONTEXT
@@ -157,36 +159,15 @@ const storeContextMiddleware = t.middleware(async ({ ctx, next }) => {
     });
   }
 
-  let hostname: string;
-  try {
-    hostname = new URL(`http://${rawHost}`).hostname
-      .toLowerCase()
-      .replace(/\.$/, "");
-  } catch {
+  const hostname = normalizeHostname(rawHost);
+  if (!hostname) {
     throw new TRPCError({
       code: "BAD_REQUEST",
       message: "The request host is invalid.",
     });
   }
 
-  const store = await ctx.db
-    .select({
-      id: stores.id,
-      name: stores.name,
-      slug: stores.slug,
-      active: stores.active,
-      createdAt: stores.createdAt,
-      updatedAt: stores.updatedAt,
-    })
-    .from(storeDomains)
-    .innerJoin(stores, eq(storeDomains.storeId, stores.id))
-    .where(
-      and(
-        sql`lower(${storeDomains.domain}) = ${hostname}`,
-        eq(stores.active, true),
-      ),
-    )
-    .then((rows) => rows[0]);
+  const store = await getStoreForHostname(hostname, ctx.db);
 
   if (!store) {
     throw new TRPCError({

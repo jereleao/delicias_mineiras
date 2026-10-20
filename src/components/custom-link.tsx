@@ -12,10 +12,10 @@ const CustomLink = ({
   className,
   ...rest
 }: CustomLinkProps) => {
-  const isInternalLink = href.startsWith("/");
-  const isAnchorLink = href.startsWith("#");
+  const isExternalLink =
+    href.startsWith("http://") || href.startsWith("https://");
 
-  if (isInternalLink || isAnchorLink) {
+  if (!isExternalLink) {
     return (
       <Link href={href} className={className} {...rest}>
         {children}

@@ -5,6 +5,7 @@ import { WhatsAppColor, WhatsAppIconWhite } from "~/components/icons";
 import { Button } from "~/components/ui/button";
 import { api } from "~/libs/trpc/react";
 import type { Product } from "~/libs/api/routers/product";
+
 import { formatPrice } from "./products";
 
 interface WhatsAppShortcutProps {

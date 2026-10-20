@@ -4,7 +4,6 @@ import { CircleCheckIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { DataTableColumnHeader } from "~/components/table/data-table-column-header";
 import { createColumnHelper } from "~/components/table/data-table-features";
-import { Checkbox } from "~/components/ui/checkbox";
 import { Tooltip } from "~/components/ui/tooltip";
 import type { User } from "~/libs/api/routers/user";
 import { RoleCell } from "./role-cell";
@@ -20,33 +19,6 @@ const columnHelper = createColumnHelper<User>();
 
 export const getColums = (roleOptions: Array<Role>) => {
   const columns = columnHelper.columns([
-    // columnHelper.display({
-    //   id: "select",
-    //   meta: {
-    //     classNames: {
-    //       header: "w-8",
-    //     },
-    //   },
-    //   header: ({ table }) => (
-    //     <Checkbox
-    //       checked={table.getIsAllPageRowsSelected()}
-    //       indeterminate={
-    //         table.getIsSomePageRowsSelected() && !table.getIsAllPageRowsSelected()
-    //       }
-    //       onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-    //       aria-label="Select all"
-    //     />
-    //   ),
-    //   cell: ({ row }) => (
-    //     <Checkbox
-    //       checked={row.getIsSelected()}
-    //       onCheckedChange={(value) => row.toggleSelected(!!value)}
-    //       aria-label="Select row"
-    //     />
-    //   ),
-    //   enableSorting: false,
-    //   enableHiding: false,
-    // }),
     columnHelper.accessor("image", {
       meta: {
         classNames: {

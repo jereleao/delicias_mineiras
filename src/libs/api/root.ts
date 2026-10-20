@@ -7,6 +7,7 @@ import { webauthnRouter } from "./routers/webauthn";
 import { permissionRouter } from "./routers/permissions";
 import { configRouter } from "./routers/config";
 import { userObjectRouter } from "./routers/user-object";
+import { storeRouter } from "./routers/store";
 
 /**
  * This is the primary router for your server.
@@ -14,14 +15,15 @@ import { userObjectRouter } from "./routers/user-object";
  * All routers added in /api/routers should be manually added here.
  */
 export const appRouter = createTRPCRouter({
-  config: configRouter,
-  userObject: userObjectRouter,
   banner: bannerRouter,
   product: productRouter,
   category: categoryRouter,
+  config: configRouter,
   user: userRouter,
+  userObject: userObjectRouter,
   webauthn: webauthnRouter,
   permission: permissionRouter,
+  store: storeRouter,
 });
 
 // export type definition of API

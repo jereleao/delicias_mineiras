@@ -86,7 +86,7 @@ export function CredentialCard({ credential }: CredentialCardProps) {
     });
 
   const handleDeleteClick = () => {
-    console.debug("TODO: Add confirmation alert");
+    console.warn("TODO: Add confirmation alert");
     deleteCredential({
       id: isoBase64URL.fromBuffer(credential.credentialID),
     });

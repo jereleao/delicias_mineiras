@@ -61,7 +61,8 @@
             "configs": "Configurations",
             "banners": "Banners",
             "banners-description": "Edit home page Banners"
-        }
+        },
+        "stores": "Stores"
     },
     "HomePage": {
         "title": "Home Page",
@@ -77,6 +78,44 @@
             "total": "Total",
             "clear": "Clear cart",
             "whatsapp": "Continue on WhatsApp"
+        },
+        "stores": {
+            "form": {
+                "title": "Store",
+                "description": "Create a new store",
+                "submit": "Submit",
+                "fields": {
+                    "name": {
+                        "label": "Name"
+                    },
+                    "slug": {
+                        "label": "Slug",
+                        "description": "This can be used as part of the url."
+                    },
+                    "domains": {
+                        "label": "Domains",
+                        "description": "The domain must match the DNS configuration.",
+                        "placeholder": "example.com",
+                        "add": "Add Domain"
+                    }
+                }
+            },
+            "table": {
+                "columns": {
+                    "name": "Store name",
+                    "slug": "Slug",
+                    "domains": "Domains"
+                },
+                "actions": {
+                    "delete": "Delete Store",
+                    "inactivate": "Inactivate Store",
+                    "activate": "Activate Store",
+                    "edit": {
+                        "title": "Edit Store",
+                        "description": "Edit the current store"
+                    }
+                }
+            }
         }
     },
     "AdminPage": {

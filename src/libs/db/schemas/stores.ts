@@ -1,5 +1,37 @@
+import z from "zod";
 import { index, uniqueIndex } from "drizzle-orm/pg-core";
-import { createTable } from "~/libs/db/schemas/common";
+import { byIdSchema, createTable } from "~/libs/db/schemas/common";
+
+export const createStoreSchema = z.object({
+  name: z.string().min(1),
+  slug: z
+    .string()
+    .min(3)
+    .max(63)
+    .regex(
+      /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
+      "Use lowercase letters, numbers, and single hyphens only.",
+    ),
+  domains: z.array(
+    z.object({
+      domain: z.url(),
+    }),
+  ),
+});
+
+export type CreateStoreType = z.infer<typeof createStoreSchema>;
+
+const updatePropertiesSchema = createStoreSchema
+  .merge(
+    z.object({
+      active: z.boolean(),
+    }),
+  )
+  .partial();
+
+export const updateStoreSchema = byIdSchema.merge(updatePropertiesSchema);
+
+export type UpdateStoreType = z.infer<typeof updateStoreSchema>;
 
 export const stores = createTable(
   "store",

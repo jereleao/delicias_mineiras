@@ -1,42 +1,23 @@
-import { api } from "~/libs/trpc/server";
+import { auth } from "~/libs/auth";
+import ProductList from "./_components/products/product-list";
 
-import { MenuSection } from "./_components/menu-section";
-import { BannerList } from "./_components/banner-list";
-import { type MenuCategory } from "./_components/products";
-import { FloaterCartButton } from "./_components/floater-cart-button";
-import { WhatsAppButton } from "./_components/whats-app-button";
+import { hasStoreForCurrentHost } from "~/libs/stores/server";
+import StoreList from "./_components/stores/store-list";
 
 export default async function Home() {
-  const products = await api.product.all();
+  const hasStore = await hasStoreForCurrentHost();
 
-  const categoriesWithProducts: Array<MenuCategory> = products?.reduce(
-    (acc, product) => {
-      const category = acc.find((c) => c.id === product.categoryId);
-      if (category) {
-        category.products.push(product);
-      } else {
-        acc.push({
-          id: product.categoryId,
-          title: product.categoryName ?? "Unknown Category",
-          products: [product],
-        });
-      }
-      return acc;
-    },
-    [] as Array<MenuCategory>,
-  );
+  if (hasStore) return <ProductList />;
 
-  return (
-    <>
-      <BannerList />
-      {categoriesWithProducts.map((category) => (
-        <MenuSection key={category.id} {...category} />
-      ))}
-      <div className="absolute right-6 -bottom-10">
-        <FloaterCartButton products={products ?? []}>
-          <WhatsAppButton />
-        </FloaterCartButton>
-      </div>
-    </>
+  const session = await auth();
+
+  console.warn("TODO: Remove this check for admin access.");
+  const hasAdminAccess = session != null;
+
+  if (hasAdminAccess) return <StoreList />;
+
+  console.warn(
+    "TODO: Implement a marketing page for stores without a store configured.",
   );
+  return <p>MARKETING</p>;
 }

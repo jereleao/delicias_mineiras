@@ -10,6 +10,8 @@ interface WhatsAppButtonProps {
 export async function WhatsAppButton({ message }: WhatsAppButtonProps) {
   const configuration = await api.config.whatsConfig();
 
+  if (!configuration) return null;
+
   const greeting = message || configuration.greeting;
 
   const whatsAppLink = `https://wa.me/${configuration.phoneNumber}?text=${encodeURIComponent(greeting)}`;

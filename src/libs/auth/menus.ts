@@ -29,6 +29,14 @@ export const MENUS = [
       },
     ],
   },
+  {
+    menuGroup: "hidden",
+    menus: [
+      {
+        menuKey: "stores",
+      },
+    ],
+  },
 ] as const;
 
 export const MENU_KEYS = MENUS.flatMap((menuGroup) =>

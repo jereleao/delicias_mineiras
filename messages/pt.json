@@ -62,7 +62,8 @@
             "configs": "Configurações",
             "banners": "Banners",
             "banners-description": "Edit home page Banners"
-        }
+        },
+        "stores": "Lojas"
     },
     "HomePage": {
         "title": "Página Inicial",
@@ -78,6 +79,15 @@
             "total": "Total",
             "clear": "Limpar carrinho",
             "whatsapp": "Continuar pelo WhatsApp"
+        },
+        "stores": {
+            "table": {
+                "columns": {
+                    "name": "Nome da loja",
+                    "slug": "Identificador",
+                    "domains": "Domínios"
+                }
+            }
         }
     },
     "AdminPage": {

@@ -7,8 +7,8 @@ import { useTranslations } from "next-intl";
 import { Button } from "~/components/ui/button";
 import { Drawer, DrawerTrigger } from "~/components/ui/drawer";
 import type { Product } from "~/libs/api/routers/product";
+import { useCart } from "~/app/(modules)/_contexts/cart-context";
 
-import { useCart } from "../_contexts/cart-context";
 import { FloaterCart } from "./floater-cart";
 import { WhatsAppShortcut } from "./whats-app-shortcut";
 

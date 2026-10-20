@@ -47,8 +47,7 @@ export const configRouter = createTRPCRouter({
     const phoneNumber = configs.find((c) => c.code == "WHATS_NUMBER")?.value;
     const greeting = configs.find((c) => c.code == "WHATS_GREETING")?.value;
 
-    if (!phoneNumber || !greeting)
-      throw new Error("Application misconfigured. Contact support.");
+    if (!phoneNumber || !greeting) return null;
 
     return { phoneNumber, greeting };
   }),

@@ -91,6 +91,18 @@ Delícias Mineiras is a multilingual product catalog for a food business. The pu
 
    Open [http://localhost:3000](http://localhost:3000).
 
+## Store subdomains
+
+Stores can be opened by slug without adding a domain to the store's domain list.
+For local development, open `http://<store-slug>.localhost:3000` (for example,
+`http://delicias-mineiras.localhost:3000`). In production, configure wildcard DNS
+and a matching wildcard TLS certificate for your application domain, then use
+`https://<store-slug>.<your-domain>`.
+
+The application matches the first hostname label (except `www`) against an
+active store slug. An exact domain registered to a store continues to take
+precedence, so custom domains remain supported.
+
 ## Database commands
 
 ```bash

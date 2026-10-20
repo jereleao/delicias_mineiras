@@ -3,7 +3,6 @@
 import { cn } from "~/utils";
 import { DataTableColumnHeader } from "~/components/table/data-table-column-header";
 import { createColumnHelper } from "~/components/table/data-table-features";
-import { Checkbox } from "~/components/ui/checkbox";
 import PermissionGuard from "~/components/permission-guard";
 import type { Banner } from "~/libs/api/routers/banner";
 
@@ -23,33 +22,6 @@ import { DataTableColumnOptions } from "~/components/table/data-table-column-opt
 const columnHelper = createColumnHelper<Banner>();
 
 export const columns = columnHelper.columns([
-  // columnHelper.display({
-  //   id: "select",
-  //   meta: {
-  //     classNames: {
-  //       header: "w-8",
-  //     },
-  //   },
-  //   header: ({ table }) => (
-  //     <Checkbox
-  //       checked={table.getIsAllPageRowsSelected()}
-  //       indeterminate={
-  //         table.getIsSomePageRowsSelected() && !table.getIsAllPageRowsSelected()
-  //       }
-  //       onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-  //       aria-label="Select all"
-  //     />
-  //   ),
-  //   cell: ({ row }) => (
-  //     <Checkbox
-  //       checked={row.getIsSelected()}
-  //       onCheckedChange={(value) => row.toggleSelected(!!value)}
-  //       aria-label="Select row"
-  //     />
-  //   ),
-  //   enableSorting: false,
-  //   enableHiding: false,
-  // }),
   columnHelper.accessor("title", {
     meta: {
       classNames: {

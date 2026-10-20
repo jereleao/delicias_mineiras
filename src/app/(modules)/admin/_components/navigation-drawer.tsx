@@ -30,12 +30,21 @@ export function AdminDrawerMenu({ className }: AdminDrawerMenuProps) {
 
   const { data: session } = useSession();
 
-  const allowedMenus = MENUS.map(({ menuGroup, menus }) => ({
-    menuGroup,
-    menus: menus.filter(({ menuKey }) =>
-      isAllowed(menuKey, session?.user.permissions ?? []),
-    ),
-  })).filter(({ menus }) => menus.length > 0);
+  type VisibleMenuGroup = Exclude<
+    (typeof MENUS)[number],
+    { menuGroup: "hidden" }
+  >;
+
+  const allowedMenus = MENUS.filter(
+    (menu): menu is VisibleMenuGroup => menu.menuGroup !== "hidden",
+  )
+    .map(({ menuGroup, menus }) => ({
+      menuGroup,
+      menus: menus.filter(({ menuKey }) =>
+        isAllowed(menuKey, session?.user.permissions ?? []),
+      ),
+    }))
+    .filter(({ menus }) => menus.length > 0);
 
   const [open, setOpen] = useState(false);
 

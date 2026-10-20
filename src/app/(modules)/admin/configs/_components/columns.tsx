@@ -2,7 +2,6 @@
 
 import { DataTableColumnHeader } from "~/components/table/data-table-column-header";
 import { createColumnHelper } from "~/components/table/data-table-features";
-import { Checkbox } from "~/components/ui/checkbox";
 import type { Config } from "~/libs/api/routers/config";
 
 import { ValueCell } from "./value-cell";
@@ -11,33 +10,6 @@ import { useTranslations } from "next-intl";
 const columnHelper = createColumnHelper<Config>();
 
 export const columns = columnHelper.columns([
-  // columnHelper.display({
-  //   id: "select",
-  //   meta: {
-  //     classNames: {
-  //       header: "w-8",
-  //     },
-  //   },
-  //   header: ({ table }) => (
-  //     <Checkbox
-  //       checked={table.getIsAllPageRowsSelected()}
-  //       indeterminate={
-  //         table.getIsSomePageRowsSelected() && !table.getIsAllPageRowsSelected()
-  //       }
-  //       onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-  //       aria-label="Select all"
-  //     />
-  //   ),
-  //   cell: ({ row }) => (
-  //     <Checkbox
-  //       checked={row.getIsSelected()}
-  //       onCheckedChange={(value) => row.toggleSelected(!!value)}
-  //       aria-label="Select row"
-  //     />
-  //   ),
-  //   enableSorting: false,
-  //   enableHiding: false,
-  // }),
   columnHelper.accessor("code", {
     header: ({ column }) => (
       <DataTableColumnHeader

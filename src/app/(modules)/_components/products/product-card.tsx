@@ -3,9 +3,10 @@
 import Image from "next/image";
 import { PlusIcon, CheckIcon } from "lucide-react";
 import { useState } from "react";
-import { formatPrice } from "./products";
 import type { Product } from "~/libs/api/routers/product";
-import { useCart } from "../_contexts/cart-context";
+import { useCart } from "~/app/(modules)/_contexts/cart-context";
+
+import { formatPrice } from "./products";
 
 export function ProductCard({ product }: { product: Product }) {
   const { addProduct } = useCart();
