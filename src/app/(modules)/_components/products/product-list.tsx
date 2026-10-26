@@ -32,7 +32,7 @@ export default async function ProductList() {
       {categoriesWithProducts.map((category) => (
         <MenuSection key={category.id} {...category} />
       ))}
-      <div className="absolute right-6 -bottom-10">
+      <div className="fixed right-6 bottom-6 z-40">
         <FloaterCartButton products={products ?? []}>
           <WhatsAppButton />
         </FloaterCartButton>

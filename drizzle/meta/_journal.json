@@ -71,6 +71,13 @@
       "when": 1792699821750,
       "tag": "0009_curly_jasper_sitwell",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1793024203573,
+      "tag": "0010_misty_the_enforcers",
+      "breakpoints": true
     }
   ]
 }

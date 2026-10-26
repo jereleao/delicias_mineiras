@@ -3,6 +3,7 @@ import { customType, index, primaryKey } from "drizzle-orm/pg-core";
 // import { type AdapterAccountType } from "next-auth/adapters";
 import { createTable } from "~/libs/db/schemas/common";
 import { roles } from "~/libs/db/schemas/permissions";
+import { v4 as uuidv4 } from "uuid";
 
 type AdapterAccountType = "oauth" | "oidc" | "email" | "webauthn";
 
@@ -18,7 +19,7 @@ export const users = createTable("user", (d) => ({
     .varchar({ length: 255 })
     .notNull()
     .primaryKey()
-    .$defaultFn(() => crypto.randomUUID()),
+    .$defaultFn(() => uuidv4()),
   roleId: d
     .integer()
     .references(() => roles.id)

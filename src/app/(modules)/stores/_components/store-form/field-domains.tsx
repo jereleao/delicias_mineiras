@@ -48,7 +48,7 @@ export function FieldDomains({ form }: FieldDomainsProps) {
               <Field
                 orientation="horizontal"
                 data-invalid={fieldState.invalid}
-                className="w-[31.5%]"
+                className="w-[32.5%]"
               >
                 <FieldContent>
                   <InputGroup>

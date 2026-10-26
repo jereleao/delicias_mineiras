@@ -1,0 +1,2 @@
+ALTER TABLE "de_mi_store_branding" ADD COLUMN "baseColor" varchar(7) DEFAULT '#000000' NOT NULL;--> statement-breakpoint
+ALTER TABLE "de_mi_store_branding" ADD CONSTRAINT "store_branding_base_color_check" CHECK ("de_mi_store_branding"."baseColor" ~ '^#[0-9A-Fa-f]{6}$');

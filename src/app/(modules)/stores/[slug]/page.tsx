@@ -19,7 +19,7 @@ export default async function StorePage({ params }: StorePageProps) {
   const t = await getTranslations("HomePage.stores.editor");
 
   return (
-    <section className="mx-auto flex w-full max-w-3xl flex-col gap-6 py-8">
+    <section className="flex w-full flex-col gap-6 py-8">
       <header className="flex flex-col gap-2">
         <Link
           href="/stores"

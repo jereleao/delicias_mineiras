@@ -22,6 +22,9 @@ const CURRENCY_SYMBOLS = {
 
 type FormInputCustomProps = {
   currency?: keyof typeof CURRENCY_SYMBOLS;
+  classNames?: {
+    container?: string;
+  };
 };
 
 type InputProps = React.ComponentProps<"input">;
@@ -31,15 +34,22 @@ export const FormInput: FormControlFunc<InputProps & FormInputCustomProps> = ({
   label,
   name,
   description,
+  classNames,
   ...inputProps
 }) => {
-  const controllerProps = { control, label, name, description };
+  const controllerProps = { control, label, name, description, classNames };
+
+  const { container: containerClassName } = classNames || {};
+
   return (
     <FormBase
       {...controllerProps}
       render={({ field, fieldState, label, description }) => {
         return (
-          <Field data-invalid={fieldState.invalid}>
+          <Field
+            data-invalid={fieldState.invalid}
+            className={containerClassName}
+          >
             <FieldContent>
               <FieldLabel htmlFor={field.name}>{label}</FieldLabel>
               {description && (
