@@ -8,6 +8,7 @@ import PermissionGuard from "~/components/permission-guard";
 import type { Store } from "~/libs/api/routers/store";
 
 import { NewButton } from "./new-button";
+import { ViewButton } from "./buttons/view-button";
 import { DeleteButton } from "./buttons/delete-button";
 import { EditButton } from "./buttons/edit-button";
 import { ActivateButton } from "./buttons/activate-button";
@@ -18,33 +19,33 @@ import CustomLink from "~/components/custom-link";
 const columnHelper = createColumnHelper<Store>();
 
 export const columns = columnHelper.columns([
-  columnHelper.display({
-    id: "select",
-    meta: {
-      classNames: {
-        header: "w-8",
-      },
-    },
-    header: ({ table }) => (
-      <Checkbox
-        checked={table.getIsAllPageRowsSelected()}
-        indeterminate={
-          table.getIsSomePageRowsSelected() && !table.getIsAllPageRowsSelected()
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  }),
+  // columnHelper.display({
+  //   id: "select",
+  //   meta: {
+  //     classNames: {
+  //       header: "w-8",
+  //     },
+  //   },
+  //   header: ({ table }) => (
+  //     <Checkbox
+  //       checked={table.getIsAllPageRowsSelected()}
+  //       indeterminate={
+  //         table.getIsSomePageRowsSelected() && !table.getIsAllPageRowsSelected()
+  //       }
+  //       onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+  //       aria-label="Select all"
+  //     />
+  //   ),
+  //   cell: ({ row }) => (
+  //     <Checkbox
+  //       checked={row.getIsSelected()}
+  //       onCheckedChange={(value) => row.toggleSelected(!!value)}
+  //       aria-label="Select row"
+  //     />
+  //   ),
+  //   enableSorting: false,
+  //   enableHiding: false,
+  // }),
   columnHelper.accessor("name", {
     meta: {
       classNames: {
@@ -133,6 +134,7 @@ export const columns = columnHelper.columns([
       const isActive = row.original.active;
       return (
         <div>
+          <ViewButton slug={row.original.slug} />
           <PermissionGuard permission="stores:edit">
             <EditButton {...row.original} />
             {isActive ? (

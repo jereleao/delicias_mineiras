@@ -9,14 +9,15 @@ const publicRoutes = ["/"];
 export async function middleware(request: NextRequest) {
   const url = request.nextUrl.clone();
 
-  const isProd = env.NODE_ENV === "production";
-  const cookiePrefix = isProd ? "__Secure-" : "";
+  const useSecureCookies = env.NODE_ENV === "production";
+  const cookiePrefix = useSecureCookies ? "__Secure-" : "";
 
   try {
     const token = await getToken({
       req: request,
       secret: env.AUTH_SECRET,
       cookieName: `${cookiePrefix}authjs.session-token`,
+      secureCookie: useSecureCookies,
     });
 
     // Check if the requested path is protected
@@ -27,6 +28,8 @@ export async function middleware(request: NextRequest) {
     }
 
     const menuKey = getMenuKeyByHref(url.pathname);
+
+    console.log(menuKey);
 
     if (!menuKey) {
       console.info(

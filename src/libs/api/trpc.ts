@@ -13,10 +13,7 @@ import { ZodError } from "zod";
 import { auth } from "~/libs/auth";
 import { db } from "~/libs/db";
 import { isAllowed, type PermissionKey } from "~/libs/auth/menus";
-import {
-  getStoreForHostname,
-  normalizeHostname,
-} from "~/libs/stores/server";
+import { getStoreForHostname, normalizeHostname } from "~/libs/stores/server";
 
 /**
  * 1. CONTEXT
@@ -149,31 +146,20 @@ export const permissionProcedure = (permission: PermissionKey) =>
     return next();
   });
 
-const storeContextMiddleware = t.middleware(async ({ ctx, next }) => {
+const optionalStoreContextMiddleware = t.middleware(async ({ ctx, next }) => {
   const rawHost = ctx.headers.get("host");
+  let store: Awaited<ReturnType<typeof getStoreForHostname>> = undefined;
 
-  if (!rawHost) {
-    throw new TRPCError({
-      code: "BAD_REQUEST",
-      message: "A request host is required to resolve the current store.",
-    });
-  }
+  if (rawHost) {
+    const hostname = normalizeHostname(rawHost);
+    if (!hostname) {
+      throw new TRPCError({
+        code: "BAD_REQUEST",
+        message: "The request host is invalid.",
+      });
+    }
 
-  const hostname = normalizeHostname(rawHost);
-  if (!hostname) {
-    throw new TRPCError({
-      code: "BAD_REQUEST",
-      message: "The request host is invalid.",
-    });
-  }
-
-  const store = await getStoreForHostname(hostname, ctx.db);
-
-  if (!store) {
-    throw new TRPCError({
-      code: "NOT_FOUND",
-      message: `No active store is configured for host "${hostname}".`,
-    });
+    store = await getStoreForHostname(hostname, ctx.db);
   }
 
   return next({
@@ -183,7 +169,35 @@ const storeContextMiddleware = t.middleware(async ({ ctx, next }) => {
   });
 });
 
-export const storePublicProcedure = publicProcedure.use(storeContextMiddleware);
+const requiredStoreContextMiddleware =
+  optionalStoreContextMiddleware.unstable_pipe(async ({ ctx, next }) => {
+    if (!ctx.store) {
+      const rawHost = ctx.headers.get("host");
+      const hostname = rawHost ? `" ${normalizeHostname(rawHost)}"` : "";
+
+      throw new TRPCError({
+        code: "NOT_FOUND",
+        message: `No active store is configured for host${hostname}.`,
+      });
+    }
+
+    return next({
+      ctx: {
+        store: ctx.store,
+      },
+    });
+  });
+
+export const storePublicProcedure = publicProcedure.use(
+  requiredStoreContextMiddleware,
+);
+
+export const optionalStorePublicProcedure = publicProcedure.use(
+  optionalStoreContextMiddleware,
+);
 
 export const storePermissionProcedure = (permission: PermissionKey) =>
-  permissionProcedure(permission).use(storeContextMiddleware);
+  permissionProcedure(permission).use(requiredStoreContextMiddleware);
+
+export const optionalStorePermissionProcedure = (permission: PermissionKey) =>
+  permissionProcedure(permission).use(optionalStoreContextMiddleware);

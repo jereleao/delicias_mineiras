@@ -1,8 +1,8 @@
 {
     "Metadata": {
-        "title": "Delícias Mineiras",
-        "description": "Delícias Mineiras Product Catalog",
-        "keywords": "Delícias Mineiras, Products, Catalog"
+        "title": "Craft Stores",
+        "description": "Product Catalog made by CRAFT",
+        "keywords": "Craft, Products, Catalog"
     },
     "Common": {
         "loading": "Loading",
@@ -107,6 +107,7 @@
                     "domains": "Domains"
                 },
                 "actions": {
+                    "view": "View Store",
                     "delete": "Delete Store",
                     "inactivate": "Inactivate Store",
                     "activate": "Activate Store",

@@ -13,6 +13,7 @@ import { TRPCReactProvider } from "~/libs/trpc/react";
 import { ThemeProvider } from "~/components/theme-provider";
 import { TooltipProvider } from "~/components/ui/tooltip";
 import { Toaster } from "~/components/ui/sonner";
+import { api } from "~/libs/trpc/server";
 
 const roboto = Roboto({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -29,10 +30,21 @@ type RootLayoutProps = {
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("Metadata");
 
+  const metaData = await api.config.metaData();
+
+  const title = metaData?.metaDataTitle ? metaData.metaDataTitle : t("title");
+  const description = metaData?.metaDataDescription
+    ? metaData.metaDataDescription
+    : t("description");
+
+  const faviconUrl = metaData?.metaDataFaviconUrl
+    ? metaData.metaDataFaviconUrl
+    : "/favicon.ico";
+
   return {
-    title: t("title"),
-    description: t("description"),
-    icons: [{ rel: "icon", url: "/favicon.ico" }],
+    title,
+    description,
+    icons: [{ rel: "icon", url: faviconUrl }],
   };
 }
 

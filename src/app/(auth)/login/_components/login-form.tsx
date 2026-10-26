@@ -11,6 +11,7 @@ import { Field, FieldLabel } from "~/components/ui/field";
 import ConditionGuard from "~/components/condition-guard";
 import { usePasskeyAvailable } from "~/hooks/use-passkey-available";
 import { useWebauthnAssert } from "~/hooks/use-webauthn-assert";
+import { cn } from "~/utils";
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
@@ -58,10 +59,18 @@ export default function LoginForm() {
       <h1 className="text-3xl font-semibold">{t("title")}</h1>
       <p className="text-muted-foreground mt-4">{t("description")}</p>
       <div className="mt-10 flex flex-col gap-4">
-        <div className="flex flex-col items-center justify-between gap-1 sm:flex-row">
+        <div
+          className={cn(
+            "flex flex-col items-center justify-between gap-1 sm:flex-row",
+            !passkeyAvailable && "justify-center",
+          )}
+        >
           <Button
             variant="outline"
-            className="h-10 w-full max-w-70 rounded-full sm:w-[49%]"
+            className={cn(
+              "h-10 w-full max-w-70 rounded-full sm:w-[49%]",
+              !passkeyAvailable && "w-full!",
+            )}
             onClick={() => signIn("google", { callbackUrl: "/" })}
           >
             <GoogleIcon className="mr-2" />

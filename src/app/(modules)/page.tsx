@@ -2,7 +2,8 @@ import { auth } from "~/libs/auth";
 import ProductList from "./_components/products/product-list";
 
 import { hasStoreForCurrentHost } from "~/libs/stores/server";
-import StoreList from "./_components/stores/store-list";
+import { redirect } from "next/navigation";
+import { getPathByMenuKey } from "~/libs/auth/menus";
 
 export default async function Home() {
   const hasStore = await hasStoreForCurrentHost();
@@ -16,7 +17,7 @@ export default async function Home() {
   console.warn("TODO: Remove this check for admin access.");
   const hasAdminAccess = session != null;
 
-  if (hasAdminAccess) return <StoreList />;
+  if (hasAdminAccess) return redirect(getPathByMenuKey("stores"));
 
   console.warn(
     "TODO: Implement a marketing page for stores without a store configured.",
