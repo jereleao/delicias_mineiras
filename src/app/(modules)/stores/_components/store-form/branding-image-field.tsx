@@ -34,7 +34,7 @@ type BrandingImageFieldProps = {
   name: BrandingImageName;
   label: string;
   onSelectImage: (file: File, name: BrandingImageName) => void;
-  onRemoveImage: (name: BrandingImageName) => void;
+  onRemoveImage?: (name: BrandingImageName) => void;
   classNames?: {
     container?: string;
     dropZone?: string;
@@ -116,7 +116,7 @@ export function BrandingImageField({
               </span>
             </DropzoneTrigger>
           </DropZoneArea>
-          {field.value && (
+          {field.value && onRemoveImage && (
             <Button
               type="button"
               variant="ghost"

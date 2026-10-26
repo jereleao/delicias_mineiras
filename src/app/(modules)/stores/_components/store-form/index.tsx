@@ -171,7 +171,6 @@ export function StoreForm({ setOpen, store }: StoreFormProps) {
             onSelectImage={(file, name) =>
               selectedFiles.current.set(name, file)
             }
-            onRemoveImage={(name) => selectedFiles.current.delete(name)}
             classNames={{
               container: "w-fit",
               dropZone: "size-[40px]",
