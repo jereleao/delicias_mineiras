@@ -2,6 +2,56 @@ import z from "zod";
 import { index, uniqueIndex } from "drizzle-orm/pg-core";
 import { byIdSchema, createTable } from "~/libs/db/schemas/common";
 
+const imageUrlOrPathSchema = z
+  .string()
+  .max(2048)
+  .refine(
+    (value) =>
+      value === "" ||
+      z.url({ protocol: /^https?$/ }).safeParse(value).success ||
+      (value.startsWith("/") && !value.startsWith("//")),
+    "Enter a valid URL or root-relative path.",
+  );
+
+const domainSchema = z
+  .string()
+  .min(1)
+  .max(253)
+  .refine((domain) => {
+    try {
+      const parsedDomain = new URL(`https://${domain}`);
+      return (
+        parsedDomain.hostname.toLowerCase() === domain.toLowerCase() &&
+        parsedDomain.pathname === "/" &&
+        !parsedDomain.search &&
+        !parsedDomain.hash
+      );
+    } catch {
+      return false;
+    }
+  }, "Enter a valid hostname.");
+
+export const storeBrandingSchema = z
+  .object({
+    baseColor: z
+      .string()
+      .regex(/^#[0-9A-Fa-f]{6}$/, "Enter a valid hex color."),
+    metaDescription: z.string(),
+    faviconUrl: imageUrlOrPathSchema,
+    logoFullLight: imageUrlOrPathSchema,
+    logoFullDark: imageUrlOrPathSchema,
+    logoSmallLight: imageUrlOrPathSchema,
+    logoSmallDark: imageUrlOrPathSchema,
+  })
+  .refine(
+    ({ logoFullLight, logoFullDark, logoSmallLight, logoSmallDark }) =>
+      Boolean(logoFullLight || logoFullDark || logoSmallLight || logoSmallDark),
+    {
+      path: [],
+      message: "At least one logo is required.",
+    },
+  );
+
 export const createStoreSchema = z.object({
   name: z.string().min(1),
   slug: z
@@ -14,9 +64,11 @@ export const createStoreSchema = z.object({
     ),
   domains: z.array(
     z.object({
-      domain: z.url(),
+      domain: domainSchema,
     }),
   ),
+  active: z.boolean(),
+  branding: storeBrandingSchema,
 });
 
 export type CreateStoreType = z.infer<typeof createStoreSchema>;

@@ -84,6 +84,9 @@
                 "title": "Store",
                 "description": "Create a new store",
                 "submit": "Submit",
+                "errors": {
+                    "save": "Unable to save the store. Check the entered values and try again."
+                },
                 "fields": {
                     "name": {
                         "label": "Name"
@@ -97,8 +100,28 @@
                         "description": "The domain must match the DNS configuration.",
                         "placeholder": "example.com",
                         "add": "Add Domain"
+                    },
+                    "active": {
+                        "label": "Store is active"
+                    },
+                    "branding": {
+                        "label": "Branding",
+                        "description": "At least one logo is required. Use a hosted URL or a root-relative path.",
+                        "baseColor": "Base color",
+                        "metaDescription": "Meta description",
+                        "faviconUrl": "Favicon URL or path",
+                        "logoFullLight": "Full logo (light theme)",
+                        "logoFullDark": "Full logo (dark theme)",
+                        "logoSmallLight": "Small logo (light theme)",
+                        "logoSmallDark": "Small logo (dark theme)",
+                        "urlPlaceholder": "https://example.com/image.png or /assets/image.png"
                     }
                 }
+            },
+            "editor": {
+                "back": "Back to stores",
+                "title": "Edit {name}",
+                "description": "Update store details, domains, metadata, and logos."
             },
             "table": {
                 "columns": {

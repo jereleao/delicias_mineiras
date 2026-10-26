@@ -1,13 +1,15 @@
 "use client";
 
-import { useTransition, type Dispatch } from "react";
+import { useRouter } from "next/navigation";
+import { useTransition, type Dispatch, type SetStateAction } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslations } from "next-intl";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
 
 import { api } from "~/libs/trpc/react";
-import type { Store } from "~/libs/api/routers/store";
-import { Form, FormInput } from "~/components/form/client";
+import type { StoreEditor } from "~/libs/api/routers/store";
+import { Form, FormCheckbox, FormInput } from "~/components/form/client";
 import { LoadingButton } from "~/components/ui/button";
 
 import { updateAction } from "../actions/update-action";
@@ -17,55 +19,75 @@ import {
   type CreateStoreType,
 } from "~/libs/db/schemas/stores";
 import { FieldDomains } from "./field-domains";
+import { FieldBranding } from "./field-branding";
 
 type StoreFormProps = {
-  setOpen: Dispatch<boolean>;
-  store?: Omit<Store, "active">;
+  setOpen?: Dispatch<SetStateAction<boolean>>;
+  store?: StoreEditor;
 };
 
 export function StoreForm({ setOpen, store }: StoreFormProps) {
-  const form = useForm({
+  const router = useRouter();
+  const form = useForm<CreateStoreType, unknown, CreateStoreType>({
     resolver: zodResolver(createStoreSchema),
     defaultValues: {
       name: store?.name ?? "",
       slug: store?.slug ?? "",
-      domains: store?.domains
-        ? store.domains.map((domain) => ({ domain }))
-        : [],
+      active: store?.active ?? true,
+      domains: store?.domains.map((domain) => ({ domain })) ?? [],
+      branding: {
+        baseColor: store?.branding.baseColor ?? "#000000",
+        metaDescription: store?.branding.metaDescription ?? "",
+        faviconUrl: store?.branding.faviconUrl ?? "",
+        logoFullLight: store?.branding.logoFullLight ?? "",
+        logoFullDark: store?.branding.logoFullDark ?? "",
+        logoSmallLight: store?.branding.logoSmallLight ?? "",
+        logoSmallDark: store?.branding.logoSmallDark ?? "",
+      },
     },
   });
 
   const [isPendingSave, startSaveTransition] = useTransition();
 
   const utils = api.useUtils();
+  const t = useTranslations("HomePage.stores.form");
 
   function onSubmit(data: CreateStoreType) {
     startSaveTransition(async () => {
-      if (store) {
-        const changedStore = await updateAction(store.id, data);
+      try {
+        if (store) {
+          const changedStore = await updateAction(store.id, data, store.slug);
+          if (!changedStore)
+            throw new Error("Store update returned no result.");
 
-        utils.store.all.setData(undefined, (old = []) =>
-          old.map((o) => (o.id == changedStore?.id ? changedStore : o)),
-        );
-      } else {
-        const newStore = await newAction(data);
+          utils.store.all.setData(undefined, (old = []) =>
+            old.map((existing) =>
+              existing.id === changedStore.id
+                ? { ...existing, ...changedStore }
+                : existing,
+            ),
+          );
+          await utils.store.all.invalidate();
+          router.replace(`/stores/${changedStore.slug}`);
+          router.refresh();
+        } else {
+          const newStore = await newAction(data);
+          if (!newStore) throw new Error("Store creation returned no result.");
 
-        if (newStore) {
           utils.store.all.setData(undefined, (old = []) => [...old, newStore]);
+          await utils.store.all.invalidate();
+          setOpen?.(false);
         }
+      } catch (error) {
+        console.error("Failed to save store:", error);
+        toast.error(t("errors.save"));
       }
-
-      await utils.store.all.invalidate();
-
-      setOpen(false);
     });
   }
 
-  const t = useTranslations("HomePage.stores.form");
-
   return (
     <div className="flex w-full flex-col">
-      <Form
+      <Form<CreateStoreType, unknown, CreateStoreType>
         form={form}
         onValid={onSubmit}
         onInvalid={(errors, _event) => console.warn("onInvalid: ", errors)}
@@ -87,7 +109,15 @@ export function StoreForm({ setOpen, store }: StoreFormProps) {
 
         <FieldDomains form={form} />
 
-        <div>
+        <FieldBranding form={form} />
+
+        <FormCheckbox
+          control={form.control}
+          name="active"
+          label={t("fields.active.label")}
+        />
+
+        <div className="flex justify-end">
           <LoadingButton type="submit" isLoading={isPendingSave}>
             {t("submit")}
           </LoadingButton>

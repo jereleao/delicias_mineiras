@@ -13,9 +13,9 @@ export async function LogoLinkHome({
   className,
   variant = "default",
 }: LogoLinkHomeProps) {
-  const config = await api.config.logoConfig();
+  const storeConfig = await api.config.storeConfig();
 
-  console.log("config", config);
+  console.log("storeConfig", storeConfig);
 
   return (
     <CustomLink href="/" className={cn("flex items-center gap-1", className)}>

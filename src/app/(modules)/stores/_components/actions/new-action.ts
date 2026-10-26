@@ -8,6 +8,7 @@ export async function newAction(storeData: CreateStoreType) {
   const [store] = await api.store.create(storeData);
 
   revalidatePath("/");
+  revalidatePath("/stores");
 
   if (!store) return null;
 

@@ -56,15 +56,16 @@ type PrefixOfMenuKey<T extends string> = T extends `${infer Prefix}.${string}`
 export type MenuKeyPrefix = PrefixOfMenuKey<MenuKey>;
 
 export function getMenuKeyByHref(href: string): MenuKey | undefined {
-  const subMenus = MENUS.flatMap((menuGroup) =>
-    menuGroup.menus.map((menu) => menu),
-  );
+  const path = href.split(/[?#]/, 1)[0]?.replace(/\/+$/, "") || "/";
 
-  const menu = subMenus.find((menu) => menu.menuKey === getMenuKeyByPath(href));
+  const sortedMenuKeys = [...MENU_KEYS].sort((a, b) => b.length - a.length);
 
-  if (menu) return menu.menuKey;
+  const foundMenuKey = sortedMenuKeys.find((menuKey) => {
+    const menuPath = `/${menuKey.replaceAll(".", "/")}`;
+    return path === menuPath || path.startsWith(`${menuPath}/`);
+  });
 
-  return undefined;
+  return foundMenuKey;
 }
 
 const permissionsAddons = ["edit", "manage"] as const;

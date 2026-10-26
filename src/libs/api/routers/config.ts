@@ -61,78 +61,22 @@ export const configRouter = createTRPCRouter({
     return { phoneNumber, greeting };
   }),
 
-  logoConfig: optionalStorePublicProcedure.query(async ({ ctx }) => {
+  storeConfig: optionalStorePublicProcedure.query(async ({ ctx }) => {
     if (!ctx.store) return null;
 
     const storeId = ctx.store.id;
 
-    const configs = await ctx.db.query.configs.findMany({
-      columns: {
-        code: true,
-        value: true,
-      },
-      where: (config, { inArray }) =>
-        and(
-          eq(config.storeId, storeId),
-          inArray(config.code, [
-            CONFIG_CODES.logoFullDark,
-            CONFIG_CODES.logoFullLight,
-            CONFIG_CODES.logoSmallDark,
-            CONFIG_CODES.logoSmallLight,
-          ]),
-        ),
-      orderBy: (config, { desc }) => [desc(config.createdAt)],
+    const storeBranding = await ctx.db.query.storeBranding.findFirst({
+      where: (branding, { eq }) => eq(branding.storeId, storeId),
     });
 
-    const logoFullDark = configs.find(
-      (c) => c.code == CONFIG_CODES.logoFullDark,
-    )?.value;
-    const logoFullLight = configs.find(
-      (c) => c.code == CONFIG_CODES.logoFullLight,
-    )?.value;
-    const logoSmallDark = configs.find(
-      (c) => c.code == CONFIG_CODES.logoSmallDark,
-    )?.value;
-    const logoSmallLight = configs.find(
-      (c) => c.code == CONFIG_CODES.logoSmallLight,
-    )?.value;
+    if (!storeBranding) return null;
 
-    return { logoFullDark, logoFullLight, logoSmallDark, logoSmallLight };
-  }),
-
-  metaData: optionalStorePublicProcedure.query(async ({ ctx }) => {
-    if (!ctx.store) return null;
-
-    const storeId = ctx.store.id;
-
-    const configs = await ctx.db.query.configs.findMany({
-      columns: {
-        code: true,
-        value: true,
-      },
-      where: (config, { inArray }) =>
-        and(
-          eq(config.storeId, storeId),
-          inArray(config.code, [
-            CONFIG_CODES.metaDataTitle,
-            CONFIG_CODES.metaDataDescription,
-            CONFIG_CODES.metaDataFaviconUrl,
-          ]),
-        ),
-      orderBy: (config, { desc }) => [desc(config.createdAt)],
-    });
-
-    const metaDataTitle = configs.find(
-      (c) => c.code == CONFIG_CODES.metaDataTitle,
-    )?.value;
-    const metaDataDescription = configs.find(
-      (c) => c.code == CONFIG_CODES.metaDataDescription,
-    )?.value;
-    const metaDataFaviconUrl = configs.find(
-      (c) => c.code == CONFIG_CODES.metaDataFaviconUrl,
-    )?.value;
-
-    return { metaDataTitle, metaDataDescription, metaDataFaviconUrl };
+    return {
+      storeSlug: ctx.store.slug,
+      metaTitle: ctx.store.name,
+      ...storeBranding,
+    };
   }),
 
   update: storePermissionProcedure("admin.configs:edit")

@@ -81,6 +81,49 @@
             "whatsapp": "Continuar pelo WhatsApp"
         },
         "stores": {
+            "form": {
+                "title": "Loja",
+                "description": "Criar uma nova loja",
+                "submit": "Salvar",
+                "errors": {
+                    "save": "Não foi possível salvar a loja. Confira os dados e tente novamente."
+                },
+                "fields": {
+                    "name": {
+                        "label": "Nome"
+                    },
+                    "slug": {
+                        "label": "Identificador",
+                        "description": "Este valor pode ser usado como parte da URL."
+                    },
+                    "domains": {
+                        "label": "Domínios",
+                        "description": "O domínio deve corresponder à configuração de DNS.",
+                        "placeholder": "exemplo.com",
+                        "add": "Adicionar domínio"
+                    },
+                    "active": {
+                        "label": "Loja ativa"
+                    },
+                    "branding": {
+                        "label": "Identidade visual",
+                        "description": "É necessário informar pelo menos um logo. Use uma URL hospedada ou um caminho relativo à raiz.",
+                        "baseColor": "Cor base",
+                        "metaDescription": "Descrição meta",
+                        "faviconUrl": "URL ou caminho do favicon",
+                        "logoFullLight": "Logo completo (tema claro)",
+                        "logoFullDark": "Logo completo (tema escuro)",
+                        "logoSmallLight": "Logo pequeno (tema claro)",
+                        "logoSmallDark": "Logo pequeno (tema escuro)",
+                        "urlPlaceholder": "https://exemplo.com/imagem.png ou /assets/imagem.png"
+                    }
+                }
+            },
+            "editor": {
+                "back": "Voltar para lojas",
+                "title": "Editar {name}",
+                "description": "Altere os dados, domínios, metadados e logos da loja."
+            },
             "table": {
                 "columns": {
                     "name": "Nome da loja",

@@ -13,11 +13,13 @@ import { configs } from "./schemas/config";
 import { userObjects } from "./schemas/user-objects";
 import { stores } from "./schemas/stores";
 import { storeDomains } from "./schemas/store-domains";
+import { storeBranding } from "./schemas/store-branding";
 
 export {
   configs,
   stores,
   storeDomains,
+  storeBranding,
   userObjects,
   banners,
   categories,

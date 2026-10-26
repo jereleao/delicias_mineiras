@@ -29,8 +29,6 @@ export async function middleware(request: NextRequest) {
 
     const menuKey = getMenuKeyByHref(url.pathname);
 
-    console.log(menuKey);
-
     if (!menuKey) {
       console.info(
         `Menu for ${url.pathname} not found, consider public route.`,

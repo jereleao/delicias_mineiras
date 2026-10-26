@@ -64,6 +64,13 @@
       "when": 1792424488635,
       "tag": "0008_dark_skin",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1792699821750,
+      "tag": "0009_curly_jasper_sitwell",
+      "breakpoints": true
     }
   ]
 }

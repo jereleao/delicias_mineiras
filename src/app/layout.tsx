@@ -30,15 +30,15 @@ type RootLayoutProps = {
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("Metadata");
 
-  const metaData = await api.config.metaData();
+  const storeConfig = await api.config.storeConfig();
 
-  const title = metaData?.metaDataTitle ? metaData.metaDataTitle : t("title");
-  const description = metaData?.metaDataDescription
-    ? metaData.metaDataDescription
+  const title = storeConfig?.metaTitle ? storeConfig.metaTitle : t("title");
+  const description = storeConfig?.metaDescription
+    ? storeConfig.metaDescription
     : t("description");
 
-  const faviconUrl = metaData?.metaDataFaviconUrl
-    ? metaData.metaDataFaviconUrl
+  const faviconUrl = storeConfig?.faviconUrl
+    ? storeConfig.faviconUrl
     : "/favicon.ico";
 
   return {
