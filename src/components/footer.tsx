@@ -87,7 +87,10 @@ export default async function Footer() {
           </nav>
         ))}
         <div className="flex flex-col items-start justify-between gap-2 lg:items-end">
-          <LogoLinkHome className="mt-2 flex-col [&>p]:text-sm" />
+          <LogoLinkHome
+            className="mt-2 flex-col [&>p]:text-sm"
+            variant="small"
+          />
           <p className="text-muted-foreground text-xs">{appVersion}</p>
         </div>
       </div>

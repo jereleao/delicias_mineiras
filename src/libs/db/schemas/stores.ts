@@ -8,6 +8,7 @@ const imageUrlOrPathSchema = z
   .refine(
     (value) =>
       value === "" ||
+      value.startsWith("blob:") ||
       z.url({ protocol: /^https?$/ }).safeParse(value).success ||
       (value.startsWith("/") && !value.startsWith("//")),
     "Enter a valid URL or root-relative path.",

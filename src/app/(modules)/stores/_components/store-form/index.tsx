@@ -1,7 +1,13 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useTransition, type Dispatch, type SetStateAction } from "react";
+import {
+  useTransition,
+  useEffect,
+  useRef,
+  type Dispatch,
+  type SetStateAction,
+} from "react";
 import { useForm } from "react-hook-form";
 import { useTranslations } from "next-intl";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -25,6 +31,11 @@ import {
 } from "~/libs/db/schemas/stores";
 import { FieldDomains } from "./field-domains";
 import { FieldError } from "~/components/ui/field";
+import {
+  BrandingImageField,
+  type BrandingImageName,
+} from "./branding-image-field";
+import { uploadFile } from "~/libs/storage/action/upload-file";
 
 type StoreFormProps = {
   setOpen?: Dispatch<SetStateAction<boolean>>;
@@ -33,6 +44,8 @@ type StoreFormProps = {
 
 export function StoreForm({ setOpen, store }: StoreFormProps) {
   const router = useRouter();
+  const selectedFiles = useRef(new Map<BrandingImageName, File>());
+
   const form = useForm<CreateStoreType, unknown, CreateStoreType>({
     resolver: zodResolver(createStoreSchema),
     defaultValues: {
@@ -56,12 +69,50 @@ export function StoreForm({ setOpen, store }: StoreFormProps) {
 
   const utils = api.useUtils();
   const t = useTranslations("HomePage.stores.form");
+  const imageFields = [
+    { brandingKey: "faviconUrl", formName: "branding.faviconUrl" },
+    { brandingKey: "logoFullLight", formName: "branding.logoFullLight" },
+    { brandingKey: "logoFullDark", formName: "branding.logoFullDark" },
+    { brandingKey: "logoSmallLight", formName: "branding.logoSmallLight" },
+    { brandingKey: "logoSmallDark", formName: "branding.logoSmallDark" },
+  ] as const;
+
+  useEffect(
+    () => () => {
+      for (const field of selectedFiles.current.keys()) {
+        const imageUrl = form.getValues(field);
+        if (imageUrl.startsWith("blob:")) URL.revokeObjectURL(imageUrl);
+      }
+      selectedFiles.current.clear();
+    },
+    [form],
+  );
 
   function onSubmit(data: CreateStoreType) {
     startSaveTransition(async () => {
       try {
+        const storeData: CreateStoreType = {
+          ...data,
+          branding: { ...data.branding },
+        };
+        const selectedObjectUrls: string[] = [];
+
+        for (const { brandingKey, formName } of imageFields) {
+          const imageUrl = storeData.branding[brandingKey];
+          const selectedFile = selectedFiles.current.get(formName);
+          if (!selectedFile) continue;
+
+          const uploadedFile = await uploadFile(selectedFile);
+          storeData.branding[brandingKey] = uploadedFile.url;
+          selectedObjectUrls.push(imageUrl);
+        }
+
         if (store) {
-          const changedStore = await updateAction(store.id, data, store.slug);
+          const changedStore = await updateAction(
+            store.id,
+            storeData,
+            store.slug,
+          );
           if (!changedStore)
             throw new Error("Store update returned no result.");
 
@@ -76,13 +127,21 @@ export function StoreForm({ setOpen, store }: StoreFormProps) {
           router.replace(`/stores/${changedStore.slug}`);
           router.refresh();
         } else {
-          const newStore = await newAction(data);
+          const newStore = await newAction(storeData);
           if (!newStore) throw new Error("Store creation returned no result.");
 
           utils.store.all.setData(undefined, (old = []) => [...old, newStore]);
           await utils.store.all.invalidate();
           setOpen?.(false);
         }
+
+        for (const { brandingKey, formName } of imageFields) {
+          if (selectedFiles.current.has(formName)) {
+            form.setValue(formName, storeData.branding[brandingKey]);
+          }
+        }
+        selectedObjectUrls.forEach((url) => URL.revokeObjectURL(url));
+        selectedFiles.current.clear();
       } catch (error) {
         console.error("Failed to save store:", error);
         toast.error(t("errors.save"));
@@ -92,8 +151,8 @@ export function StoreForm({ setOpen, store }: StoreFormProps) {
 
   const logoFields = [
     "logoFullLight",
-    "logoFullDark",
     "logoSmallLight",
+    "logoFullDark",
     "logoSmallDark",
   ] as const;
 
@@ -105,6 +164,19 @@ export function StoreForm({ setOpen, store }: StoreFormProps) {
         onInvalid={(errors, _event) => console.warn("onInvalid: ", errors)}
       >
         <div className="flex gap-4">
+          <BrandingImageField
+            form={form}
+            name="branding.faviconUrl"
+            label={t("fields.branding.faviconUrl")}
+            onSelectImage={(file, name) =>
+              selectedFiles.current.set(name, file)
+            }
+            onRemoveImage={(name) => selectedFiles.current.delete(name)}
+            classNames={{
+              container: "w-fit",
+              dropZone: "size-[40px]",
+            }}
+          />
           <FormInput
             control={form.control}
             name="name"
@@ -126,7 +198,8 @@ export function StoreForm({ setOpen, store }: StoreFormProps) {
             label={t("fields.branding.baseColor")}
             type="color"
             classNames={{
-              container: "w-[90px]!",
+              container: "w-[90px]! min-w-[40px]",
+              input: "cursor-pointer",
             }}
           />
 
@@ -149,23 +222,21 @@ export function StoreForm({ setOpen, store }: StoreFormProps) {
           label={t("fields.branding.metaDescription")}
         />
 
-        <FormInput
-          control={form.control}
-          name="branding.faviconUrl"
-          label={t("fields.branding.faviconUrl")}
-          placeholder={t("fields.branding.urlPlaceholder")}
-          autoComplete="off"
-        />
-
         <div className="grid gap-4 sm:grid-cols-2">
           {logoFields.map((field) => (
-            <FormInput
+            <BrandingImageField
               key={field}
-              control={form.control}
+              form={form}
               name={`branding.${field}`}
               label={t(`fields.branding.${field}`)}
-              placeholder={t("fields.branding.urlPlaceholder")}
-              autoComplete="off"
+              onSelectImage={(file, name) =>
+                selectedFiles.current.set(name, file)
+              }
+              onRemoveImage={(name) => selectedFiles.current.delete(name)}
+              classNames={{
+                container: "w-fit",
+                dropZone: "h-16 w-auto",
+              }}
             />
           ))}
           <FieldError errors={[form.formState.errors.branding]} />

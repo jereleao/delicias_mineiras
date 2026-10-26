@@ -642,6 +642,9 @@ const DropzoneMessage = forwardRef<HTMLParagraphElement, DropzoneMessageProps>(
     }
 
     const body = context.rootError ? String(context.rootError) : children;
+
+    if (!body) return null;
+
     return (
       <p
         ref={ref}

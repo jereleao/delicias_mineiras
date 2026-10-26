@@ -1,394 +1,395 @@
 {
-    "Metadata": {
-        "title": "Lojas da Craft",
-        "description": "Catálogo de produtos produzido por CRAFT",
-        "keywords": "Craft, Produtos, Catálogo"
+  "AboutPage": {
+    "title": "Quem Somos"
+  },
+  "AccountPage": {
+    "title": "Minha Conta",
+    "preferences": "Preferências",
+    "profile": {
+      "title": "Perfil",
+      "description": "Informações do perfil.",
+      "displayName": "Nome de exibição",
+      "bio": "Biografia",
+      "edit": "Editar",
+      "editForm": {
+        "title": "Edite as informações do seu perfil.",
+        "save": "Salvar"
+      }
     },
-    "Common": {
-        "loading": "Carregando",
-        "chars": "caracteres",
-        "noResults": "Nenhum resultado.",
-        "submit": "Enviar",
-        "invalid": "Inválido",
-        "tables": {
-            "asc": "Asc",
-            "desc": "Desc",
-            "hide": "Esconder",
-            "toggleColumns": "Colunas",
-            "pagination": {
-                "goToFirst": "Ir para a primeira página",
-                "goToPrevious": "Ir para a página anterior",
-                "goToNext": "Ir para a próxima página",
-                "goToLast": "Ir para a última página",
-                "currentPage": "Página {current} de {pageCount}",
-                "rowsPerPage": "Linhas por página",
-                "selected": "{selectedCount} de {totalRows} linha(s) selecionada(s)."
-            }
-        },
-        "components": {
-            "dropzone": {
-                "retry": "Tentar novamente",
-                "remove": "Remover arquivo"
-            },
-            "dialog": {
-                "close": "Fechar"
-            },
-            "caroucel": {
-                "previousSlide": "Slide anterior",
-                "nextSlide": "Próximo slide"
-            },
-            "imageCropper": {
-                "cancel": "Cancelar",
-                "save": "Salvar seleção"
-            },
-            "textare": {
-                "counter": "{current}/{max} caracteres"
-            }
-        }
-    },
-    "NavigationMenu": {
-        "menuLabel": "Menus",
-        "menus": "Menus",
-        "navbar": {
-            "products": "Produtos",
-            "administration": "Administração",
-            "home": "Página inicial"
-        },
-        "admin": {
-            "products": "Produtos",
-            "products-description": "Gerenciar todos os produtos",
-            "categories": "Categorias",
-            "users": "Usuários",
-            "configs": "Configurações",
-            "banners": "Banners",
-            "banners-description": "Edit home page Banners"
-        },
-        "stores": "Lojas"
-    },
-    "HomePage": {
-        "title": "Página Inicial",
-        "cart": {
-            "title": "Seu carrinho",
-            "itemCount": "{count} itens",
-            "edit": "Editar",
-            "close": "Fechar carrinho",
-            "unavailableProduct": "Produto indisponível",
-            "decreaseQuantity": "Diminuir quantidade de {product}",
-            "increaseQuantity": "Aumentar quantidade de {product}",
-            "removeProduct": "Remover {product}",
-            "total": "Total",
-            "clear": "Limpar carrinho",
-            "whatsapp": "Continuar pelo WhatsApp"
-        },
-        "stores": {
-            "form": {
-                "title": "Loja",
-                "description": "Criar uma nova loja",
-                "submit": "Salvar",
-                "errors": {
-                    "save": "Não foi possível salvar a loja. Confira os dados e tente novamente."
-                },
-                "fields": {
-                    "name": {
-                        "label": "Nome"
-                    },
-                    "slug": {
-                        "label": "Identificador",
-                        "description": "Este valor pode ser usado como parte da URL."
-                    },
-                    "domains": {
-                        "label": "Domínios",
-                        "description": "O domínio deve corresponder à configuração de DNS.",
-                        "placeholder": "exemplo.com",
-                        "add": "Adicionar domínio"
-                    },
-                    "active": {
-                        "label": "Loja ativa"
-                    },
-                    "branding": {
-                        "label": "Identidade visual",
-                        "description": "É necessário informar pelo menos um logo. Use uma URL hospedada ou um caminho relativo à raiz.",
-                        "baseColor": "Cor base",
-                        "metaDescription": "Descrição meta",
-                        "faviconUrl": "URL ou caminho do favicon",
-                        "logoFullLight": "Logo completo (tema claro)",
-                        "logoFullDark": "Logo completo (tema escuro)",
-                        "logoSmallLight": "Logo pequeno (tema claro)",
-                        "logoSmallDark": "Logo pequeno (tema escuro)",
-                        "urlPlaceholder": "https://exemplo.com/imagem.png ou /assets/imagem.png"
-                    }
-                }
-            },
-            "editor": {
-                "back": "Voltar para lojas",
-                "title": "Editar {name}",
-                "description": "Altere os dados, domínios, metadados e logos da loja."
-            },
-            "table": {
-                "columns": {
-                    "name": "Nome da loja",
-                    "slug": "Identificador",
-                    "domains": "Domínios"
-                }
-            }
-        }
-    },
-    "AdminPage": {
-        "title": "Painel Administrativo",
-        "products": {
-            "form": {
-                "title": "Produto",
-                "description": "Criar um novo produto",
-                "submit": "Salvar",
-                "fields": {
-                    "categoryId": {
-                        "label": "Categoria",
-                        "description": "Esta categoria criará seções na página de produtos.",
-                        "add": {
-                            "button": "Adicionar",
-                            "placeholder": "Nova categoria"
-                        }
-                    },
-                    "name": {
-                        "label": "Nome",
-                        "placeholder": "Queijo cheddar",
-                        "description": "Este nome aparecerá como título do produto."
-                    },
-                    "description": {
-                        "label": "Descrição",
-                        "placeholder": "Média de 600 g por peça",
-                        "description": "Esta descrição aparecerá abaixo do título."
-                    },
-                    "price": {
-                        "label": "Preço"
-                    },
-                    "imageFile": {
-                        "label": "Imagem"
-                    },
-                    "keywords": {
-                        "label": "Palavras-chave",
-                        "description": "As palavras-chave podem ser usadas para refinar os resultados da busca.",
-                        "placeholder": "Palavra",
-                        "add": "Adicionar palavra-chave"
-                    }
-                }
-            },
-            "table": {
-                "columns": {
-                    "name": "Produto",
-                    "description": "Descrição",
-                    "imageUrl": "Imagem",
-                    "categoryName": "Categoria",
-                    "price": "Preço"
-                },
-                "actions": {
-                    "view": "Ver produto",
-                    "delete": "Excluir produto",
-                    "inactivate": "Inativar produto",
-                    "activate": "Ativar produto",
-                    "edit": {
-                        "title": "Editar produto",
-                        "description": "Editar o produto atual"
-                    }
-                }
-            }
-        },
-        "categories": {
-            "form": {
-                "title": "Categoria",
-                "description": "Criar uma nova categoria",
-                "submit": "Salvar",
-                "fields": {
-                    "name": {
-                        "label": "Nome",
-                        "placeholder": "Queijos",
-                        "description": "Este nome aparecera como título de uma seção."
-                    }
-                }
-            },
-            "table": {
-                "columns": {
-                    "name": "Categoria"
-                },
-                "actions": {
-                    "delete": "Excluir Categoria",
-                    "edit": {
-                        "title": "Editar Categoria",
-                        "description": "Editar a categoria atual"
-                    }
-                }
-            }
-        },
-        "banners": {
-            "form": {
-                "title": "Banner",
-                "description": "Criar um novo banner",
-                "submit": "Salvar",
-                "fields": {
-                    "title": {
-                        "label": "Título",
-                        "placeholder": "Campanha principal"
-                    },
-                    "description": {
-                        "label": "Descrição",
-                        "description": "Esta descrição não aparecerá na interface."
-                    }
-                }
-            },
-            "table": {
-                "columns": {
-                    "title": "Título",
-                    "description": "Descrição",
-                    "imageUrl": "Imagem"
-                },
-                "actions": {
-                    "view": "Ver banner",
-                    "delete": "Excluir banner",
-                    "inactivate": "Inativar banner",
-                    "activate": "Ativar banner",
-                    "edit": {
-                        "title": "Editar banner",
-                        "description": "Editar o banner atual"
-                    }
-                }
-            }
-        },
-        "users": {
-            "form": {
-                "title": "Usuário",
-                "description": "Criar um novo usuário",
-                "submit": "Salvar",
-                "fields": {
-                    "email": {
-                        "label": "Email",
-                        "placeholder": "exemplo@email.com"
-                    },
-                    "name": {
-                        "label": "Nome",
-                        "placeholder": "João da Silva"
-                    },
-                    "bio": {
-                        "label": "Biografia"
-                    },
-                    "role": {
-                        "label": "Função"
-                    }
-                }
-            },
-            "roles": "{opt, select, user {Usuário} admin {Administrador} editor {Editor} other {INVÁLIDO}}",
-            "table": {
-                "columns": {
-                    "name": "Nome",
-                    "bio": "Biografia",
-                    "email": "Email",
-                    "role": "Função"
-                },
-                "actions": {
-                    "delete": "Excluir usuário",
-                    "edit": {
-                        "title": "Editar usuário",
-                        "description": "Editar o usuário atual"
-                    }
-                }
-            }
-        },
-        "configs": {
-            "table": {
-                "columns": {
-                    "code": "Código",
-                    "description": "Descrição",
-                    "value": "Valor"
-                },
-                "values": {
-                    "WHATS_NUMBER": "Número de telefone do WhatsApp",
-                    "WHATS_GREETING": "Mensagem de saudação do WhatsApp",
-                    "invalid": "Inválido"
-                }
-            }
-        }
-    },
-    "AboutPage": {
-        "title": "Quem Somos"
-    },
-    "ContactPage": {
-        "title": "Contato"
-    },
-    "Footer": {
-        "institutional": "Institucional",
-        "restricted": "Área restrita"
-    },
-    "LoginPage": {
-        "title": "Entrar",
-        "description": "Escolha uma das opções abaixo para fazer login.",
-        "google": "Entrar com Google",
-        "passkey": "Entrar com Passkey",
-        "or": "ou",
-        "email": {
-            "label": "Endereço de email",
-            "send": "Entrar com Email",
-            "sending": "Enviando...",
-            "sent": "Verifique sua caixa de entrada para o link de login."
-        },
-        "error": {
-            "title": "Ocorreu um erro.",
-            "options": "{error, select, AccessDenied {Este endereço de email não está autorizado a entrar.} Forbidden {Você não possui as permissões para acessar essa página.} Configuration {Erro de configuração. Entre em contato com o suporte para corrigir.} other {Por favor tente novamente.}}",
-            "back": "Voltar para a página inicial"
-        }
-    },
-    "UserMenu": {
-        "login": "Entrar",
-        "language": {
-            "label": "Alterar idioma",
-            "locale": "{locale, select, pt {🇵🇹 Português} en {🇺🇸 Inglês} other {Unknown}}"
-        },
-        "theme": {
-            "label": "Alterar tema",
-            "light": "Claro",
-            "dark": "Escuro",
-            "system": "Sistema"
-        },
-        "logout": "Sair"
-    },
-    "PasskeyAvailability": {
-        "title": "Disponibilidade de Passkeys",
-        "description": "Passkeys estão disponíveis neste dispositivo. Você pode usá-los para fazer login.",
-        "dismiss": "Dispensar",
-        "register": "Registrar Passkey"
-    },
-    "AccountPage": {
-        "title": "Minha Conta",
-        "preferences": "Preferências",
-        "profile": {
-            "title": "Perfil",
-            "description": "Informações do perfil.",
-            "displayName": "Nome de exibição",
-            "bio": "Biografia",
-            "edit": "Editar",
-            "editForm": {
-                "title": "Edite as informações do seu perfil.",
-                "save": "Salvar"
-            }
-        },
-        "passkeys": {
-            "title": "Passkeys",
-            "description": "Os dispositivos configurados estão listados abaixo.",
-            "register": "Registrar passkey neste dispositivo",
-            "details": {
-                "authenticatorType": "Tipo de autenticador",
-                "credentialType": "Tipo de credencial",
-                "transports": "Transportes",
-                "createdAt": "Criado em",
-                "lastUsed": "Último uso"
-            },
-            "authenticatorTypeOptions": "{type, select, platform {Autenticador da plataforma} cross-platform {Autenticador cruzado da plataforma} other {}}",
-            "credentialTypeOptions": "{type, select, singleDevice {Dispositivo único} multiDevice {Múltiplos dispositivos} other {}}",
-            "transportOptions": {
-                "internal": "Interno",
-                "hybrid": "Híbrido",
-                "usb": "USB",
-                "nfc": "NFC",
-                "ble": "Bluetooth"
-            }
-        }
+    "passkeys": {
+      "title": "Passkeys",
+      "description": "Os dispositivos configurados estão listados abaixo.",
+      "register": "Registrar passkey neste dispositivo",
+      "details": {
+        "authenticatorType": "Tipo de autenticador",
+        "credentialType": "Tipo de credencial",
+        "transports": "Transportes",
+        "createdAt": "Criado em",
+        "lastUsed": "Último uso"
+      },
+      "authenticatorTypeOptions": "{type, select, platform {Autenticador da plataforma} cross-platform {Autenticador cruzado da plataforma} other {}}",
+      "credentialTypeOptions": "{type, select, singleDevice {Dispositivo único} multiDevice {Múltiplos dispositivos} other {}}",
+      "transportOptions": {
+        "internal": "Interno",
+        "hybrid": "Híbrido",
+        "usb": "USB",
+        "nfc": "NFC",
+        "ble": "Bluetooth"
+      }
     }
+  },
+  "AdminPage": {
+    "title": "Painel Administrativo",
+    "products": {
+      "form": {
+        "title": "Produto",
+        "description": "Criar um novo produto",
+        "submit": "Salvar",
+        "fields": {
+          "categoryId": {
+            "label": "Categoria",
+            "description": "Esta categoria criará seções na página de produtos.",
+            "add": {
+              "button": "Adicionar",
+              "placeholder": "Nova categoria"
+            }
+          },
+          "name": {
+            "label": "Nome",
+            "placeholder": "Queijo cheddar",
+            "description": "Este nome aparecerá como título do produto."
+          },
+          "description": {
+            "label": "Descrição",
+            "placeholder": "Média de 600 g por peça",
+            "description": "Esta descrição aparecerá abaixo do título."
+          },
+          "price": {
+            "label": "Preço"
+          },
+          "imageFile": {
+            "label": "Imagem"
+          },
+          "keywords": {
+            "label": "Palavras-chave",
+            "description": "As palavras-chave podem ser usadas para refinar os resultados da busca.",
+            "placeholder": "Palavra",
+            "add": "Adicionar palavra-chave"
+          }
+        }
+      },
+      "table": {
+        "columns": {
+          "name": "Produto",
+          "description": "Descrição",
+          "imageUrl": "Imagem",
+          "categoryName": "Categoria",
+          "price": "Preço"
+        },
+        "actions": {
+          "view": "Ver produto",
+          "delete": "Excluir produto",
+          "inactivate": "Inativar produto",
+          "activate": "Ativar produto",
+          "edit": {
+            "title": "Editar produto",
+            "description": "Editar o produto atual"
+          }
+        }
+      }
+    },
+    "categories": {
+      "form": {
+        "title": "Categoria",
+        "description": "Criar uma nova categoria",
+        "submit": "Salvar",
+        "fields": {
+          "name": {
+            "label": "Nome",
+            "placeholder": "Queijos",
+            "description": "Este nome aparecera como título de uma seção."
+          }
+        }
+      },
+      "table": {
+        "columns": {
+          "name": "Categoria"
+        },
+        "actions": {
+          "delete": "Excluir Categoria",
+          "edit": {
+            "title": "Editar Categoria",
+            "description": "Editar a categoria atual"
+          }
+        }
+      }
+    },
+    "banners": {
+      "form": {
+        "title": "Banner",
+        "description": "Criar um novo banner",
+        "submit": "Salvar",
+        "fields": {
+          "title": {
+            "label": "Título",
+            "placeholder": "Campanha principal"
+          },
+          "description": {
+            "label": "Descrição",
+            "description": "Esta descrição não aparecerá na interface."
+          }
+        }
+      },
+      "table": {
+        "columns": {
+          "title": "Título",
+          "description": "Descrição",
+          "imageUrl": "Imagem"
+        },
+        "actions": {
+          "view": "Ver banner",
+          "delete": "Excluir banner",
+          "inactivate": "Inativar banner",
+          "activate": "Ativar banner",
+          "edit": {
+            "title": "Editar banner",
+            "description": "Editar o banner atual"
+          }
+        }
+      }
+    },
+    "users": {
+      "form": {
+        "title": "Usuário",
+        "description": "Criar um novo usuário",
+        "submit": "Salvar",
+        "fields": {
+          "email": {
+            "label": "Email",
+            "placeholder": "exemplo@email.com"
+          },
+          "name": {
+            "label": "Nome",
+            "placeholder": "João da Silva"
+          },
+          "bio": {
+            "label": "Biografia"
+          },
+          "role": {
+            "label": "Função"
+          }
+        }
+      },
+      "roles": "{opt, select, user {Usuário} admin {Administrador} editor {Editor} other {INVÁLIDO}}",
+      "table": {
+        "columns": {
+          "name": "Nome",
+          "bio": "Biografia",
+          "email": "Email",
+          "role": "Função"
+        },
+        "actions": {
+          "delete": "Excluir usuário",
+          "edit": {
+            "title": "Editar usuário",
+            "description": "Editar o usuário atual"
+          }
+        }
+      }
+    },
+    "configs": {
+      "table": {
+        "columns": {
+          "code": "Código",
+          "description": "Descrição",
+          "value": "Valor"
+        },
+        "values": {
+          "WHATS_NUMBER": "Número de telefone do WhatsApp",
+          "WHATS_GREETING": "Mensagem de saudação do WhatsApp",
+          "invalid": "Inválido"
+        }
+      }
+    }
+  },
+  "Common": {
+    "loading": "Carregando",
+    "chars": "caracteres",
+    "noResults": "Nenhum resultado.",
+    "submit": "Enviar",
+    "invalid": "Inválido",
+    "tables": {
+      "asc": "Asc",
+      "desc": "Desc",
+      "hide": "Esconder",
+      "toggleColumns": "Colunas",
+      "pagination": {
+        "goToFirst": "Ir para a primeira página",
+        "goToPrevious": "Ir para a página anterior",
+        "goToNext": "Ir para a próxima página",
+        "goToLast": "Ir para a última página",
+        "currentPage": "Página {current} de {pageCount}",
+        "rowsPerPage": "Linhas por página",
+        "selected": "{selectedCount} de {totalRows} linha(s) selecionada(s)."
+      }
+    },
+    "components": {
+      "dropzone": {
+        "retry": "Tentar novamente",
+        "remove": "Remover arquivo"
+      },
+      "dialog": {
+        "close": "Fechar"
+      },
+      "caroucel": {
+        "previousSlide": "Slide anterior",
+        "nextSlide": "Próximo slide"
+      },
+      "imageCropper": {
+        "cancel": "Cancelar",
+        "save": "Salvar seleção",
+        "error": "Não foi possível processar a imagem. Tente novamente."
+      },
+      "textare": {
+        "counter": "{current}/{max} caracteres"
+      }
+    }
+  },
+  "ContactPage": {
+    "title": "Contato"
+  },
+  "Footer": {
+    "institutional": "Institucional",
+    "restricted": "Área restrita"
+  },
+  "HomePage": {
+    "title": "Página Inicial",
+    "cart": {
+      "title": "Seu carrinho",
+      "itemCount": "{count} itens",
+      "edit": "Editar",
+      "close": "Fechar carrinho",
+      "unavailableProduct": "Produto indisponível",
+      "decreaseQuantity": "Diminuir quantidade de {product}",
+      "increaseQuantity": "Aumentar quantidade de {product}",
+      "removeProduct": "Remover {product}",
+      "total": "Total",
+      "clear": "Limpar carrinho",
+      "whatsapp": "Continuar pelo WhatsApp"
+    },
+    "stores": {
+      "form": {
+        "title": "Loja",
+        "description": "Criar uma nova loja",
+        "submit": "Salvar",
+        "errors": {
+          "save": "Não foi possível salvar a loja. Confira os dados e tente novamente."
+        },
+        "fields": {
+          "name": {
+            "label": "Nome"
+          },
+          "slug": {
+            "label": "Identificador",
+            "description": "Este valor pode ser usado como parte da URL."
+          },
+          "domains": {
+            "label": "Domínios",
+            "description": "O domínio deve corresponder à configuração de DNS.",
+            "placeholder": "exemplo.com",
+            "add": "Adicionar domínio"
+          },
+          "active": {
+            "label": "Loja ativa"
+          },
+          "branding": {
+            "label": "Identidade visual",
+            "description": "É necessário informar pelo menos um logo. Use uma URL hospedada ou um caminho relativo à raiz.",
+            "baseColor": "Cor base",
+            "metaDescription": "Descrição meta",
+            "faviconUrl": "URL ou caminho do favicon",
+            "logoFullLight": "Logo completo (tema claro)",
+            "logoFullDark": "Logo completo (tema escuro)",
+            "logoSmallLight": "Logo pequeno (tema claro)",
+            "logoSmallDark": "Logo pequeno (tema escuro)",
+            "removeImage": "Remover imagem"
+          }
+        }
+      },
+      "editor": {
+        "back": "Voltar para lojas",
+        "title": "Editar {name}",
+        "description": "Altere os dados, domínios, metadados e logos da loja."
+      },
+      "table": {
+        "columns": {
+          "name": "Nome da loja",
+          "slug": "Identificador",
+          "domains": "Domínios"
+        }
+      }
+    }
+  },
+  "LoginPage": {
+    "title": "Entrar",
+    "description": "Escolha uma das opções abaixo para fazer login.",
+    "google": "Entrar com Google",
+    "passkey": "Entrar com Passkey",
+    "or": "ou",
+    "email": {
+      "label": "Endereço de email",
+      "send": "Entrar com Email",
+      "sending": "Enviando...",
+      "sent": "Verifique sua caixa de entrada para o link de login."
+    },
+    "error": {
+      "title": "Ocorreu um erro.",
+      "options": "{error, select, AccessDenied {Este endereço de email não está autorizado a entrar.} Forbidden {Você não possui as permissões para acessar essa página.} Configuration {Erro de configuração. Entre em contato com o suporte para corrigir.} other {Por favor tente novamente.}}",
+      "back": "Voltar para a página inicial"
+    }
+  },
+  "Metadata": {
+    "title": "Lojas da Craft",
+    "description": "Catálogo de produtos produzido por CRAFT",
+    "keywords": "Craft, Produtos, Catálogo"
+  },
+  "NavigationMenu": {
+    "menuLabel": "Menus",
+    "menus": "Menus",
+    "navbar": {
+      "products": "Produtos",
+      "administration": "Administração",
+      "home": "Página inicial"
+    },
+    "admin": {
+      "products": "Produtos",
+      "products-description": "Gerenciar todos os produtos",
+      "categories": "Categorias",
+      "users": "Usuários",
+      "configs": "Configurações",
+      "banners": "Banners",
+      "banners-description": "Edit home page Banners"
+    },
+    "stores": "Lojas"
+  },
+  "PasskeyAvailability": {
+    "title": "Disponibilidade de Passkeys",
+    "description": "Passkeys estão disponíveis neste dispositivo. Você pode usá-los para fazer login.",
+    "dismiss": "Dispensar",
+    "register": "Registrar Passkey"
+  },
+  "UserMenu": {
+    "login": "Entrar",
+    "language": {
+      "label": "Alterar idioma",
+      "locale": "{locale, select, pt {🇵🇹 Português} en {🇺🇸 Inglês} other {Unknown}}"
+    },
+    "theme": {
+      "label": "Alterar tema",
+      "light": "Claro",
+      "dark": "Escuro",
+      "system": "Sistema"
+    },
+    "logout": "Sair"
+  }
 }

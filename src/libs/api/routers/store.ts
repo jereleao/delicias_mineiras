@@ -18,6 +18,29 @@ export type StoreEditor = NonNullable<StoreOutputs["getBySlug"]>;
 
 export type GetStoreResponse = Array<Store>;
 
+function ensureBrandingImagesUploaded(branding: {
+  faviconUrl: string;
+  logoFullLight: string;
+  logoFullDark: string;
+  logoSmallLight: string;
+  logoSmallDark: string;
+}) {
+  const imageUrls = [
+    branding.faviconUrl,
+    branding.logoFullLight,
+    branding.logoFullDark,
+    branding.logoSmallLight,
+    branding.logoSmallDark,
+  ];
+
+  if (imageUrls.some((url) => url.startsWith("blob:"))) {
+    throw new TRPCError({
+      code: "BAD_REQUEST",
+      message: "Branding images must be uploaded before saving.",
+    });
+  }
+}
+
 export const storeRouter = createTRPCRouter({
   all: protectedProcedure.query(async ({ ctx }) => {
     console.warn("TODO: only get allowed stores for the current user");
@@ -107,6 +130,8 @@ export const storeRouter = createTRPCRouter({
   create: permissionProcedure("stores:manage")
     .input(createStoreSchema)
     .mutation(async ({ ctx, input }) => {
+      ensureBrandingImagesUploaded(input.branding);
+
       return ctx.db.transaction(async (tx) => {
         const [newStore] = await tx
           .insert(stores)
@@ -155,6 +180,8 @@ export const storeRouter = createTRPCRouter({
   update: permissionProcedure("stores:edit")
     .input(updateStoreSchema)
     .mutation(async ({ ctx, input }) => {
+      if (input.branding) ensureBrandingImagesUploaded(input.branding);
+
       return ctx.db.transaction(async (tx) => {
         const [existingStore] = await tx
           .select({
