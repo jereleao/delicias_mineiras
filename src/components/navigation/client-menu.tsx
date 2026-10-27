@@ -10,46 +10,34 @@ import {
 } from "~/components/ui/navigation-menu";
 import {
   getPathByMenuKey,
-  isAllowed,
-  MENUS,
+  type MenuGroup,
   type MenuKey,
 } from "~/libs/auth/menus";
 import { getTranslations } from "next-intl/server";
-import { auth } from "~/libs/auth";
 
-type AdminNavigationMenuProps = Readonly<{
+type GenericMenuGroup = {
+  menuGroup: MenuGroup["menuGroup"];
+  menus: Array<{
+    menuKey: MenuKey;
+  }>;
+};
+
+type ClientMenuProps = Readonly<{
+  menus: Array<GenericMenuGroup>;
   className?: string;
 }>;
 
-export async function AdminNavigationMenu({
-  className,
-}: AdminNavigationMenuProps) {
+export async function ClientMenu({ menus, className }: ClientMenuProps) {
   const t = await getTranslations("NavigationMenu");
-
-  const session = await auth();
-
-  type VisibleMenuGroup = Exclude<
-    (typeof MENUS)[number],
-    { menuGroup: "hidden" }
-  >;
-
-  const allowedMenus = MENUS.filter(
-    (menu): menu is VisibleMenuGroup => menu.menuGroup !== "hidden",
-  )
-    .map(({ menuGroup, menus }) => ({
-      menuGroup,
-      menus: menus.filter(({ menuKey }) =>
-        isAllowed(menuKey, session?.user.permissions ?? []),
-      ),
-    }))
-    .filter(({ menus }) => menus.length > 0);
 
   return (
     <NavigationMenu className={className}>
       <NavigationMenuList className="gap-1">
-        {allowedMenus.map((menu) => (
+        {menus.map((menu) => (
           <NavigationMenuItem key={menu.menuGroup}>
-            <NavigationMenuTrigger>{t(menu.menuGroup)}</NavigationMenuTrigger>
+            <NavigationMenuTrigger>
+              {t(`groups.${menu.menuGroup}`)}
+            </NavigationMenuTrigger>
             <NavigationMenuContent>
               <ul className="w-96 py-1">
                 {menu.menus.map(({ menuKey }) => (
@@ -76,7 +64,7 @@ async function SubMenu({ menuKey }: SubMenuProps) {
   const tKeyDescription = `${menuKey}-description` as tKeys;
 
   return (
-    <ListItem href={getPathByMenuKey(menuKey)} title={t(menuKey)}>
+    <ListItem href={getPathByMenuKey(menuKey)} title={t(menuKey as tKeys)}>
       {t.has(tKeyDescription) ? t(tKeyDescription) : null}
     </ListItem>
   );

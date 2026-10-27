@@ -9,7 +9,9 @@ import {
   accounts,
   permissions,
   rolePermissions,
+  roles,
   sessions,
+  userRoles,
   users,
   verificationTokens,
 } from "~/libs/db/schema";
@@ -17,11 +19,16 @@ import { eq } from "drizzle-orm";
 import type { PermissionKey } from "./menus";
 import { PasskeyProvider } from "./providers/passkey";
 
+export type ScopedPermissions = {
+  platform: PermissionKey[];
+  stores: Record<string, PermissionKey[]>;
+};
+
 declare module "next-auth/jwt" {
   interface JWT {
     id: string;
     provider: string;
-    permissions: PermissionKey[];
+    platformPermissions: PermissionKey[];
   }
 }
 
@@ -35,7 +42,7 @@ declare module "next-auth" {
   interface Session extends DefaultSession {
     user: {
       id: string;
-      permissions: Array<PermissionKey>;
+      permissions: ScopedPermissions;
     } & DefaultSession["user"];
     provider: string;
   }
@@ -46,15 +53,41 @@ export const rpId = env.NEXT_PUBLIC_BASE_URL.replace(
   "$1",
 );
 
-const getUserPermissions = async (userId: string): Promise<PermissionKey[]> => {
+const getUserPermissions = async (
+  userId: string,
+): Promise<ScopedPermissions> => {
   const rows = await db
-    .select({ key: permissions.key })
-    .from(users)
-    .innerJoin(rolePermissions, eq(users.roleId, rolePermissions.roleId))
+    .select({ storeId: roles.storeId, key: permissions.key })
+    .from(userRoles)
+    .innerJoin(roles, eq(userRoles.roleId, roles.id))
+    .innerJoin(rolePermissions, eq(roles.id, rolePermissions.roleId))
     .innerJoin(permissions, eq(rolePermissions.permissionId, permissions.id))
-    .where(eq(users.id, userId));
+    .where(eq(userRoles.userId, userId));
 
-  return rows.map(({ key }) => key as PermissionKey);
+  const platformPermissions = new Set<PermissionKey>();
+  const storePermissions = new Map<number, Set<PermissionKey>>();
+
+  for (const { storeId, key } of rows) {
+    const permissionKey = key as PermissionKey;
+    if (storeId === null) {
+      platformPermissions.add(permissionKey);
+      continue;
+    }
+
+    const permissionSet = storePermissions.get(storeId) ?? new Set();
+    permissionSet.add(permissionKey);
+    storePermissions.set(storeId, permissionSet);
+  }
+
+  const stores: ScopedPermissions["stores"] = {};
+  for (const [storeId, permissionSet] of storePermissions) {
+    stores[storeId] = [...permissionSet];
+  }
+
+  return {
+    platform: [...platformPermissions],
+    stores,
+  };
 };
 
 type CurrentUser = {
@@ -62,7 +95,6 @@ type CurrentUser = {
   id: string;
   name: string | null;
   active: boolean;
-  roleId: number;
   bio: string | null;
   image: string | null;
   emailVerified: Date | null;
@@ -229,7 +261,9 @@ export const authConfig = {
       }
 
       const userId = user?.id ?? resultToken.sub ?? resultToken.id;
-      resultToken.permissions = userId ? await getUserPermissions(userId) : [];
+      resultToken.platformPermissions = userId
+        ? (await getUserPermissions(userId)).platform
+        : [];
 
       if (typeof resultToken.image == "string") {
         resultToken.picture = resultToken.image;
@@ -237,14 +271,17 @@ export const authConfig = {
 
       return resultToken;
     },
-    session({ session, token, user, newSession, trigger }) {
-      // console.log("session", { session, token, user, newSession, trigger });
+    async session({ session, token }) {
+      const userId = token.sub || token.id;
+
       return {
         ...session,
         user: {
           ...session.user,
-          id: token.sub || token.id, // Ensure the user ID is included in the session
-          permissions: token.permissions ?? [],
+          id: userId, // Ensure the user ID is included in the session
+          permissions: userId
+            ? await getUserPermissions(userId)
+            : { platform: [], stores: {} },
         },
         provider: token.provider,
       };

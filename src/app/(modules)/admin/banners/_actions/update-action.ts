@@ -14,7 +14,7 @@ export async function updateAction(
     ...bannerData,
   });
 
-  revalidatePath(getPathByMenuKey("admin.banners"));
+  revalidatePath(getPathByMenuKey("store.banners"));
 
   if (banners.length !== 1) return null;
 

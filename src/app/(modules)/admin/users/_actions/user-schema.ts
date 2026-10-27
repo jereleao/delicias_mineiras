@@ -7,7 +7,7 @@ export const userFormSchema = z.object({
     .min(5, "User name must be at least 5 characters.")
     .max(32, "User name must be at most 32 characters."),
   bio: z.string().max(255, "'Bio' must be at most 255 characters.").optional(),
-  roleId: z.coerce.number(),
+  roleIds: z.array(z.coerce.number().int().positive()).min(1),
 });
 
 export type UserFormType = z.infer<typeof userFormSchema>;

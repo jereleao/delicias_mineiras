@@ -5,6 +5,7 @@ import { LogoLinkHome } from "~/components/logo-link-home";
 import { auth } from "~/libs/auth";
 import { isAllowed, type PermissionKey } from "~/libs/auth/menus";
 import { env } from "~/env";
+import { getStoreForCurrentHost } from "~/libs/stores/server";
 
 type AuthenticatedFooterLink = {
   label: string;
@@ -29,7 +30,10 @@ type FooterColumn = {
 export default async function Footer() {
   const t = await getTranslations();
 
-  const session = await auth();
+  const [session, store] = await Promise.all([
+    auth(),
+    getStoreForCurrentHost(),
+  ]);
 
   const isAuthenticated = !!session?.user;
 
@@ -46,13 +50,20 @@ export default async function Footer() {
         {
           label: t("AdminPage.title"),
           href: "/admin",
-          authTag: "admin",
+          authTag: "store",
         },
       ],
     },
   ];
 
   const appVersion = `v${env.NEXT_PUBLIC_APP_VERSION}`;
+  const permissions = session?.user.permissions;
+  const scopedPermissions = store
+    ? [
+        ...(permissions?.platform ?? []),
+        ...(permissions?.stores[store.id] ?? []),
+      ]
+    : (permissions?.platform ?? []);
 
   return (
     <footer className="bg-muted w-dvw">
@@ -72,7 +83,9 @@ export default async function Footer() {
             />
             <ul className="mt-6 flex flex-col gap-4">
               {column.links
-                .filter((link) => checkPermission(link, session?.user))
+                .filter((link) =>
+                  checkPermission(link, session?.user, scopedPermissions),
+                )
                 .map((link) => (
                   <li key={link.label}>
                     <Link
@@ -98,7 +111,11 @@ export default async function Footer() {
   );
 }
 
-function checkPermission(link: FooterLink, user: Session["user"] | undefined) {
+function checkPermission(
+  link: FooterLink,
+  user: Session["user"] | undefined,
+  permissions: PermissionKey[],
+) {
   const requiredAuth = "requiresAuth" in link && link.requiresAuth;
 
   const hasAuthTag = "authTag" in link;
@@ -107,7 +124,7 @@ function checkPermission(link: FooterLink, user: Session["user"] | undefined) {
 
   if (requiredAuth && !!user) return true;
 
-  if (hasAuthTag && isAllowed(link.authTag, user?.permissions ?? []))
+  if (hasAuthTag && isAllowed(link.authTag, permissions))
     return true;
 
   return false;

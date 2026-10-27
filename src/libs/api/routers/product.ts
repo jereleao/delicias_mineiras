@@ -80,7 +80,7 @@ export const productRouter = createTRPCRouter({
       return product ?? null;
     }),
 
-  create: storePermissionProcedure("admin.products:manage")
+  create: storePermissionProcedure("store.products:manage")
     .input(createProductSchema)
     .mutation(async ({ ctx, input }) => {
       const category = await ctx.db.query.categories.findFirst({
@@ -114,7 +114,7 @@ export const productRouter = createTRPCRouter({
       return newProduct;
     }),
 
-  update: storePermissionProcedure("admin.products:edit")
+  update: storePermissionProcedure("store.products:edit")
     .input(updateProductSchema)
     .mutation(async ({ ctx, input: { price: priceAsNumber, ...input } }) => {
       const product = await ctx.db.query.products.findFirst({
@@ -156,7 +156,7 @@ export const productRouter = createTRPCRouter({
       return newProduct;
     }),
 
-  delete: storePermissionProcedure("admin.products:manage")
+  delete: storePermissionProcedure("store.products:manage")
     .input(byIdSchema)
     .mutation(async ({ ctx, input }) => {
       const product = await ctx.db.query.products.findFirst({

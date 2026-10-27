@@ -15,36 +15,29 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "~/components/ui/accordion";
-import { getPathByMenuKey, isAllowed, MENUS } from "~/libs/auth/menus";
+import {
+  getPathByMenuKey,
+  type MenuGroup,
+  type MenuKey,
+} from "~/libs/auth/menus";
 import { useTranslations } from "next-intl";
 import CustomLink from "~/components/custom-link";
-import { useSession } from "next-auth/react";
 import { useState } from "react";
 
-type AdminDrawerMenuProps = Readonly<{
+type GenericMenuGroup = {
+  menuGroup: MenuGroup["menuGroup"];
+  menus: Array<{
+    menuKey: MenuKey;
+  }>;
+};
+
+type ClientDrawerProps = Readonly<{
+  menus: Array<GenericMenuGroup>;
   className?: string;
 }>;
 
-export function AdminDrawerMenu({ className }: AdminDrawerMenuProps) {
+export function ClientDrawer({ menus, className }: ClientDrawerProps) {
   const t = useTranslations("NavigationMenu");
-
-  const { data: session } = useSession();
-
-  type VisibleMenuGroup = Exclude<
-    (typeof MENUS)[number],
-    { menuGroup: "hidden" }
-  >;
-
-  const allowedMenus = MENUS.filter(
-    (menu): menu is VisibleMenuGroup => menu.menuGroup !== "hidden",
-  )
-    .map(({ menuGroup, menus }) => ({
-      menuGroup,
-      menus: menus.filter(({ menuKey }) =>
-        isAllowed(menuKey, session?.user.permissions ?? []),
-      ),
-    }))
-    .filter(({ menus }) => menus.length > 0);
 
   const [open, setOpen] = useState(false);
 
@@ -62,14 +55,14 @@ export function AdminDrawerMenu({ className }: AdminDrawerMenuProps) {
           </DrawerHeader>
           <div className="no-scrollbar overflow-y-auto px-4">
             <Accordion type="multiple">
-              {allowedMenus.map((menu) => (
+              {menus.map((menu) => (
                 <AccordionItem
                   key={menu.menuGroup}
                   value={menu.menuGroup}
                   className="border-0!"
                 >
                   <AccordionTrigger className="bg-secondary text-secondary-foreground my-1 w-full px-2 py-1 text-sm font-medium">
-                    {t(menu.menuGroup)}
+                    {t(`groups.${menu.menuGroup}`)}
                   </AccordionTrigger>
                   <AccordionContent className="pb-0">
                     <ul className="pt-1">

@@ -6,7 +6,7 @@ type UserButtonProps = {
   showLoginOption?: boolean;
 };
 
-export default async function UserButton({ showLoginOption }: UserButtonProps) {
+export async function UserButton({ showLoginOption }: UserButtonProps) {
   const session = await auth();
 
   if (!session?.user) return showLoginOption ? <SignIn /> : null;

@@ -58,7 +58,7 @@ export const getColums = (roleOptions: Array<Role>) => {
         tKey: "AdminPage.users.table.columns.email",
       },
       header: ({ column }) => <DataTableColumnHeader column={column} />,
-      cell: ({ cell, row }) => {
+      cell: ({ cell }) => {
         const isVerified = row.original.emailVerified;
         const cellValue = cell.getValue();
         return (
@@ -74,7 +74,7 @@ export const getColums = (roleOptions: Array<Role>) => {
         );
       },
     }),
-    columnHelper.accessor("roleId", {
+    columnHelper.accessor("roleIds", {
       enableHiding: true,
       meta: {
         classNames: {
@@ -85,18 +85,7 @@ export const getColums = (roleOptions: Array<Role>) => {
       },
       header: ({ column }) => <DataTableColumnHeader column={column} />,
       cell: ({ cell, row }) => {
-        const userId = row.original.id;
-        const cellValue = cell.getValue();
-
-        const t = useTranslations("Common");
-
-        if (typeof cellValue !== "number") {
-          return <span className="text-red-500">{t("invalid")}</span>;
-        }
-
-        return (
-          <RoleCell userId={userId} roleId={cellValue} options={roleOptions} />
-        );
+        return <RoleCell roleIds={cell.getValue()} options={roleOptions} />;
       },
     }),
     columnHelper.display({

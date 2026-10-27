@@ -44,10 +44,18 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(url);
     }
 
-    const grantedPermission = isAllowed(menuKey, token.permissions);
+    if (menuKey.startsWith("store.")) {
+      return NextResponse.next();
+    }
+
+    const platformPermissions = Array.isArray(token.platformPermissions)
+      ? token.platformPermissions
+      : [];
+
+    const grantedPermission = isAllowed(menuKey, platformPermissions);
 
     if (!grantedPermission) {
-      console.info("User dont have permission for this page");
+      console.info(`User dont have permission for the menu: ${menuKey}.`);
 
       url.pathname = "/auth";
       url.search = "?error=Forbidden";

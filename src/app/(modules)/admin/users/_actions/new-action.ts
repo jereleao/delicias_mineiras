@@ -6,9 +6,9 @@ import type { InviteType } from "~/libs/db/schemas/users";
 import { api } from "~/libs/trpc/server";
 
 export async function newAction(inviteData: InviteType) {
-  const users = await api.user.invite(inviteData);
+  const users = await api.user.inviteStore(inviteData);
 
-  revalidatePath(getPathByMenuKey("admin.users"));
+  revalidatePath(getPathByMenuKey("store.users"));
 
   if (users.length !== 1) return null;
 

@@ -1,39 +1,42 @@
 export const MENUS = [
   {
-    menuGroup: "navbar.home",
+    menuGroup: "store.home",
     menus: [
       {
-        menuKey: "admin.banners",
+        menuKey: "store.banners",
       },
     ],
   },
   {
-    menuGroup: "navbar.products",
+    menuGroup: "store.products",
     menus: [
       {
-        menuKey: "admin.products",
+        menuKey: "store.products",
       },
       {
-        menuKey: "admin.categories",
+        menuKey: "store.categories",
       },
     ],
   },
   {
-    menuGroup: "navbar.administration",
+    menuGroup: "store.administration",
     menus: [
       {
-        menuKey: "admin.users",
+        menuKey: "store.users",
       },
       {
-        menuKey: "admin.configs",
+        menuKey: "store.configs",
       },
     ],
   },
   {
-    menuGroup: "hidden",
+    menuGroup: "root",
     menus: [
       {
         menuKey: "stores",
+      },
+      {
+        menuKey: "users",
       },
     ],
   },
@@ -61,7 +64,7 @@ export function getMenuKeyByHref(href: string): MenuKey | undefined {
   const sortedMenuKeys = [...MENU_KEYS].sort((a, b) => b.length - a.length);
 
   const foundMenuKey = sortedMenuKeys.find((menuKey) => {
-    const menuPath = `/${menuKey.replaceAll(".", "/")}`;
+    const menuPath = getPathByMenuKey(menuKey);
     return path === menuPath || path.startsWith(`${menuPath}/`);
   });
 
@@ -99,11 +102,19 @@ export function isAllowed(
 }
 
 export function getPathByMenuKey(menuKey: MenuKey): string {
-  return `/${menuKey.replace(".", "/")}`;
+  const routeKey = menuKey.startsWith("store.")
+    ? `admin.${menuKey.slice("store.".length)}`
+    : menuKey;
+  return `/${routeKey.replaceAll(".", "/")}`;
 }
 
 export function getMenuKeyByPath(path: string): MenuKey | undefined {
-  const menuKey = path.split("/").filter(Boolean).join(".") as MenuKey;
+  const rawMenuKey = path.split("/").filter(Boolean).join(".");
+  const menuKey = (
+    rawMenuKey.startsWith("admin.")
+      ? `store.${rawMenuKey.slice("admin.".length)}`
+      : rawMenuKey
+  ) as MenuKey;
 
   return MENU_KEYS.includes(menuKey) ? menuKey : undefined;
 }

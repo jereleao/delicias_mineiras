@@ -8,7 +8,7 @@ import { api } from "~/libs/trpc/server";
 export async function newAction(bannerData: CreateBannerType) {
   const banners = await api.banner.create(bannerData);
 
-  revalidatePath(getPathByMenuKey("admin.banners"));
+  revalidatePath(getPathByMenuKey("store.banners"));
 
   if (banners.length !== 1) return null;
 

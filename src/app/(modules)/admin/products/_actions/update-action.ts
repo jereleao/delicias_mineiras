@@ -10,7 +10,7 @@ export async function updateAction(data: UpdateProductType) {
     ...data,
   });
 
-  revalidatePath(getPathByMenuKey("admin.products"));
+  revalidatePath(getPathByMenuKey("store.products"));
 
   if (banners.length !== 1) return null;
 

@@ -135,9 +135,10 @@ export const protectedProcedure = t.procedure
 
 export const permissionProcedure = (permission: PermissionKey) =>
   protectedProcedure.use(async ({ ctx, next }) => {
-    const permissions = ctx.session.user.permissions;
-
-    const grantedPermission = isAllowed(permission, permissions);
+    const grantedPermission = isAllowed(
+      permission,
+      ctx.session.user.permissions.platform,
+    );
 
     if (!grantedPermission) {
       throw new TRPCError({ code: "FORBIDDEN" });
@@ -196,8 +197,77 @@ export const optionalStorePublicProcedure = publicProcedure.use(
   optionalStoreContextMiddleware,
 );
 
+export const optionalStoreProtectedProcedure = protectedProcedure.use(
+  optionalStoreContextMiddleware,
+);
+
+function hasStorePermission(
+  permissions: {
+    platform: PermissionKey[];
+    stores: Record<string, PermissionKey[]>;
+  },
+  storeId: number,
+  permission: PermissionKey,
+) {
+  return (
+    isAllowed(permission, permissions.stores[storeId] ?? []) ||
+    isAllowed(permission, permissions.platform)
+  );
+}
+
 export const storePermissionProcedure = (permission: PermissionKey) =>
-  permissionProcedure(permission).use(requiredStoreContextMiddleware);
+  protectedProcedure
+    .use(requiredStoreContextMiddleware)
+    .use(async ({ ctx, next }) => {
+      if (
+        !hasStorePermission(
+          ctx.session.user.permissions,
+          ctx.store.id,
+          permission,
+        )
+      ) {
+        throw new TRPCError({ code: "FORBIDDEN" });
+      }
+
+      return next();
+    });
+
+export const optionalScopedPermissionProcedure = (
+  storePermission: PermissionKey,
+  platformPermission: PermissionKey,
+) =>
+  optionalStoreProtectedProcedure.use(async ({ ctx, next }) => {
+    const grantedPermission = ctx.store
+      ? hasStorePermission(
+          ctx.session.user.permissions,
+          ctx.store.id,
+          storePermission,
+        )
+      : isAllowed(
+          platformPermission,
+          ctx.session.user.permissions.platform,
+        );
+
+    if (!grantedPermission) {
+      throw new TRPCError({ code: "FORBIDDEN" });
+    }
+
+    return next();
+  });
 
 export const optionalStorePermissionProcedure = (permission: PermissionKey) =>
-  permissionProcedure(permission).use(optionalStoreContextMiddleware);
+  optionalStoreProtectedProcedure.use(async ({ ctx, next }) => {
+    const grantedPermission = ctx.store
+      ? hasStorePermission(
+          ctx.session.user.permissions,
+          ctx.store.id,
+          permission,
+        )
+      : isAllowed(permission, ctx.session.user.permissions.platform);
+
+    if (!grantedPermission) {
+      throw new TRPCError({ code: "FORBIDDEN" });
+    }
+
+    return next();
+  });

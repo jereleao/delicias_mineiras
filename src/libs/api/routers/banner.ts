@@ -61,7 +61,7 @@ export const bannerRouter = createTRPCRouter({
     return banners ?? null;
   }),
 
-  getById: storePermissionProcedure("admin.banners")
+  getById: storePermissionProcedure("store.banners")
     .input(byIdSchema)
     .query(async ({ ctx, input }) => {
       const banner = await ctx.db.query.banners.findFirst({
@@ -74,7 +74,7 @@ export const bannerRouter = createTRPCRouter({
       return banner ?? null;
     }),
 
-  create: storePermissionProcedure("admin.banners:manage")
+  create: storePermissionProcedure("store.banners:manage")
     .input(createBannerSchema)
     .mutation(async ({ ctx, input }) => {
       const bannerData = {
@@ -103,7 +103,7 @@ export const bannerRouter = createTRPCRouter({
       return newBanner;
     }),
 
-  update: storePermissionProcedure("admin.banners:edit")
+  update: storePermissionProcedure("store.banners:edit")
     .input(updateBannerSchema)
     .mutation(async ({ ctx, input }) => {
       const banner = await ctx.db.query.banners.findFirst({
@@ -132,7 +132,7 @@ export const bannerRouter = createTRPCRouter({
       return newBanner;
     }),
 
-  delete: storePermissionProcedure("admin.banners:manage")
+  delete: storePermissionProcedure("store.banners:manage")
     .input(byIdSchema)
     .mutation(async ({ ctx, input }) => {
       const banner = await ctx.db.query.banners.findFirst({

@@ -68,14 +68,16 @@ export async function getStoreForHostname(
 }
 
 export async function hasStoreForCurrentHost(): Promise<boolean> {
+  return Boolean(await getStoreForCurrentHost());
+}
+
+export async function getStoreForCurrentHost() {
   const requestHeaders = await headers();
   const rawHost = requestHeaders.get("host");
-  if (!rawHost) return false;
+  if (!rawHost) return undefined;
 
   const hostname = normalizeHostname(rawHost);
-  if (!hostname) return false;
+  if (!hostname) return undefined;
 
-  const store = await getStoreForHostname(hostname);
-
-  return !!store;
+  return getStoreForHostname(hostname);
 }

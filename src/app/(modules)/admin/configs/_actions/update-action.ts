@@ -10,7 +10,7 @@ export async function updateAction(code: string, value: string) {
     value,
   });
 
-  revalidatePath(getPathByMenuKey("admin.configs"));
+  revalidatePath(getPathByMenuKey("store.configs"));
 
   if (configs.length !== 1) return null;
 

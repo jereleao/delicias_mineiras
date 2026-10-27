@@ -1,11 +1,20 @@
 import { relations } from "drizzle-orm";
-import { index, primaryKey, uniqueIndex } from "drizzle-orm/pg-core";
+import { sql } from "drizzle-orm";
+import {
+  index,
+  primaryKey,
+  uniqueIndex,
+} from "drizzle-orm/pg-core";
 import { createTable } from "~/libs/db/schemas/common";
+import { stores } from "~/libs/db/schemas/stores";
 
 export const roles = createTable(
   "role",
   (d) => ({
     id: d.integer().primaryKey().generatedByDefaultAsIdentity(),
+    storeId: d
+      .integer()
+      .references(() => stores.id, { onDelete: "cascade" }),
     name: d.varchar({ length: 100 }).notNull(),
     description: d.varchar({ length: 255 }),
     createdAt: d
@@ -14,7 +23,15 @@ export const roles = createTable(
       .notNull(),
     updatedAt: d.timestamp({ withTimezone: true }).$onUpdate(() => new Date()),
   }),
-  (t) => [uniqueIndex("role_name_idx").on(t.name)],
+  (t) => [
+    uniqueIndex("role_platform_name_idx")
+      .on(t.name)
+      .where(sql`${t.storeId} is null`),
+    uniqueIndex("role_store_name_idx")
+      .on(t.storeId, t.name)
+      .where(sql`${t.storeId} is not null`),
+    index("role_store_idx").on(t.storeId),
+  ],
 );
 
 export const permissions = createTable(

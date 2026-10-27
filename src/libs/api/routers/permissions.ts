@@ -1,20 +1,37 @@
 import type { inferRouterOutputs } from "@trpc/server";
-import { createTRPCRouter, protectedProcedure } from "~/libs/api/trpc";
+import {
+  createTRPCRouter,
+  permissionProcedure,
+  storePermissionProcedure,
+} from "~/libs/api/trpc";
 
 type PermissionsOutputs = inferRouterOutputs<typeof permissionRouter>;
 
-export type Role = PermissionsOutputs["roles"][number];
+export type Role = PermissionsOutputs["platformRoles"][number];
 
 export const permissionRouter = createTRPCRouter({
-  roles: protectedProcedure.query(async ({ ctx }) => {
-    const categories = await ctx.db.query.roles.findMany({
+  platformRoles: permissionProcedure("users").query(async ({ ctx }) => {
+    return ctx.db.query.roles.findMany({
       columns: {
         id: true,
         name: true,
         description: true,
       },
+      where: (role, { isNull }) => isNull(role.storeId),
     });
-
-    return categories ?? null;
   }),
+
+  storeRoles: storePermissionProcedure("store.users").query(
+    async ({ ctx }) => {
+      return ctx.db.query.roles.findMany({
+        columns: {
+          id: true,
+          name: true,
+          description: true,
+        },
+        where: (role, { eq }) => eq(role.storeId, ctx.store.id),
+      });
+    },
+  ),
+
 });

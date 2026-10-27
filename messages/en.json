@@ -189,7 +189,7 @@
           "role": "Role"
         },
         "actions": {
-          "delete": "Delete Category",
+          "delete": "Delete User",
           "edit": {
             "title": "Edit User",
             "description": "Edit the current user"
@@ -365,21 +365,24 @@
   },
   "NavigationMenu": {
     "menuLabel": "Menus",
-    "navbar": {
-      "products": "Products",
-      "administration": "Administration",
-      "home": "Home Page"
+    "groups": {
+      "store": {
+        "home": "Home Page",
+        "products": "Products",
+        "administration": "Administration"
+      },
+      "root": "Plataform"
     },
-    "admin": {
+    "store": {
       "products": "Products",
-      "products-description": "Manage all products",
+      "banners": "Banners",
+      "banners-description": "Edit home page Banners",
       "categories": "Categories",
       "users": "Users",
-      "configs": "Configurations",
-      "banners": "Banners",
-      "banners-description": "Edit home page Banners"
+      "configs": "Configurations"
     },
-    "stores": "Stores"
+    "stores": "Stores",
+    "users": "Users"
   },
   "PasskeyAvailability": {
     "title": "Passkey Availability",

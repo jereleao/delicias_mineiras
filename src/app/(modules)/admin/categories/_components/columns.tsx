@@ -38,7 +38,7 @@ export const columns = columnHelper.columns([
         column={column}
         className="flex justify-center"
         title={
-          <PermissionGuard permission="admin.categories:manage">
+          <PermissionGuard permission="store.categories:manage">
             <NewButton />
           </PermissionGuard>
         }
@@ -49,10 +49,10 @@ export const columns = columnHelper.columns([
 
       return (
         <div className="flex gap-1">
-          <PermissionGuard permission="admin.categories:edit">
+          <PermissionGuard permission="store.categories:edit">
             <EditButton {...category} />
           </PermissionGuard>
-          <PermissionGuard permission="admin.categories:manage">
+          <PermissionGuard permission="store.categories:manage">
             <DeleteButton categoryId={category.id} />
           </PermissionGuard>
         </div>

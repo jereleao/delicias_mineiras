@@ -11,7 +11,7 @@ type EditButtonProps = {
   id: string;
   name: string | null;
   bio: string | null;
-  roleId: number;
+  roleIds: number[];
   roleOptions: Array<Role>;
 };
 
@@ -19,7 +19,7 @@ export function EditButton({
   id,
   name,
   bio,
-  roleId,
+  roleIds,
   roleOptions,
 }: EditButtonProps) {
   const t = useTranslations("AdminPage.users.table");
@@ -28,7 +28,7 @@ export function EditButton({
     id,
     name: name ?? "",
     bio: bio ?? undefined,
-    roleId,
+    roleIds,
   };
 
   return (
@@ -38,6 +38,7 @@ export function EditButton({
         description={t("actions.edit.description")}
         className="md:max-w-3xl"
         content={UserForm}
+        storeScoped
         user={user}
         roleOptions={roleOptions}
       >

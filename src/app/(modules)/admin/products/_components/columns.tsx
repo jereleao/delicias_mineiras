@@ -172,7 +172,7 @@ export const columns = columnHelper.columns([
       <DataTableColumnOptions
         table={table}
         title={
-          <PermissionGuard permission="admin.products:manage">
+          <PermissionGuard permission="store.products:manage">
             <NewButton />
           </PermissionGuard>
         }
@@ -185,7 +185,7 @@ export const columns = columnHelper.columns([
 
       return (
         <div>
-          <PermissionGuard permission="admin.products:edit">
+          <PermissionGuard permission="store.products:edit">
             <EditButton {...row.original} />
             {isActive ? (
               <InactivateButton productId={productId} />
@@ -193,7 +193,7 @@ export const columns = columnHelper.columns([
               <ActivateButton productId={productId} />
             )}
           </PermissionGuard>
-          <PermissionGuard permission="admin.products:manage">
+          <PermissionGuard permission="store.products:manage">
             <DeleteButton productId={productId} />
           </PermissionGuard>
         </div>

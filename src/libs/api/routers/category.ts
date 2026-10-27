@@ -15,7 +15,7 @@ export type Category = CategoryOutputs["all"][number];
 export type GetCategoryResponse = Array<Category>;
 
 export const categoryRouter = createTRPCRouter({
-  all: storePermissionProcedure("admin.categories").query(async ({ ctx }) => {
+  all: storePermissionProcedure("store.categories").query(async ({ ctx }) => {
     const categories = await ctx.db.query.categories.findMany({
       columns: {
         id: true,
@@ -27,7 +27,7 @@ export const categoryRouter = createTRPCRouter({
     return categories ?? null;
   }),
 
-  getById: storePermissionProcedure("admin.categories")
+  getById: storePermissionProcedure("store.categories")
     .input(byIdSchema)
     .query(async ({ ctx, input }) => {
       const category = await ctx.db.query.categories.findFirst({
@@ -40,7 +40,7 @@ export const categoryRouter = createTRPCRouter({
       return category ?? null;
     }),
 
-  create: storePermissionProcedure("admin.categories:manage")
+  create: storePermissionProcedure("store.categories:manage")
     .input(createCategorySchema)
     .mutation(async ({ ctx, input }) => {
       const newCategory = await ctx.db
@@ -58,7 +58,7 @@ export const categoryRouter = createTRPCRouter({
       return newCategory;
     }),
 
-  update: storePermissionProcedure("admin.categories:edit")
+  update: storePermissionProcedure("store.categories:edit")
     .input(updateCategorySchema)
     .mutation(async ({ ctx, input }) => {
       const category = await ctx.db.query.categories.findFirst({
@@ -87,7 +87,7 @@ export const categoryRouter = createTRPCRouter({
       return newCategory;
     }),
 
-  delete: storePermissionProcedure("admin.categories:manage")
+  delete: storePermissionProcedure("store.categories:manage")
     .input(byIdSchema)
     .mutation(async ({ ctx, input }) => {
       const category = await ctx.db.query.categories.findFirst({

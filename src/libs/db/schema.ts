@@ -7,6 +7,7 @@ import {
   sessions,
   storedCredentials,
   users,
+  userRoles,
   verificationTokens,
 } from "./schemas/users";
 import { configs } from "./schemas/config";
@@ -28,6 +29,7 @@ export {
   permissions,
   rolePermissions,
   users,
+  userRoles,
   accounts,
   sessions,
   verificationTokens,

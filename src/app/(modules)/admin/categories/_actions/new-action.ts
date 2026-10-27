@@ -7,7 +7,7 @@ import { api } from "~/libs/trpc/server";
 export async function newAction(categoryName: string) {
   const categories = await api.category.create({ name: categoryName });
 
-  revalidatePath(getPathByMenuKey("admin.categories"));
+  revalidatePath(getPathByMenuKey("store.categories"));
 
   if (categories.length !== 1) return null;
 

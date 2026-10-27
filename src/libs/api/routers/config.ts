@@ -79,7 +79,7 @@ export const configRouter = createTRPCRouter({
     };
   }),
 
-  update: storePermissionProcedure("admin.configs:edit")
+  update: storePermissionProcedure("store.configs:edit")
     .input(
       z.object({
         code: z.string().min(1),
