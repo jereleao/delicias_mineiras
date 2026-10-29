@@ -20,7 +20,12 @@ export function ViewButton({ slug }: ViewButtonProps) {
   return (
     <Tooltip content={t("actions.view")}>
       <Button variant="ghost" size="icon-sm" className="hover:bg-primary/10">
-        <Link href={storeUrl} className="flex items-center justify-center">
+        <Link
+          href={storeUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center justify-center"
+        >
           <EyeIcon className="size-4" />
           <span className="sr-only">{t("actions.view")}</span>
         </Link>

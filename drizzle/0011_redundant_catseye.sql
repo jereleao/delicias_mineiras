@@ -66,3 +66,6 @@ JOIN "de_mi_permission" permission
 WHERE platform_role."storeId" IS NULL
 	AND platform_role."name" = 'admin'
 ON CONFLICT DO NOTHING;
+--> statement-breakpoint
+DELETE FROM "de_mi_permission"
+WHERE "key" LIKE 'admin.%';

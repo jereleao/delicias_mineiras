@@ -8,24 +8,25 @@ import { api } from "~/libs/trpc/react";
 import { useTransition, type Dispatch } from "react";
 import { LoadingButton } from "~/components/ui/button";
 import { useTranslations } from "next-intl";
-import type { Role } from "~/libs/api/routers/permissions";
+import type { RoleOption } from "~/libs/api/routers/permissions";
 import { inviteSchema, type InviteType } from "~/libs/db/schemas/users";
 import { newAction } from "../_actions/new-action";
 
 type UserFormProps = {
   setOpen: Dispatch<boolean>;
-  roleOptions: Array<Role>;
+  roleOptions: Array<RoleOption>;
 };
 
 export function InviteForm({ setOpen, roleOptions }: UserFormProps) {
   const t = useTranslations("AdminPage.users");
 
-  const defaultRoleId = roleOptions.find((opt) => opt.name == "user")?.id;
+  // TODO: Check the default role option
+  // const defaultRoleId = roleOptions.find((opt) => opt.name == "user")?.id;
 
   const form = useForm({
     resolver: zodResolver(inviteSchema),
     defaultValues: {
-      roleIds: defaultRoleId ? [defaultRoleId] : [],
+      roleIds: /*defaultRoleId ? [defaultRoleId] :*/ [],
     },
   });
   const selectedRoleIds = form.watch("roleIds");
@@ -64,7 +65,7 @@ export function InviteForm({ setOpen, roleOptions }: UserFormProps) {
         <legend className="text-sm font-medium">
           {t("form.fields.role.label")}
         </legend>
-        {roleOptions.map(({ id, name, description }) => (
+        {roleOptions.map(({ id, key, description }) => (
           <label key={id} className="flex items-center gap-2 text-sm">
             <Checkbox
               checked={selectedRoleIds.includes(id)}
@@ -79,7 +80,7 @@ export function InviteForm({ setOpen, roleOptions }: UserFormProps) {
               }}
             />
             <span>
-              {t("roles", { opt: name })}
+              {key}
               {description ? ` — ${description}` : ""}
             </span>
           </label>

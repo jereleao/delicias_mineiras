@@ -9,7 +9,7 @@ import {
   publicProcedure,
   storePermissionProcedure,
 } from "~/libs/api/trpc";
-import { db } from "~/libs/db";
+import type { db } from "~/libs/db";
 import { roles, userRoles, users } from "~/libs/db/schema";
 import { inviteSchema } from "~/libs/db/schemas/users";
 
@@ -17,7 +17,7 @@ type UserOutputs = inferRouterOutputs<typeof userRouter>;
 
 export type ExistingKey = UserOutputs["existingKeys"][number];
 
-export type User = UserOutputs["allPlatform"][number];
+export type User = UserOutputs["all"][number];
 
 export type GetAllUsersResponse = Array<User>;
 
@@ -43,9 +43,7 @@ async function validateRoleIds(
     .where(
       and(
         inArray(roles.id, uniqueRoleIds),
-        storeId === null
-          ? isNull(roles.storeId)
-          : eq(roles.storeId, storeId),
+        storeId === null ? isNull(roles.storeId) : eq(roles.storeId, storeId),
       ),
     );
 
@@ -70,24 +68,20 @@ async function replaceRoleAssignments(
     .where(
       and(
         eq(userRoles.userId, userId),
-        storeId === null
-          ? isNull(roles.storeId)
-          : eq(roles.storeId, storeId),
+        storeId === null ? isNull(roles.storeId) : eq(roles.storeId, storeId),
       ),
     );
 
   if (currentRoles.length > 0) {
-    await database
-      .delete(userRoles)
-      .where(
-        and(
-          eq(userRoles.userId, userId),
-          inArray(
-            userRoles.roleId,
-            currentRoles.map(({ roleId }) => roleId),
-          ),
+    await database.delete(userRoles).where(
+      and(
+        eq(userRoles.userId, userId),
+        inArray(
+          userRoles.roleId,
+          currentRoles.map(({ roleId }) => roleId),
         ),
-      );
+      ),
+    );
   }
 
   if (roleIds.length > 0) {
@@ -100,10 +94,7 @@ async function replaceRoleAssignments(
   }
 }
 
-async function getUsersInScope(
-  database: typeof db,
-  storeId: number | null,
-) {
+async function getUsersInScope(database: typeof db, storeId: number | null) {
   const people = await database
     .select({
       id: users.id,
@@ -123,11 +114,7 @@ async function getUsersInScope(
     })
     .from(userRoles)
     .innerJoin(roles, eq(userRoles.roleId, roles.id))
-    .where(
-      storeId === null
-        ? isNull(roles.storeId)
-        : eq(roles.storeId, storeId),
-    );
+    .where(storeId === null ? undefined : eq(roles.storeId, storeId));
 
   const roleIdsByUser = new Map<string, number[]>();
   for (const { userId, roleId } of assignments) {
@@ -145,7 +132,7 @@ async function getUsersInScope(
 }
 
 export const userRouter = createTRPCRouter({
-  allPlatform: permissionProcedure("users").query(async ({ ctx }) => {
+  all: permissionProcedure("users").query(async ({ ctx }) => {
     return getUsersInScope(ctx.db, null);
   }),
 
@@ -176,8 +163,11 @@ export const userRouter = createTRPCRouter({
   getById: permissionProcedure("users")
     .input(z.object({ id: z.string() }))
     .query(async ({ ctx, input }) => {
-      const usersInScope = await getUsersInScope(ctx.db, null);
-      return usersInScope.find((user) => user.id === input.id) ?? null;
+      const userData = await ctx.db.query.users.findFirst({
+        where: (user, { eq }) => eq(user.id, input.id),
+      });
+
+      return userData ?? null;
     }),
 
   getByEmail: publicProcedure.input(z.email()).query(async ({ ctx, input }) => {
@@ -192,7 +182,6 @@ export const userRouter = createTRPCRouter({
     .input(inviteSchema)
     .mutation(async ({ ctx, input }) =>
       ctx.db.transaction(async (tx) => {
-        await validateRoleIds(tx, input.roleIds, null);
         const [existingUser] = await tx
           .select({
             id: users.id,
@@ -207,17 +196,14 @@ export const userRouter = createTRPCRouter({
           .limit(1);
         const [newUser] = existingUser
           ? [existingUser]
-          : await tx
-              .insert(users)
-              .values({ email: input.email })
-              .returning({
-                id: users.id,
-                bio: users.bio,
-                name: users.name,
-                email: users.email,
-                image: users.image,
-                emailVerified: users.emailVerified,
-              });
+          : await tx.insert(users).values({ email: input.email }).returning({
+              id: users.id,
+              bio: users.bio,
+              name: users.name,
+              email: users.email,
+              image: users.image,
+              emailVerified: users.emailVerified,
+            });
 
         if (!newUser) {
           throw new TRPCError({
@@ -231,6 +217,7 @@ export const userRouter = createTRPCRouter({
           .from(userRoles)
           .innerJoin(roles, eq(userRoles.roleId, roles.id))
           .where(and(eq(userRoles.userId, newUser.id), isNull(roles.storeId)));
+
         const roleIds = [
           ...new Set([
             ...currentRoleIds.map(({ roleId }) => roleId),
@@ -261,17 +248,14 @@ export const userRouter = createTRPCRouter({
           .limit(1);
         const [newUser] = existingUser
           ? [existingUser]
-          : await tx
-              .insert(users)
-              .values({ email: input.email })
-              .returning({
-                id: users.id,
-                bio: users.bio,
-                name: users.name,
-                email: users.email,
-                image: users.image,
-                emailVerified: users.emailVerified,
-              });
+          : await tx.insert(users).values({ email: input.email }).returning({
+              id: users.id,
+              bio: users.bio,
+              name: users.name,
+              email: users.email,
+              image: users.image,
+              emailVerified: users.emailVerified,
+            });
 
         if (!newUser) {
           throw new TRPCError({
@@ -296,12 +280,7 @@ export const userRouter = createTRPCRouter({
             ...input.roleIds,
           ]),
         ];
-        await replaceRoleAssignments(
-          tx,
-          newUser.id,
-          roleIds,
-          ctx.store.id,
-        );
+        await replaceRoleAssignments(tx, newUser.id, roleIds, ctx.store.id);
         return [{ ...newUser, roleIds }];
       }),
     ),
@@ -318,7 +297,6 @@ export const userRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) =>
       ctx.db.transaction(async (tx) => {
-        await validateRoleIds(tx, input.roleIds, null);
         const [updated] = await tx
           .update(users)
           .set({
@@ -378,7 +356,7 @@ export const userRouter = createTRPCRouter({
       }),
     ),
 
-  deletePlatform: permissionProcedure("users:manage")
+  delete: permissionProcedure("users:manage")
     .input(z.object({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
       const [user] = await ctx.db
@@ -399,10 +377,7 @@ export const userRouter = createTRPCRouter({
         .from(userRoles)
         .innerJoin(roles, eq(userRoles.roleId, roles.id))
         .where(
-          and(
-            eq(userRoles.userId, input.id),
-            eq(roles.storeId, ctx.store.id),
-          ),
+          and(eq(userRoles.userId, input.id), eq(roles.storeId, ctx.store.id)),
         );
 
       if (scopedRoles.length === 0) {
@@ -412,17 +387,15 @@ export const userRouter = createTRPCRouter({
         });
       }
 
-      await ctx.db
-        .delete(userRoles)
-        .where(
-          and(
-            eq(userRoles.userId, input.id),
-            inArray(
-              userRoles.roleId,
-              scopedRoles.map(({ roleId }) => roleId),
-            ),
+      await ctx.db.delete(userRoles).where(
+        and(
+          eq(userRoles.userId, input.id),
+          inArray(
+            userRoles.roleId,
+            scopedRoles.map(({ roleId }) => roleId),
           ),
-        );
+        ),
+      );
     }),
 
   dismissPasskey: protectedProcedure.mutation(async ({ ctx }) => {

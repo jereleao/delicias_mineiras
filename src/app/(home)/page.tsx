@@ -1,5 +1,5 @@
 import { auth } from "~/libs/auth";
-import ProductList from "./_components/products/product-list";
+import ProductList from "./_components/product-list";
 
 import { hasStoreForCurrentHost } from "~/libs/stores/server";
 import { redirect } from "next/navigation";

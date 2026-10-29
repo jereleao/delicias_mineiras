@@ -1,10 +1,6 @@
 "use client";
 
-import {
-  Form,
-  FormInput,
-  FormTextarea,
-} from "~/components/form/client";
+import { Form, FormInput, FormTextarea } from "~/components/form/client";
 import { Checkbox } from "~/components/ui/checkbox";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -14,12 +10,12 @@ import { LoadingButton } from "~/components/ui/button";
 import { useTranslations } from "next-intl";
 import { userFormSchema, type UserFormType } from "../_actions/user-schema";
 import { updateAction } from "../_actions/update-action";
-import type { Role } from "~/libs/api/routers/permissions";
+import type { RoleOption } from "~/libs/api/routers/permissions";
 
 type UserFormProps = {
   setOpen: Dispatch<boolean>;
   user: UserFormType;
-  roleOptions: Array<Role>;
+  roleOptions: Array<RoleOption>;
   storeScoped?: boolean;
 };
 
@@ -88,7 +84,7 @@ export function UserForm({
         <legend className="text-sm font-medium">
           {t("form.fields.role.label")}
         </legend>
-        {roleOptions.map(({ id, name, description }) => (
+        {roleOptions.map(({ id, key, description }) => (
           <label key={id} className="flex items-center gap-2 text-sm">
             <Checkbox
               checked={selectedRoleIds.includes(id)}
@@ -103,7 +99,7 @@ export function UserForm({
               }}
             />
             <span>
-              {t("roles", { opt: name })}
+              {key}
               {description ? ` — ${description}` : ""}
             </span>
           </label>

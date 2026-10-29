@@ -7,7 +7,5 @@ import { columns } from "./_components/columns";
 export default async function StoresPage() {
   const data: Array<Store> = await api.store.all();
 
-  return (
-    <DataTable id="stores" columns={columns} data={data} className="mt-4" />
-  );
+  return <DataTable id="stores" columns={columns} data={data} />;
 }

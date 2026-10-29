@@ -1,23 +1,22 @@
 "use client";
 
 import { CircleCheckIcon } from "lucide-react";
-import { useTranslations } from "next-intl";
 import { DataTableColumnHeader } from "~/components/table/data-table-column-header";
 import { createColumnHelper } from "~/components/table/data-table-features";
 import { Tooltip } from "~/components/ui/tooltip";
 import type { User } from "~/libs/api/routers/user";
-import { RoleCell } from "./role-cell";
-import type { Role } from "~/libs/api/routers/permissions";
+import type { RoleOption } from "~/libs/api/routers/permissions";
 
 import { EditButton } from "./buttons/edit-button";
 import { DeleteButton } from "./buttons/delete-button";
 import UserAvatar from "~/components/user-avatar";
 import { InviteNewUser } from "./invite-button";
 import { DataTableColumnOptions } from "~/components/table/data-table-column-options";
+import { RoleCell } from "~/app/(modules)/users/_components/role-cell";
 
 const columnHelper = createColumnHelper<User>();
 
-export const getColums = (roleOptions: Array<Role>) => {
+export const getColums = (roleOptions: Array<RoleOption>) => {
   const columns = columnHelper.columns([
     columnHelper.accessor("image", {
       meta: {
@@ -58,7 +57,7 @@ export const getColums = (roleOptions: Array<Role>) => {
         tKey: "AdminPage.users.table.columns.email",
       },
       header: ({ column }) => <DataTableColumnHeader column={column} />,
-      cell: ({ cell }) => {
+      cell: ({ cell, row }) => {
         const isVerified = row.original.emailVerified;
         const cellValue = cell.getValue();
         return (
@@ -84,7 +83,7 @@ export const getColums = (roleOptions: Array<Role>) => {
         tKey: "AdminPage.users.table.columns.role",
       },
       header: ({ column }) => <DataTableColumnHeader column={column} />,
-      cell: ({ cell, row }) => {
+      cell: ({ cell }) => {
         return <RoleCell roleIds={cell.getValue()} options={roleOptions} />;
       },
     }),

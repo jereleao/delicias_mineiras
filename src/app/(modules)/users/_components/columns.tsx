@@ -1,13 +1,12 @@
 "use client";
 
 import { CircleCheckIcon } from "lucide-react";
-import { useTranslations } from "next-intl";
 import { DataTableColumnHeader } from "~/components/table/data-table-column-header";
 import { createColumnHelper } from "~/components/table/data-table-features";
 import { Tooltip } from "~/components/ui/tooltip";
 import type { User } from "~/libs/api/routers/user";
 import { RoleCell } from "./role-cell";
-import type { Role } from "~/libs/api/routers/permissions";
+import type { RoleOption } from "~/libs/api/routers/permissions";
 
 import { EditButton } from "./buttons/edit-button";
 import { DeleteButton } from "./buttons/delete-button";
@@ -17,7 +16,7 @@ import { DataTableColumnOptions } from "~/components/table/data-table-column-opt
 
 const columnHelper = createColumnHelper<User>();
 
-export const getColums = (roleOptions: Array<Role>) => {
+export const getColums = (roleOptions: Array<RoleOption>) => {
   const columns = columnHelper.columns([
     columnHelper.accessor("image", {
       meta: {

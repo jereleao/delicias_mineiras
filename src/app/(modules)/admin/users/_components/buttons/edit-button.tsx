@@ -5,14 +5,14 @@ import { PencilIcon } from "lucide-react";
 import { DialogButton } from "~/components/dialog-button";
 import { UserForm } from "../user-form";
 import type { UserFormType } from "../../_actions/user-schema";
-import type { Role } from "~/libs/api/routers/permissions";
+import type { RoleOption } from "~/libs/api/routers/permissions";
 
 type EditButtonProps = {
   id: string;
   name: string | null;
   bio: string | null;
   roleIds: number[];
-  roleOptions: Array<Role>;
+  roleOptions: Array<RoleOption>;
 };
 
 export function EditButton({

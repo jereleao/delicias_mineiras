@@ -8,7 +8,5 @@ export default async function ProductsPage() {
 
   console.debug("TODO: make responsible design on columns widths");
 
-  return (
-    <DataTable id="products" columns={columns} data={data} className="mt-4" />
-  );
+  return <DataTable id="products" columns={columns} data={data} />;
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import type { Role } from "~/libs/api/routers/permissions";
+import type { RoleOption } from "~/libs/api/routers/permissions";
 import type { User } from "~/libs/api/routers/user";
 import { getColums } from "./columns";
 import {
@@ -9,8 +9,8 @@ import {
 } from "~/components/table/data-table";
 
 type UsersTableProps = {
-  data: User[];
-  roleOptions: Role[];
+  data: Array<User>;
+  roleOptions: Array<RoleOption>;
   config: TableConfiguration;
 };
 
@@ -23,7 +23,6 @@ export function UsersTable({ data, roleOptions, config }: UsersTableProps) {
       config={config}
       columns={columns}
       data={data}
-      className="mt-4"
     />
   );
 }

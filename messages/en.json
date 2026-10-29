@@ -180,7 +180,6 @@
           }
         }
       },
-      "roles": "{opt, select, user {User} admin {Admin} editor {Editor} other {INVALID}}",
       "table": {
         "columns": {
           "name": "Name",
@@ -218,6 +217,7 @@
     "noResults": "No results.",
     "submit": "Submit",
     "invalid": "Invalid",
+    "clearSelection": "Clear selection",
     "tables": {
       "asc": "Asc",
       "desc": "Desc",
@@ -260,7 +260,9 @@
   },
   "Footer": {
     "institutional": "Institutional",
-    "restricted": "Restricted Area"
+    "restricted": "Restricted Area",
+    "versionCraft": "© 2026 CRAFT. All rights reserved. {appVersion}",
+    "crafted": "Crafted with precision"
   },
   "HomePage": {
     "title": "Home Page",
@@ -317,7 +319,6 @@
         }
       },
       "editor": {
-        "back": "Back to stores",
         "title": "Edit {name}",
         "description": "Update store details, domains, metadata, and logos."
       },
@@ -371,7 +372,8 @@
         "products": "Products",
         "administration": "Administration"
       },
-      "root": "Plataform"
+      "root": "Plataform",
+      "access": "Access"
     },
     "store": {
       "products": "Products",
@@ -382,7 +384,50 @@
       "configs": "Configurations"
     },
     "stores": "Stores",
-    "users": "Users"
+    "users": "Users",
+    "permissions": "Permissions"
+  },
+  "PermissionsPage": {
+    "roles": {
+      "form": {
+        "title": "Platform role",
+        "description": "Create a platform role",
+        "submit": "Save",
+        "fields": {
+          "name": {
+            "label": "Role key",
+            "placeholder": "admin",
+            "description": "This key identifies the platform role."
+          },
+          "storeId": {
+            "label": "Store",
+            "description": "Store assigned to this role, leave blank to give global permissions."
+          },
+          "description": {
+            "label": "Description",
+            "placeholder": "Describe what this role is for",
+            "description": "A short explanation of the role."
+          },
+          "permissions": {
+            "label": "Permissions"
+          }
+        }
+      },
+      "table": {
+        "columns": {
+          "name": "Role",
+          "storeName": "Store",
+          "description": "Description"
+        },
+        "actions": {
+          "delete": "Delete role",
+          "edit": {
+            "title": "Edit role",
+            "description": "Edit the current platform role"
+          }
+        }
+      }
+    }
   },
   "PasskeyAvailability": {
     "title": "Passkey Availability",

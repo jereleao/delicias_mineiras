@@ -8,7 +8,7 @@ export default async function UsersPage() {
 
   const [data, roleOptions, dbConfig] = await Promise.all([
     api.user.allStore(),
-    api.permission.storeRoles(),
+    api.permission.roleOptions(),
     api.userObject.getByKey({
       key: `table_${tableId}`,
     }),

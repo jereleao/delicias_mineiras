@@ -180,7 +180,6 @@
           }
         }
       },
-      "roles": "{opt, select, user {Usuário} admin {Administrador} editor {Editor} other {INVÁLIDO}}",
       "table": {
         "columns": {
           "name": "Nome",
@@ -218,6 +217,7 @@
     "noResults": "Nenhum resultado.",
     "submit": "Enviar",
     "invalid": "Inválido",
+    "clearSelection": "Limpar seleção",
     "tables": {
       "asc": "Asc",
       "desc": "Desc",
@@ -370,7 +370,43 @@
       "banners": "Banners",
       "banners-description": "Edit home page Banners"
     },
-    "stores": "Lojas"
+    "stores": "Lojas",
+    "users": "Usuários",
+    "permissions": "Permissões"
+  },
+  "PermissionsPage": {
+    "roles": {
+      "form": {
+        "title": "Função da plataforma",
+        "description": "Criar uma função da plataforma",
+        "submit": "Salvar",
+        "fields": {
+          "name": {
+            "label": "Nome",
+            "placeholder": "Administrador",
+            "description": "Este nome identifica a função da plataforma."
+          },
+          "description": {
+            "label": "Descrição",
+            "placeholder": "Descreva a finalidade desta função",
+            "description": "Uma breve explicação da função."
+          }
+        }
+      },
+      "table": {
+        "columns": {
+          "name": "Função",
+          "description": "Descrição"
+        },
+        "actions": {
+          "delete": "Excluir função",
+          "edit": {
+            "title": "Editar função",
+            "description": "Editar a função atual da plataforma"
+          }
+        }
+      }
+    }
   },
   "PasskeyAvailability": {
     "title": "Disponibilidade de Passkeys",

@@ -5,10 +5,10 @@ import { useTranslations } from "next-intl";
 import { DialogButton } from "~/components/dialog-button";
 import { Button } from "~/components/ui/button";
 import { InviteForm } from "./invite-form";
-import type { Role } from "~/libs/api/routers/permissions";
+import type { RoleOption } from "~/libs/api/routers/permissions";
 
 type InviteNewUserProps = {
-  roleOptions: Array<Role>;
+  roleOptions: Array<RoleOption>;
 };
 
 export function InviteNewUser(p: InviteNewUserProps) {

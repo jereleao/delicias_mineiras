@@ -1,23 +1,26 @@
 "use client";
 
-import { useTranslations } from "next-intl";
-import type { Role } from "~/libs/api/routers/permissions";
+import { Badge } from "~/components/ui/badge";
+import type { RoleOption } from "~/libs/api/routers/permissions";
 
 type RoleCellProps = {
   roleIds: number[];
-  options: Array<Role>;
+  options: Array<RoleOption>;
 };
 
 export function RoleCell({ roleIds, options }: RoleCellProps) {
-  const t = useTranslations("AdminPage.users");
-
   const selectedRoles = options.filter((role) => roleIds.includes(role.id));
 
+  console.log({ roleIds, options, selectedRoles });
+
+  // eslint-disable-next-line react/jsx-no-literals
+  if (!selectedRoles.length) return <span>—</span>;
+
   return (
-    <span>
-      {selectedRoles
-        .map(({ name }) => t("roles", { opt: name }))
-        .join(", ") || "—"}
-    </span>
+    <div className="flex gap-1">
+      {selectedRoles.map(({ id, key }) => {
+        return <Badge key={id}>{key}</Badge>;
+      })}
+    </div>
   );
 }

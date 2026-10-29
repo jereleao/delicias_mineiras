@@ -4,6 +4,7 @@ import { and, eq, sql } from "drizzle-orm";
 import { headers } from "next/headers";
 import { db } from "~/libs/db";
 import { storeDomains, stores } from "~/libs/db/schema";
+import { auth } from "~/libs/auth";
 
 export function normalizeHostname(rawHost: string): string | undefined {
   try {
@@ -80,4 +81,23 @@ export async function getStoreForCurrentHost() {
   if (!hostname) return undefined;
 
   return getStoreForHostname(hostname);
+}
+
+export async function getStoreScopedPermissions() {
+  const session = await auth();
+
+  const isAuthenticated = !!session?.user;
+
+  if (!isAuthenticated) return [];
+
+  const permissions = session.user.permissions;
+
+  const store = await getStoreForCurrentHost();
+
+  const plataformPermissions = permissions?.platform ?? [];
+  const storePermissions = store ? (permissions?.stores[store.id] ?? []) : [];
+
+  const scopedPermissions = [...plataformPermissions, ...storePermissions];
+
+  return scopedPermissions;
 }

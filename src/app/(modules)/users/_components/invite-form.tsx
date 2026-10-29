@@ -1,26 +1,25 @@
 "use client";
 
-import { Form, FormInput } from "~/components/form/client";
-import { Checkbox } from "~/components/ui/checkbox";
+import { Form, FormInput, FormMultiSelect } from "~/components/form/client";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { api } from "~/libs/trpc/react";
 import { useTransition, type Dispatch } from "react";
 import { LoadingButton } from "~/components/ui/button";
 import { useTranslations } from "next-intl";
-import type { Role } from "~/libs/api/routers/permissions";
+import type { RoleOption } from "~/libs/api/routers/permissions";
 import { inviteSchema, type InviteType } from "~/libs/db/schemas/users";
 import { newAction } from "../_actions/new-action";
 
 type UserFormProps = {
   setOpen: Dispatch<boolean>;
-  roleOptions: Array<Role>;
+  roleOptions: Array<RoleOption>;
 };
 
 export function InviteForm({ setOpen, roleOptions }: UserFormProps) {
   const t = useTranslations("AdminPage.users");
 
-  const defaultRoleId = roleOptions.find((opt) => opt.name == "user")?.id;
+  const defaultRoleId = roleOptions.find((opt) => opt.key == "user")?.id;
 
   const form = useForm({
     resolver: zodResolver(inviteSchema),
@@ -28,7 +27,6 @@ export function InviteForm({ setOpen, roleOptions }: UserFormProps) {
       roleIds: defaultRoleId ? [defaultRoleId] : [],
     },
   });
-  const selectedRoleIds = form.watch("roleIds");
 
   const [isPendingSave, startSaveTransition] = useTransition();
 
@@ -63,31 +61,15 @@ export function InviteForm({ setOpen, roleOptions }: UserFormProps) {
         autoComplete="off"
       />
 
-      <fieldset className="space-y-2">
-        <legend className="text-sm font-medium">
-          {t("form.fields.role.label")}
-        </legend>
-        {roleOptions.map(({ id, name, description }) => (
-          <label key={id} className="flex items-center gap-2 text-sm">
-            <Checkbox
-              checked={selectedRoleIds.includes(id)}
-              onCheckedChange={(checked) => {
-                const nextRoleIds = checked
-                  ? [...selectedRoleIds, id]
-                  : selectedRoleIds.filter((roleId) => roleId !== id);
-                form.setValue("roleIds", nextRoleIds, {
-                  shouldDirty: true,
-                  shouldValidate: true,
-                });
-              }}
-            />
-            <span>
-              {t("roles", { opt: name })}
-              {description ? ` — ${description}` : ""}
-            </span>
-          </label>
-        ))}
-      </fieldset>
+      <FormMultiSelect
+        control={form.control}
+        name="roleIds"
+        label={t("form.fields.role.label")}
+        options={roleOptions.map((r) => ({
+          value: r.id.toString(),
+          label: r.key,
+        }))}
+      />
 
       <div>
         <LoadingButton type="submit" isLoading={isPendingSave}>

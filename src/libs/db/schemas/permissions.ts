@@ -1,20 +1,35 @@
 import { relations } from "drizzle-orm";
 import { sql } from "drizzle-orm";
-import {
-  index,
-  primaryKey,
-  uniqueIndex,
-} from "drizzle-orm/pg-core";
-import { createTable } from "~/libs/db/schemas/common";
+import { index, primaryKey, uniqueIndex } from "drizzle-orm/pg-core";
+import z from "zod";
+import { byIdSchema, createTable } from "~/libs/db/schemas/common";
 import { stores } from "~/libs/db/schemas/stores";
+
+export const createRoleSchema = z.object({
+  name: z.string().trim().min(1).max(100),
+  storeId: z.coerce.number().nullable(),
+  description: z.string().trim().max(255).nullable(),
+  permissions: z
+    .array(
+      z
+        .string()
+        .regex(/^[1-9]\d*$/)
+        .refine((id) => Number.isSafeInteger(Number(id))),
+    )
+    .refine((ids) => new Set(ids).size === ids.length, {
+      message: "Permission IDs must be unique.",
+    }),
+});
+
+export const updateRoleSchema = byIdSchema.merge(createRoleSchema);
+
+export type RoleInput = z.infer<typeof createRoleSchema>;
 
 export const roles = createTable(
   "role",
   (d) => ({
     id: d.integer().primaryKey().generatedByDefaultAsIdentity(),
-    storeId: d
-      .integer()
-      .references(() => stores.id, { onDelete: "cascade" }),
+    storeId: d.integer().references(() => stores.id, { onDelete: "cascade" }),
     name: d.varchar({ length: 100 }).notNull(),
     description: d.varchar({ length: 255 }),
     createdAt: d

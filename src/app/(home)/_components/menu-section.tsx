@@ -1,5 +1,11 @@
+import type { Product } from "~/libs/api/routers/product";
 import { ProductCard } from "./product-card";
-import type { MenuCategory } from "./products";
+
+export type MenuCategory = {
+  id: number;
+  title: string;
+  products: Product[];
+};
 
 type MenuSectionProps = MenuCategory;
 

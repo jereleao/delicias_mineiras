@@ -11,9 +11,9 @@ import {
   DrawerTitle,
 } from "~/components/ui/drawer";
 import type { Product } from "~/libs/api/routers/product";
-import { useCart } from "~/app/(modules)/_contexts/cart-context";
+import { useCart } from "~/app/(home)/_contexts/cart-context";
+import { formatPrice } from "~/utils";
 
-import { formatPrice } from "./products";
 import { WhatsAppShortcut } from "./whats-app-shortcut";
 
 interface FloaterCartProps {

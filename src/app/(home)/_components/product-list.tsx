@@ -1,10 +1,9 @@
 import { api } from "~/libs/trpc/server";
 
-import type { MenuCategory } from "./products";
-import { BannerList } from "./banner-list";
-import { MenuSection } from "./menu-section";
+import { MenuSection, type MenuCategory } from "./menu-section";
 import { FloaterCartButton } from "./floater-cart-button";
 import { WhatsAppButton } from "./whats-app-button";
+import { BannerList } from "./banner-list";
 
 export default async function ProductList() {
   const products = await api.product.all();

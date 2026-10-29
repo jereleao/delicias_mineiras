@@ -35,8 +35,16 @@ export const MENUS = [
       {
         menuKey: "stores",
       },
+    ],
+  },
+  {
+    menuGroup: "access",
+    menus: [
       {
         menuKey: "users",
+      },
+      {
+        menuKey: "permissions",
       },
     ],
   },

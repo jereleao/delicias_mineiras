@@ -104,7 +104,11 @@ export const columns = columnHelper.columns([
         <div>
           {cellValue.map((domain, index) => (
             <span key={index} className="mr-1 inline-block">
-              <CustomLink href={`http://${domain}`}>{domain}</CustomLink>
+              <CustomLink
+                href={domain.startsWith("http") ? domain : `http://${domain}`}
+              >
+                {domain}
+              </CustomLink>
             </span>
           ))}
         </div>

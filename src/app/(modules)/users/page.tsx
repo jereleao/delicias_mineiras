@@ -7,8 +7,8 @@ export default async function UsersPage() {
   const tableId = "users";
 
   const [data, roleOptions, dbConfig] = await Promise.all([
-    api.user.allPlatform(),
-    api.permission.platformRoles(),
+    api.user.all(),
+    api.permission.roleOptions(),
     api.userObject.getByKey({
       key: `table_${tableId}`,
     }),
@@ -16,6 +16,9 @@ export default async function UsersPage() {
 
   const tableConfig: TableConfiguration =
     (dbConfig?.value as TableConfiguration) ?? DEFAULT_TABLE_CONFIGURATION;
+
+  // Default the bio to be hidden.
+  tableConfig.columnVisibility.bio = false;
 
   return (
     <UsersTable
