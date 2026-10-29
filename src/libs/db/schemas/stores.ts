@@ -17,12 +17,12 @@ const imageUrlOrPathSchema = z
 const domainSchema = z
   .string()
   .min(1)
-  .max(253)
+  .max(259)
   .refine((domain) => {
     try {
       const parsedDomain = new URL(`https://${domain}`);
       return (
-        parsedDomain.hostname.toLowerCase() === domain.toLowerCase() &&
+        parsedDomain.host.toLowerCase() === domain.toLowerCase() &&
         parsedDomain.pathname === "/" &&
         !parsedDomain.search &&
         !parsedDomain.hash

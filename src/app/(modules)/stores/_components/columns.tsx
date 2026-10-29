@@ -8,7 +8,6 @@ import PermissionGuard from "~/components/permission-guard";
 import type { Store } from "~/libs/api/routers/store";
 
 import { NewButton } from "./new-button";
-import { ViewButton } from "./buttons/view-button";
 import { DeleteButton } from "./buttons/delete-button";
 import { EditButton } from "./buttons/edit-button";
 import { ActivateButton } from "./buttons/activate-button";
@@ -138,7 +137,6 @@ export const columns = columnHelper.columns([
       const isActive = row.original.active;
       return (
         <div>
-          <ViewButton slug={row.original.slug} />
           <PermissionGuard permission="stores:edit">
             <EditButton {...row.original} />
             {isActive ? (

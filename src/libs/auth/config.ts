@@ -163,51 +163,10 @@ export const authConfig = {
   session: {
     strategy: "jwt",
   },
-  cookies: {
-    sessionToken: {
-      name: `${useSecureCookies ? "__Secure-" : ""}authjs.session-token`,
-      options: {
-        httpOnly: true,
-        sameSite: "lax",
-        path: "/",
-        domain,
-        secure: useSecureCookies,
-      },
-    },
-  },
   pages: {
     error: "/auth",
   },
   callbacks: {
-    async redirect({ url, baseUrl }) {
-      console.log({ url, baseUrl });
-      return baseUrl;
-    },
-    //         try {
-    //           const target = new URL(url, baseUrl);
-    //           const base = new URL(baseUrl);
-    //           const targetUsesSharedDomain =
-    //             target.hostname === authCookieDomain ||
-    //             target.hostname.endsWith(`.${authCookieDomain}`);
-    //           const baseUsesSharedDomain =
-    //             base.hostname === authCookieDomain ||
-    //             base.hostname.endsWith(`.${authCookieDomain}`);
-
-    //           if (
-    //             target.origin === base.origin ||
-    //             (targetUsesSharedDomain &&
-    //               baseUsesSharedDomain &&
-    //               target.protocol === base.protocol &&
-    //               target.port === base.port)
-    //           ) {
-    //             return target.toString();
-    //           }
-    //         } catch {
-    //           return baseUrl;
-    //         }
-
-    //         return baseUrl;
-    //       },
     async signIn({ user, account, profile }) {
       console.log("signIn", { user, account, profile });
 
