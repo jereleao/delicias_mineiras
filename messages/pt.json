@@ -260,7 +260,9 @@
   },
   "Footer": {
     "institutional": "Institucional",
-    "restricted": "Área restrita"
+    "restricted": "Área restrita",
+    "versionCraft": "© 2026 CRAFT. Todos os direitos reservados. {appVersion}",
+    "crafted": "Criado com precisão"
   },
   "HomePage": {
     "title": "Página Inicial",
@@ -326,6 +328,16 @@
           "name": "Nome da loja",
           "slug": "Identificador",
           "domains": "Domínios"
+        },
+        "actions": {
+          "view": "Ver loja",
+          "delete": "Excluir loja",
+          "inactivate": "Inativar loja",
+          "activate": "Ativar loja",
+          "edit": {
+            "title": "Editar loja",
+            "description": "Editar a loja atual"
+          }
         }
       }
     }
@@ -355,6 +367,23 @@
   },
   "NavigationMenu": {
     "menuLabel": "Menus",
+    "groups": {
+      "store": {
+        "home": "Página inicial",
+        "products": "Produtos",
+        "administration": "Administração"
+      },
+      "root": "Plataforma",
+      "access": "Acesso"
+    },
+    "store": {
+      "products": "Produtos",
+      "banners": "Banners",
+      "banners-description": "Editar banners da página inicial",
+      "categories": "Categorias",
+      "users": "Usuários",
+      "configs": "Configurações"
+    },
     "menus": "Menus",
     "navbar": {
       "products": "Produtos",
@@ -386,16 +415,24 @@
             "placeholder": "Administrador",
             "description": "Este nome identifica a função da plataforma."
           },
+          "storeId": {
+            "label": "Loja",
+            "description": "Loja atribuída a esta função; deixe em branco para conceder permissões globais."
+          },
           "description": {
             "label": "Descrição",
             "placeholder": "Descreva a finalidade desta função",
             "description": "Uma breve explicação da função."
+          },
+          "permissions": {
+            "label": "Permissões"
           }
         }
       },
       "table": {
         "columns": {
           "name": "Função",
+          "storeName": "Loja",
           "description": "Descrição"
         },
         "actions": {
