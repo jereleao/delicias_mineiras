@@ -28,6 +28,8 @@ export async function getStoreForHostname(
   hostname: string,
   database: typeof db = db,
 ) {
+  console.info(`Search ${hostname}`);
+
   const storeByDomain = await database
     .select({
       id: stores.id,
