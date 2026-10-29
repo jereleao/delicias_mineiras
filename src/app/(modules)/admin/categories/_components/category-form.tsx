@@ -1,18 +1,17 @@
 "use client";
 
-import { Form, FormInput } from "~/components/form/client";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { api } from "~/libs/trpc/react";
-import { useTransition, type Dispatch } from "react";
-import {
-  categoryFormSchema,
-  type CategoryFormType,
-} from "../../_actions/schema";
-import { updateAction } from "../../_actions/update-action";
-import { newAction } from "../../_actions/new-action";
-import { LoadingButton } from "~/components/ui/button";
 import { useTranslations } from "next-intl";
+import { useTransition, type Dispatch } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import { api } from "~/libs/trpc/react";
+import { Form, FormInput } from "~/components/form/client";
+import { LoadingButton } from "~/components/ui/button";
+
+import { categoryFormSchema, type CategoryFormType } from "../_actions/schema";
+import { updateAction } from "../_actions/update-action";
+import { newAction } from "../_actions/new-action";
 
 type CategoryFormProps = {
   setOpen: Dispatch<boolean>;
