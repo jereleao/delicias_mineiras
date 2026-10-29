@@ -1,6 +1,6 @@
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import type { inferRouterOutputs } from "@trpc/server";
-import { createTRPCRouter, permissionProcedure } from "~/libs/api/trpc";
+import { createTRPCRouter, storePermissionProcedure } from "~/libs/api/trpc";
 import { categories } from "~/libs/db/schema";
 import {
   createCategorySchema,
@@ -15,22 +15,24 @@ export type Category = CategoryOutputs["all"][number];
 export type GetCategoryResponse = Array<Category>;
 
 export const categoryRouter = createTRPCRouter({
-  all: permissionProcedure("admin.categories").query(async ({ ctx }) => {
+  all: storePermissionProcedure("store.categories").query(async ({ ctx }) => {
     const categories = await ctx.db.query.categories.findMany({
       columns: {
         id: true,
         name: true,
       },
+      where: (category, { eq }) => eq(category.storeId, ctx.store.id),
     });
 
     return categories ?? null;
   }),
 
-  getById: permissionProcedure("admin.categories")
+  getById: storePermissionProcedure("store.categories")
     .input(byIdSchema)
     .query(async ({ ctx, input }) => {
       const category = await ctx.db.query.categories.findFirst({
-        where: (category, { eq }) => eq(category.id, input.id),
+        where: (category, { and, eq }) =>
+          and(eq(category.id, input.id), eq(category.storeId, ctx.store.id)),
         orderBy: (category, { desc }) => [desc(category.createdAt)],
       });
       if (!category) throw new Error("not Found");
@@ -38,13 +40,14 @@ export const categoryRouter = createTRPCRouter({
       return category ?? null;
     }),
 
-  create: permissionProcedure("admin.categories:manage")
+  create: storePermissionProcedure("store.categories:manage")
     .input(createCategorySchema)
     .mutation(async ({ ctx, input }) => {
       const newCategory = await ctx.db
         .insert(categories)
         .values({
           name: input.name,
+          storeId: ctx.store.id,
           createdById: ctx.session.user.id,
         })
         .returning({
@@ -55,11 +58,12 @@ export const categoryRouter = createTRPCRouter({
       return newCategory;
     }),
 
-  update: permissionProcedure("admin.categories:edit")
+  update: storePermissionProcedure("store.categories:edit")
     .input(updateCategorySchema)
     .mutation(async ({ ctx, input }) => {
       const category = await ctx.db.query.categories.findFirst({
-        where: (category, { eq }) => eq(category.id, input.id),
+        where: (category, { and, eq }) =>
+          and(eq(category.id, input.id), eq(category.storeId, ctx.store.id)),
       });
 
       if (!category) throw new Error("not Found");
@@ -69,7 +73,12 @@ export const categoryRouter = createTRPCRouter({
         .set({
           name: input.name,
         })
-        .where(eq(categories.id, input.id))
+        .where(
+          and(
+            eq(categories.id, input.id),
+            eq(categories.storeId, ctx.store.id),
+          ),
+        )
         .returning({
           id: categories.id,
           name: categories.name,
@@ -78,15 +87,23 @@ export const categoryRouter = createTRPCRouter({
       return newCategory;
     }),
 
-  delete: permissionProcedure("admin.categories:manage")
+  delete: storePermissionProcedure("store.categories:manage")
     .input(byIdSchema)
     .mutation(async ({ ctx, input }) => {
       const category = await ctx.db.query.categories.findFirst({
-        where: (category, { eq }) => eq(category.id, input.id),
+        where: (category, { and, eq }) =>
+          and(eq(category.id, input.id), eq(category.storeId, ctx.store.id)),
       });
 
       if (!category) throw new Error("not Found");
 
-      await ctx.db.delete(categories).where(eq(categories.id, input.id));
+      await ctx.db
+        .delete(categories)
+        .where(
+          and(
+            eq(categories.id, input.id),
+            eq(categories.storeId, ctx.store.id),
+          ),
+        );
     }),
 });

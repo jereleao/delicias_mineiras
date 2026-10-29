@@ -18,6 +18,7 @@ import {
 } from "react-dropzone";
 import { Button } from "~/components/ui/button";
 import { useTranslations } from "next-intl";
+import { v4 as uuidv4 } from "uuid";
 
 type DropzoneResult<TUploadRes, TUploadError> =
   | {
@@ -353,7 +354,7 @@ const useDropzone = <TUploadRes, TUploadError = string>(
           if (file) await onRemoveFile(file.id);
         }
 
-        const id = crypto.randomUUID();
+        const id = uuidv4();
         dispatch({ type: "add", fileName: file.name, file, id });
         await _uploadFile(file, id);
       });
@@ -641,6 +642,9 @@ const DropzoneMessage = forwardRef<HTMLParagraphElement, DropzoneMessageProps>(
     }
 
     const body = context.rootError ? String(context.rootError) : children;
+
+    if (!body) return null;
+
     return (
       <p
         ref={ref}

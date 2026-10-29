@@ -3,12 +3,13 @@ import { customType, index, primaryKey } from "drizzle-orm/pg-core";
 // import { type AdapterAccountType } from "next-auth/adapters";
 import { createTable } from "~/libs/db/schemas/common";
 import { roles } from "~/libs/db/schemas/permissions";
+import { v4 as uuidv4 } from "uuid";
 
 type AdapterAccountType = "oauth" | "oidc" | "email" | "webauthn";
 
 export const inviteSchema = z.object({
   email: z.email(),
-  roleId: z.coerce.number(),
+  roleIds: z.array(z.coerce.number().int().positive()).min(1),
 });
 
 export type InviteType = z.infer<typeof inviteSchema>;
@@ -18,11 +19,7 @@ export const users = createTable("user", (d) => ({
     .varchar({ length: 255 })
     .notNull()
     .primaryKey()
-    .$defaultFn(() => crypto.randomUUID()),
-  roleId: d
-    .integer()
-    .references(() => roles.id)
-    .notNull(),
+    .$defaultFn(() => uuidv4()),
   name: d.varchar({ length: 255 }),
   bio: d.varchar({ length: 255 }),
   image: d.varchar({ length: 255 }),
@@ -35,6 +32,24 @@ export const users = createTable("user", (d) => ({
   active: d.boolean().default(true).notNull(),
   offerPasskey: d.boolean().default(true).notNull(),
 }));
+
+export const userRoles = createTable(
+  "user_role",
+  (d) => ({
+    userId: d
+      .varchar({ length: 255 })
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    roleId: d
+      .integer()
+      .notNull()
+      .references(() => roles.id, { onDelete: "cascade" }),
+  }),
+  (t) => [
+    primaryKey({ columns: [t.userId, t.roleId] }),
+    index("user_role_role_idx").on(t.roleId),
+  ],
+);
 
 export const accounts = createTable(
   "account",

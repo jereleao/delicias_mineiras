@@ -17,5 +17,5 @@ export async function deleteAction(productId: number | string) {
     }
   }
 
-  revalidatePath(getPathByMenuKey("admin.products"));
+  revalidatePath(getPathByMenuKey("store.products"));
 }

@@ -1,340 +1,452 @@
 {
-    "Metadata": {
-        "title": "Delícias Mineiras",
-        "description": "Delícias Mineiras Product Catalog",
-        "keywords": "Delícias Mineiras, Products, Catalog"
+  "AboutPage": {
+    "title": "About Us"
+  },
+  "AccountPage": {
+    "title": "My Account",
+    "preferences": "Preferences",
+    "profile": {
+      "title": "Profile",
+      "description": "Profile information.",
+      "displayName": "Display Name",
+      "bio": "Bio",
+      "edit": "Edit",
+      "editForm": {
+        "title": "Edit your profile information.",
+        "save": "Save"
+      }
     },
-    "Common": {
-        "loading": "Loading",
-        "chars": "characters",
-        "noResults": "No results.",
-        "submit": "Submit",
-        "invalid": "Invalid",
-        "tables": {
-            "asc": "Asc",
-            "desc": "Desc",
-            "hide": "Hide",
-            "toggleColumns": "Columns",
-            "pagination": {
-                "goToFirst": "Go to first page",
-                "goToPrevious": "Go to previous page",
-                "goToNext": "Go to next page",
-                "goToLast": "Go to last page",
-                "currentPage": "Page {current} of {pageCount}",
-                "rowsPerPage": "Rows per page",
-                "selected": "{selectedCount} of {totalRows} row(s) selected."
-            }
-        },
-        "components": {
-            "dropzone": {
-                "retry": "Retry",
-                "remove": "Remove file"
-            },
-            "dialog": {
-                "close": "Close"
-            },
-            "caroucel": {
-                "previousSlide": "Previous slide",
-                "nextSlide": "Next slide"
-            },
-            "imageCropper": {
-                "cancel": "Cancel",
-                "save": "Save selection"
-            },
-            "textare": {
-                "counter": "{current}/{max} characters"
-            }
-        }
-    },
-    "NavigationMenu": {
-        "menuLabel": "Menus",
-        "navbar": {
-            "products": "Products",
-            "administration": "Administration",
-            "home": "Home Page"
-        },
-        "admin": {
-            "products": "Products",
-            "products-description": "Manage all products",
-            "categories": "Categories",
-            "users": "Users",
-            "configs": "Configurations",
-            "banners": "Banners",
-            "banners-description": "Edit home page Banners"
-        }
-    },
-    "HomePage": {
-        "title": "Home Page",
-        "cart": {
-            "title": "Your cart",
-            "itemCount": "{count} items",
-            "edit": "Edit",
-            "close": "Close cart",
-            "unavailableProduct": "Unavailable product",
-            "decreaseQuantity": "Decrease quantity of {product}",
-            "increaseQuantity": "Increase quantity of {product}",
-            "removeProduct": "Remove {product}",
-            "total": "Total",
-            "clear": "Clear cart",
-            "whatsapp": "Continue on WhatsApp"
-        }
-    },
-    "AdminPage": {
-        "title": "Admin Dashboard",
-        "products": {
-            "form": {
-                "title": "Product",
-                "description": "Create a new product",
-                "submit": "Submit",
-                "fields": {
-                    "categoryId": {
-                        "label": "Category",
-                        "description": "This category will create sections on the products page.",
-                        "add": {
-                            "button": "Add",
-                            "placeholder": "New Category"
-                        }
-                    },
-                    "name": {
-                        "label": "Name",
-                        "placeholder": "Cheddar Cheease",
-                        "description": "This name will appear as product title."
-                    },
-                    "description": {
-                        "label": "Description",
-                        "placeholder": "Average 600g/piece",
-                        "description": "This description will appear bellow the title."
-                    },
-                    "price": {
-                        "label": "Price"
-                    },
-                    "imageFile": {
-                        "label": "Image"
-                    },
-                    "keywords": {
-                        "label": "Keywords",
-                        "description": "The keywords can be used to refine the search results.",
-                        "placeholder": "Word",
-                        "add": "Add Keyword"
-                    }
-                }
-            },
-            "table": {
-                "columns": {
-                    "name": "Product",
-                    "description": "Description",
-                    "imageUrl": "Image",
-                    "categoryName": "Category",
-                    "price": "Price"
-                },
-                "actions": {
-                    "view": "View Product",
-                    "delete": "Delete Product",
-                    "inactivate": "Inactivate Product",
-                    "activate": "Activate Product",
-                    "edit": {
-                        "title": "Edit Product",
-                        "description": "Edit the current product"
-                    }
-                }
-            }
-        },
-        "categories": {
-            "form": {
-                "title": "Category",
-                "description": "Create a new category",
-                "submit": "Submit",
-                "fields": {
-                    "name": {
-                        "label": "Name",
-                        "placeholder": "Cheease",
-                        "description": "This name will appear as a section title."
-                    }
-                }
-            },
-            "table": {
-                "columns": {
-                    "name": "Category"
-                },
-                "actions": {
-                    "delete": "Delete Category",
-                    "edit": {
-                        "title": "Edit Category",
-                        "description": "Edit the current category"
-                    }
-                }
-            }
-        },
-        "banners": {
-            "form": {
-                "title": "Banner",
-                "description": "Create a new banner",
-                "submit": "Submit",
-                "fields": {
-                    "title": {
-                        "label": "Title",
-                        "placeholder": "Main campaign"
-                    },
-                    "description": {
-                        "label": "Description",
-                        "description": "This description won`t apper in the UI."
-                    }
-                }
-            },
-            "table": {
-                "columns": {
-                    "title": "Title",
-                    "description": "Description",
-                    "imageUrl": "Image"
-                },
-                "actions": {
-                    "view": "View Banner",
-                    "delete": "Delete Banner",
-                    "inactivate": "Inactivate Banner",
-                    "activate": "Activate Banner",
-                    "edit": {
-                        "title": "Edit Banner",
-                        "description": "Edit the current banner"
-                    }
-                }
-            }
-        },
-        "users": {
-            "form": {
-                "title": "User",
-                "description": "Invite new user to access the app",
-                "submit": "Submit",
-                "fields": {
-                    "email": {
-                        "label": "Email",
-                        "placeholder": "example@email.com"
-                    },
-                    "name": {
-                        "label": "Name",
-                        "placeholder": "John Doe"
-                    },
-                    "bio": {
-                        "label": "Bio"
-                    },
-                    "role": {
-                        "label": "Role"
-                    }
-                }
-            },
-            "roles": "{opt, select, user {User} admin {Admin} editor {Editor} other {INVALID}}",
-            "table": {
-                "columns": {
-                    "name": "Name",
-                    "bio": "Bio",
-                    "email": "Email",
-                    "role": "Role"
-                },
-                "actions": {
-                    "delete": "Delete Category",
-                    "edit": {
-                        "title": "Edit User",
-                        "description": "Edit the current user"
-                    }
-                }
-            }
-        },
-        "configs": {
-            "table": {
-                "columns": {
-                    "code": "Code",
-                    "description": "Description",
-                    "value": "Value"
-                },
-                "values": {
-                    "WHATS_NUMBER": "WhatsApp phone number",
-                    "WHATS_GREETING": "WhatsApp greeting message",
-                    "invalid": "Invalid"
-                }
-            }
-        }
-    },
-    "AboutPage": {
-        "title": "About Us"
-    },
-    "ContactPage": {
-        "title": "Contact"
-    },
-    "Footer": {
-        "institutional": "Institutional",
-        "restricted": "Restricted Area"
-    },
-    "LoginPage": {
-        "title": "Login",
-        "description": "Choose one of the options below to log in.",
-        "google": "Login with Google",
-        "passkey": "Login with Passkey",
-        "or": "or",
-        "email": {
-            "label": "Email address",
-            "send": "Login with Email",
-            "sending": "Sending...",
-            "sent": "Check your inbox for the login link."
-        },
-        "error": {
-            "title": "An error occurred.",
-            "options": "{error, select, AccessDenied {This email address is not authorized to log in.} Forbidden {You don`t have the permissions to access this page.} Configuration {Configuration error. Contact support to correct.} other {Please try again.}}",
-            "back": "Back to home page"
-        }
-    },
-    "UserMenu": {
-        "login": "Login",
-        "language": {
-            "label": "Change Language",
-            "locale": "{locale, select, pt {🇵🇹 Portuguese} en {🇺🇸 English} other {Unknown}}"
-        },
-        "theme": {
-            "label": "Change theme",
-            "light": "Light",
-            "dark": "Dark",
-            "system": "System"
-        },
-        "logout": "Logout"
-    },
-    "PasskeyAvailability": {
-        "title": "Passkey Availability",
-        "description": "Passkeys are available on this device. You can use them to log in.",
-        "dismiss": "Dismiss",
-        "register": "Register Passkey"
-    },
-    "AccountPage": {
-        "title": "My Account",
-        "preferences": "Preferences",
-        "profile": {
-            "title": "Profile",
-            "description": "Profile information.",
-            "displayName": "Display Name",
-            "bio": "Bio",
-            "edit": "Edit",
-            "editForm": {
-                "title": "Edit your profile information.",
-                "save": "Save"
-            }
-        },
-        "passkeys": {
-            "title": "Passkeys",
-            "description": "The configured devices are listed below.",
-            "register": "Register passkey on this device",
-            "details": {
-                "authenticatorType": "Authenticator Type",
-                "credentialType": "Credential Type",
-                "transports": "Transports",
-                "createdAt": "Created At",
-                "lastUsed": "Last Used"
-            },
-            "authenticatorTypeOptions": "{type, select, platform {Platform Authenticator} cross-platform {Cross-Platform Authenticator} other {}}",
-            "credentialTypeOptions": "{type, select, singleDevice {Single Device} multiDevice {Multi Device} other {}}",
-            "transportOptions": {
-                "internal": "Internal",
-                "hybrid": "Hybrid",
-                "usb": "USB",
-                "nfc": "NFC",
-                "ble": "Bluetooth"
-            }
-        }
+    "passkeys": {
+      "title": "Passkeys",
+      "description": "The configured devices are listed below.",
+      "register": "Register passkey on this device",
+      "details": {
+        "authenticatorType": "Authenticator Type",
+        "credentialType": "Credential Type",
+        "transports": "Transports",
+        "createdAt": "Created At",
+        "lastUsed": "Last Used"
+      },
+      "authenticatorTypeOptions": "{type, select, platform {Platform Authenticator} cross-platform {Cross-Platform Authenticator} other {}}",
+      "credentialTypeOptions": "{type, select, singleDevice {Single Device} multiDevice {Multi Device} other {}}",
+      "transportOptions": {
+        "internal": "Internal",
+        "hybrid": "Hybrid",
+        "usb": "USB",
+        "nfc": "NFC",
+        "ble": "Bluetooth"
+      }
     }
+  },
+  "AdminPage": {
+    "title": "Admin Dashboard",
+    "products": {
+      "form": {
+        "title": "Product",
+        "description": "Create a new product",
+        "submit": "Submit",
+        "fields": {
+          "categoryId": {
+            "label": "Category",
+            "description": "This category will create sections on the products page.",
+            "add": {
+              "button": "Add",
+              "placeholder": "New Category"
+            }
+          },
+          "name": {
+            "label": "Name",
+            "placeholder": "Cheddar Cheease",
+            "description": "This name will appear as product title."
+          },
+          "description": {
+            "label": "Description",
+            "placeholder": "Average 600g/piece",
+            "description": "This description will appear bellow the title."
+          },
+          "price": {
+            "label": "Price"
+          },
+          "imageFile": {
+            "label": "Image"
+          },
+          "keywords": {
+            "label": "Keywords",
+            "description": "The keywords can be used to refine the search results.",
+            "placeholder": "Word",
+            "add": "Add Keyword"
+          }
+        }
+      },
+      "table": {
+        "columns": {
+          "name": "Product",
+          "description": "Description",
+          "imageUrl": "Image",
+          "categoryName": "Category",
+          "price": "Price"
+        },
+        "actions": {
+          "view": "View Product",
+          "delete": "Delete Product",
+          "inactivate": "Inactivate Product",
+          "activate": "Activate Product",
+          "edit": {
+            "title": "Edit Product",
+            "description": "Edit the current product"
+          }
+        }
+      }
+    },
+    "categories": {
+      "form": {
+        "title": "Category",
+        "description": "Create a new category",
+        "submit": "Submit",
+        "fields": {
+          "name": {
+            "label": "Name",
+            "placeholder": "Cheease",
+            "description": "This name will appear as a section title."
+          }
+        }
+      },
+      "table": {
+        "columns": {
+          "name": "Category"
+        },
+        "actions": {
+          "delete": "Delete Category",
+          "edit": {
+            "title": "Edit Category",
+            "description": "Edit the current category"
+          }
+        }
+      }
+    },
+    "banners": {
+      "form": {
+        "title": "Banner",
+        "description": "Create a new banner",
+        "submit": "Submit",
+        "fields": {
+          "title": {
+            "label": "Title",
+            "placeholder": "Main campaign"
+          },
+          "description": {
+            "label": "Description",
+            "description": "This description won`t apper in the UI."
+          }
+        }
+      },
+      "table": {
+        "columns": {
+          "title": "Title",
+          "description": "Description",
+          "imageUrl": "Image"
+        },
+        "actions": {
+          "view": "View Banner",
+          "delete": "Delete Banner",
+          "inactivate": "Inactivate Banner",
+          "activate": "Activate Banner",
+          "edit": {
+            "title": "Edit Banner",
+            "description": "Edit the current banner"
+          }
+        }
+      }
+    },
+    "users": {
+      "form": {
+        "title": "User",
+        "description": "Invite new user to access the app",
+        "submit": "Submit",
+        "fields": {
+          "email": {
+            "label": "Email",
+            "placeholder": "example@email.com"
+          },
+          "name": {
+            "label": "Name",
+            "placeholder": "John Doe"
+          },
+          "bio": {
+            "label": "Bio"
+          },
+          "role": {
+            "label": "Role"
+          }
+        }
+      },
+      "table": {
+        "columns": {
+          "name": "Name",
+          "bio": "Bio",
+          "email": "Email",
+          "role": "Role"
+        },
+        "actions": {
+          "delete": "Delete User",
+          "edit": {
+            "title": "Edit User",
+            "description": "Edit the current user"
+          }
+        }
+      }
+    },
+    "configs": {
+      "table": {
+        "columns": {
+          "code": "Code",
+          "description": "Description",
+          "value": "Value"
+        },
+        "values": {
+          "WHATS_NUMBER": "WhatsApp phone number",
+          "WHATS_GREETING": "WhatsApp greeting message",
+          "invalid": "Invalid"
+        }
+      }
+    }
+  },
+  "Common": {
+    "loading": "Loading",
+    "chars": "characters",
+    "noResults": "No results.",
+    "submit": "Submit",
+    "invalid": "Invalid",
+    "clearSelection": "Clear selection",
+    "tables": {
+      "asc": "Asc",
+      "desc": "Desc",
+      "hide": "Hide",
+      "toggleColumns": "Columns",
+      "pagination": {
+        "goToFirst": "Go to first page",
+        "goToPrevious": "Go to previous page",
+        "goToNext": "Go to next page",
+        "goToLast": "Go to last page",
+        "currentPage": "Page {current} of {pageCount}",
+        "rowsPerPage": "Rows per page",
+        "selected": "{selectedCount} of {totalRows} row(s) selected."
+      }
+    },
+    "components": {
+      "dropzone": {
+        "retry": "Retry",
+        "remove": "Remove file"
+      },
+      "dialog": {
+        "close": "Close"
+      },
+      "caroucel": {
+        "previousSlide": "Previous slide",
+        "nextSlide": "Next slide"
+      },
+      "imageCropper": {
+        "cancel": "Cancel",
+        "save": "Save selection",
+        "error": "The image could not be processed. Please try again."
+      },
+      "textare": {
+        "counter": "{current}/{max} characters"
+      }
+    }
+  },
+  "ContactPage": {
+    "title": "Contact"
+  },
+  "Footer": {
+    "institutional": "Institutional",
+    "restricted": "Restricted Area",
+    "versionCraft": "© 2026 CRAFT. All rights reserved. {appVersion}",
+    "crafted": "Crafted with precision"
+  },
+  "HomePage": {
+    "title": "Home Page",
+    "cart": {
+      "title": "Your cart",
+      "itemCount": "{count} items",
+      "edit": "Edit",
+      "close": "Close cart",
+      "unavailableProduct": "Unavailable product",
+      "decreaseQuantity": "Decrease quantity of {product}",
+      "increaseQuantity": "Increase quantity of {product}",
+      "removeProduct": "Remove {product}",
+      "total": "Total",
+      "clear": "Clear cart",
+      "whatsapp": "Continue on WhatsApp"
+    },
+    "stores": {
+      "form": {
+        "title": "Store",
+        "description": "Create a new store",
+        "submit": "Submit",
+        "errors": {
+          "save": "Unable to save the store. Check the entered values and try again."
+        },
+        "fields": {
+          "name": {
+            "label": "Name"
+          },
+          "slug": {
+            "label": "Slug",
+            "description": "This can be used as part of the url."
+          },
+          "domains": {
+            "label": "Domains",
+            "description": "The domain must match the DNS configuration.",
+            "placeholder": "example.com",
+            "add": "Add Domain"
+          },
+          "active": {
+            "label": "Active"
+          },
+          "branding": {
+            "label": "Branding",
+            "description": "At least one logo is required. Use a hosted URL or a root-relative path.",
+            "baseColor": "Base color",
+            "metaDescription": "Meta description",
+            "faviconUrl": "Favicon",
+            "logoFullLight": "Full logo (light theme)",
+            "logoFullDark": "Full logo (dark theme)",
+            "logoSmallLight": "Small logo (light theme)",
+            "logoSmallDark": "Small logo (dark theme)",
+            "removeImage": "Remove image"
+          }
+        }
+      },
+      "editor": {
+        "title": "Edit {name}",
+        "description": "Update store details, domains, metadata, and logos."
+      },
+      "table": {
+        "columns": {
+          "name": "Store name",
+          "slug": "Slug",
+          "domains": "Domains"
+        },
+        "actions": {
+          "view": "View Store",
+          "delete": "Delete Store",
+          "inactivate": "Inactivate Store",
+          "activate": "Activate Store",
+          "edit": {
+            "title": "Edit Store",
+            "description": "Edit the current store"
+          }
+        }
+      }
+    }
+  },
+  "LoginPage": {
+    "title": "Login",
+    "description": "Choose one of the options below to log in.",
+    "google": "Login with Google",
+    "passkey": "Login with Passkey",
+    "or": "or",
+    "email": {
+      "label": "Email address",
+      "send": "Login with Email",
+      "sending": "Sending...",
+      "sent": "Check your inbox for the login link."
+    },
+    "error": {
+      "title": "An error occurred.",
+      "options": "{error, select, AccessDenied {This email address is not authorized to log in.} Forbidden {You don`t have the permissions to access this page.} Configuration {Configuration error. Contact support to correct.} other {Please try again.}}",
+      "back": "Back to home page"
+    }
+  },
+  "Metadata": {
+    "title": "Craft Stores",
+    "description": "Product Catalog made by CRAFT",
+    "keywords": "Craft, Products, Catalog"
+  },
+  "NavigationMenu": {
+    "menuLabel": "Menus",
+    "groups": {
+      "store": {
+        "home": "Home Page",
+        "products": "Products",
+        "administration": "Administration"
+      },
+      "root": "Plataform",
+      "access": "Access"
+    },
+    "store": {
+      "products": "Products",
+      "banners": "Banners",
+      "banners-description": "Edit home page Banners",
+      "categories": "Categories",
+      "users": "Users",
+      "configs": "Configurations"
+    },
+    "stores": "Stores",
+    "users": "Users",
+    "permissions": "Permissions"
+  },
+  "PermissionsPage": {
+    "roles": {
+      "form": {
+        "title": "Platform role",
+        "description": "Create a platform role",
+        "submit": "Save",
+        "fields": {
+          "name": {
+            "label": "Role key",
+            "placeholder": "admin",
+            "description": "This key identifies the platform role."
+          },
+          "storeId": {
+            "label": "Store",
+            "description": "Store assigned to this role, leave blank to give global permissions."
+          },
+          "description": {
+            "label": "Description",
+            "placeholder": "Describe what this role is for",
+            "description": "A short explanation of the role."
+          },
+          "permissions": {
+            "label": "Permissions"
+          }
+        }
+      },
+      "table": {
+        "columns": {
+          "name": "Role",
+          "storeName": "Store",
+          "description": "Description"
+        },
+        "actions": {
+          "delete": "Delete role",
+          "edit": {
+            "title": "Edit role",
+            "description": "Edit the current platform role"
+          }
+        }
+      }
+    }
+  },
+  "PasskeyAvailability": {
+    "title": "Passkey Availability",
+    "description": "Passkeys are available on this device. You can use them to log in.",
+    "dismiss": "Dismiss",
+    "register": "Register Passkey"
+  },
+  "UserMenu": {
+    "login": "Login",
+    "language": {
+      "label": "Change Language",
+      "locale": "{locale, select, pt {🇵🇹 Portuguese} en {🇺🇸 English} other {Unknown}}"
+    },
+    "theme": {
+      "label": "Change theme",
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System"
+    },
+    "logout": "Logout"
+  }
 }

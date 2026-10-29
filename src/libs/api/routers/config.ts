@@ -1,12 +1,14 @@
 import type { inferRouterOutputs } from "@trpc/server";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import z from "zod";
 import {
   createTRPCRouter,
-  permissionProcedure,
-  publicProcedure,
+  optionalStorePublicProcedure,
+  storePermissionProcedure,
+  storePublicProcedure,
 } from "~/libs/api/trpc";
 import { configs } from "~/libs/db/schema";
+import { CONFIG_CODES } from "~/libs/db/schemas/config";
 
 type ConfigOutputs = inferRouterOutputs<typeof configRouter>;
 
@@ -15,41 +17,69 @@ export type Config = ConfigOutputs["all"][number];
 export type GetConfigResponse = Array<Config>;
 
 export const configRouter = createTRPCRouter({
-  all: publicProcedure.query(async ({ ctx }) => {
+  all: storePublicProcedure.query(async ({ ctx }) => {
     const configs = await ctx.db.query.configs.findMany({
       columns: {
         code: true,
         description: true,
         value: true,
       },
-      where: (config, { isNotNull }) => isNotNull(config.value),
+      where: (config, { and, eq, isNotNull }) =>
+        and(eq(config.storeId, ctx.store.id), isNotNull(config.value)),
       orderBy: (config, { desc }) => [desc(config.createdAt)],
     });
 
     return configs ?? null;
   }),
 
-  whatsConfig: publicProcedure.query(async ({ ctx }) => {
+  whatsConfig: storePublicProcedure.query(async ({ ctx }) => {
     const configs = await ctx.db.query.configs.findMany({
       columns: {
         code: true,
         value: true,
       },
       where: (config, { inArray }) =>
-        inArray(config.code, ["WHATS_NUMBER", "WHATS_GREETING"]),
+        and(
+          eq(config.storeId, ctx.store.id),
+          inArray(config.code, [
+            CONFIG_CODES.whatsNumber,
+            CONFIG_CODES.whatsGreeting,
+          ]),
+        ),
       orderBy: (config, { desc }) => [desc(config.createdAt)],
     });
 
-    const phoneNumber = configs.find((c) => c.code == "WHATS_NUMBER")?.value;
-    const greeting = configs.find((c) => c.code == "WHATS_GREETING")?.value;
+    const phoneNumber = configs.find(
+      (c) => c.code == CONFIG_CODES.whatsNumber,
+    )?.value;
+    const greeting = configs.find(
+      (c) => c.code == CONFIG_CODES.whatsGreeting,
+    )?.value;
 
-    if (!phoneNumber || !greeting)
-      throw new Error("Application misconfigured. Contact support.");
+    if (!phoneNumber || !greeting) return null;
 
     return { phoneNumber, greeting };
   }),
 
-  update: permissionProcedure("admin.banners:edit")
+  storeConfig: optionalStorePublicProcedure.query(async ({ ctx }) => {
+    if (!ctx.store) return null;
+
+    const storeId = ctx.store.id;
+
+    const storeBranding = await ctx.db.query.storeBranding.findFirst({
+      where: (branding, { eq }) => eq(branding.storeId, storeId),
+    });
+
+    if (!storeBranding) return null;
+
+    return {
+      storeSlug: ctx.store.slug,
+      metaTitle: ctx.store.name,
+      ...storeBranding,
+    };
+  }),
+
+  update: storePermissionProcedure("store.configs:edit")
     .input(
       z.object({
         code: z.string().min(1),
@@ -58,17 +88,18 @@ export const configRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       const config = await ctx.db.query.configs.findFirst({
-        where: (config, { eq }) => eq(config.code, input.code),
+        where: (config, { and, eq }) =>
+          and(eq(config.code, input.code), eq(config.storeId, ctx.store.id)),
       });
 
       if (!config) throw new Error("not Found");
 
-      const updated = { ...config, ...input };
-
       const newConfig = await ctx.db
         .update(configs)
-        .set(updated)
-        .where(eq(configs.code, input.code))
+        .set({ value: input.value })
+        .where(
+          and(eq(configs.code, input.code), eq(configs.storeId, ctx.store.id)),
+        )
         .returning({
           code: configs.code,
           description: configs.description,

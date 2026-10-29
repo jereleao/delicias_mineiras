@@ -9,6 +9,7 @@ import { FieldGroup } from "~/components/ui/field";
 import { FormInput } from "~/components/form/client/form-input";
 import { FormTextarea } from "~/components/form/client/form-textarea";
 import { FormSelect } from "~/components/form/client/form-select";
+import { FormMultiSelect } from "~/components/form/client/form-multi-select";
 import { FormCheckbox } from "~/components/form/client/form-checkbox";
 
 function Form<
@@ -36,4 +37,11 @@ function Form<
   );
 }
 
-export { Form, FormInput, FormTextarea, FormSelect, FormCheckbox };
+export {
+  Form,
+  FormInput,
+  FormTextarea,
+  FormSelect,
+  FormMultiSelect,
+  FormCheckbox,
+};

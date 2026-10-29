@@ -10,10 +10,10 @@
 import { initTRPC, TRPCError } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
-
 import { auth } from "~/libs/auth";
 import { db } from "~/libs/db";
 import { isAllowed, type PermissionKey } from "~/libs/auth/menus";
+import { getStoreForHostname, normalizeHostname } from "~/libs/stores/server";
 
 /**
  * 1. CONTEXT
@@ -135,9 +135,135 @@ export const protectedProcedure = t.procedure
 
 export const permissionProcedure = (permission: PermissionKey) =>
   protectedProcedure.use(async ({ ctx, next }) => {
-    const permissions = ctx.session.user.permissions;
+    const grantedPermission = isAllowed(
+      permission,
+      ctx.session.user.permissions.platform,
+    );
 
-    const grantedPermission = isAllowed(permission, permissions);
+    if (!grantedPermission) {
+      throw new TRPCError({ code: "FORBIDDEN" });
+    }
+
+    return next();
+  });
+
+const optionalStoreContextMiddleware = t.middleware(async ({ ctx, next }) => {
+  const rawHost = ctx.headers.get("host");
+  let store: Awaited<ReturnType<typeof getStoreForHostname>> = undefined;
+
+  if (rawHost) {
+    const hostname = normalizeHostname(rawHost);
+    if (!hostname) {
+      throw new TRPCError({
+        code: "BAD_REQUEST",
+        message: "The request host is invalid.",
+      });
+    }
+
+    store = await getStoreForHostname(hostname, ctx.db);
+  }
+
+  return next({
+    ctx: {
+      store,
+    },
+  });
+});
+
+const requiredStoreContextMiddleware =
+  optionalStoreContextMiddleware.unstable_pipe(async ({ ctx, next }) => {
+    if (!ctx.store) {
+      const rawHost = ctx.headers.get("host");
+      const hostname = rawHost ? `" ${normalizeHostname(rawHost)}"` : "";
+
+      throw new TRPCError({
+        code: "NOT_FOUND",
+        message: `No active store is configured for host${hostname}.`,
+      });
+    }
+
+    return next({
+      ctx: {
+        store: ctx.store,
+      },
+    });
+  });
+
+export const storePublicProcedure = publicProcedure.use(
+  requiredStoreContextMiddleware,
+);
+
+export const optionalStorePublicProcedure = publicProcedure.use(
+  optionalStoreContextMiddleware,
+);
+
+export const optionalStoreProtectedProcedure = protectedProcedure.use(
+  optionalStoreContextMiddleware,
+);
+
+function hasStorePermission(
+  permissions: {
+    platform: PermissionKey[];
+    stores: Record<string, PermissionKey[]>;
+  },
+  storeId: number,
+  permission: PermissionKey,
+) {
+  return (
+    isAllowed(permission, permissions.stores[storeId] ?? []) ||
+    isAllowed(permission, permissions.platform)
+  );
+}
+
+export const storePermissionProcedure = (permission: PermissionKey) =>
+  protectedProcedure
+    .use(requiredStoreContextMiddleware)
+    .use(async ({ ctx, next }) => {
+      if (
+        !hasStorePermission(
+          ctx.session.user.permissions,
+          ctx.store.id,
+          permission,
+        )
+      ) {
+        throw new TRPCError({ code: "FORBIDDEN" });
+      }
+
+      return next();
+    });
+
+export const optionalScopedPermissionProcedure = (
+  storePermission: PermissionKey,
+  platformPermission: PermissionKey,
+) =>
+  optionalStoreProtectedProcedure.use(async ({ ctx, next }) => {
+    const grantedPermission = ctx.store
+      ? hasStorePermission(
+          ctx.session.user.permissions,
+          ctx.store.id,
+          storePermission,
+        )
+      : isAllowed(
+          platformPermission,
+          ctx.session.user.permissions.platform,
+        );
+
+    if (!grantedPermission) {
+      throw new TRPCError({ code: "FORBIDDEN" });
+    }
+
+    return next();
+  });
+
+export const optionalStorePermissionProcedure = (permission: PermissionKey) =>
+  optionalStoreProtectedProcedure.use(async ({ ctx, next }) => {
+    const grantedPermission = ctx.store
+      ? hasStorePermission(
+          ctx.session.user.permissions,
+          ctx.store.id,
+          permission,
+        )
+      : isAllowed(permission, ctx.session.user.permissions.platform);
 
     if (!grantedPermission) {
       throw new TRPCError({ code: "FORBIDDEN" });

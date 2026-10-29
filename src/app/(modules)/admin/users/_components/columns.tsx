@@ -1,52 +1,23 @@
 "use client";
 
 import { CircleCheckIcon } from "lucide-react";
-import { useTranslations } from "next-intl";
 import { DataTableColumnHeader } from "~/components/table/data-table-column-header";
 import { createColumnHelper } from "~/components/table/data-table-features";
-import { Checkbox } from "~/components/ui/checkbox";
 import { Tooltip } from "~/components/ui/tooltip";
 import type { User } from "~/libs/api/routers/user";
-import { RoleCell } from "./role-cell";
-import type { Role } from "~/libs/api/routers/permissions";
+import type { RoleOption } from "~/libs/api/routers/permissions";
 
 import { EditButton } from "./buttons/edit-button";
 import { DeleteButton } from "./buttons/delete-button";
 import UserAvatar from "~/components/user-avatar";
 import { InviteNewUser } from "./invite-button";
 import { DataTableColumnOptions } from "~/components/table/data-table-column-options";
+import { RoleCell } from "~/app/(modules)/users/_components/role-cell";
 
 const columnHelper = createColumnHelper<User>();
 
-export const getColums = (roleOptions: Array<Role>) => {
+export const getColums = (roleOptions: Array<RoleOption>) => {
   const columns = columnHelper.columns([
-    // columnHelper.display({
-    //   id: "select",
-    //   meta: {
-    //     classNames: {
-    //       header: "w-8",
-    //     },
-    //   },
-    //   header: ({ table }) => (
-    //     <Checkbox
-    //       checked={table.getIsAllPageRowsSelected()}
-    //       indeterminate={
-    //         table.getIsSomePageRowsSelected() && !table.getIsAllPageRowsSelected()
-    //       }
-    //       onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-    //       aria-label="Select all"
-    //     />
-    //   ),
-    //   cell: ({ row }) => (
-    //     <Checkbox
-    //       checked={row.getIsSelected()}
-    //       onCheckedChange={(value) => row.toggleSelected(!!value)}
-    //       aria-label="Select row"
-    //     />
-    //   ),
-    //   enableSorting: false,
-    //   enableHiding: false,
-    // }),
     columnHelper.accessor("image", {
       meta: {
         classNames: {
@@ -102,7 +73,7 @@ export const getColums = (roleOptions: Array<Role>) => {
         );
       },
     }),
-    columnHelper.accessor("roleId", {
+    columnHelper.accessor("roleIds", {
       enableHiding: true,
       meta: {
         classNames: {
@@ -112,19 +83,8 @@ export const getColums = (roleOptions: Array<Role>) => {
         tKey: "AdminPage.users.table.columns.role",
       },
       header: ({ column }) => <DataTableColumnHeader column={column} />,
-      cell: ({ cell, row }) => {
-        const userId = row.original.id;
-        const cellValue = cell.getValue();
-
-        const t = useTranslations("Common");
-
-        if (typeof cellValue !== "number") {
-          return <span className="text-red-500">{t("invalid")}</span>;
-        }
-
-        return (
-          <RoleCell userId={userId} roleId={cellValue} options={roleOptions} />
-        );
+      cell: ({ cell }) => {
+        return <RoleCell roleIds={cell.getValue()} options={roleOptions} />;
       },
     }),
     columnHelper.display({

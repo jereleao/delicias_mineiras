@@ -8,7 +8,5 @@ export default async function CategoriesPage() {
 
   console.debug("TODO: make responsible design on columns widths");
 
-  return (
-    <DataTable id="categories" columns={columns} data={data} className="mt-4" />
-  );
+  return <DataTable id="categories" columns={columns} data={data} />;
 }

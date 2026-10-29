@@ -1,31 +1,50 @@
 export const MENUS = [
   {
-    menuGroup: "navbar.home",
+    menuGroup: "store.home",
     menus: [
       {
-        menuKey: "admin.banners",
+        menuKey: "store.banners",
       },
     ],
   },
   {
-    menuGroup: "navbar.products",
+    menuGroup: "store.products",
     menus: [
       {
-        menuKey: "admin.products",
+        menuKey: "store.products",
       },
       {
-        menuKey: "admin.categories",
+        menuKey: "store.categories",
       },
     ],
   },
   {
-    menuGroup: "navbar.administration",
+    menuGroup: "store.administration",
     menus: [
       {
-        menuKey: "admin.users",
+        menuKey: "store.users",
       },
       {
-        menuKey: "admin.configs",
+        menuKey: "store.configs",
+      },
+    ],
+  },
+  {
+    menuGroup: "root",
+    menus: [
+      {
+        menuKey: "stores",
+      },
+    ],
+  },
+  {
+    menuGroup: "access",
+    menus: [
+      {
+        menuKey: "users",
+      },
+      {
+        menuKey: "permissions",
       },
     ],
   },
@@ -48,15 +67,16 @@ type PrefixOfMenuKey<T extends string> = T extends `${infer Prefix}.${string}`
 export type MenuKeyPrefix = PrefixOfMenuKey<MenuKey>;
 
 export function getMenuKeyByHref(href: string): MenuKey | undefined {
-  const subMenus = MENUS.flatMap((menuGroup) =>
-    menuGroup.menus.map((menu) => menu),
-  );
+  const path = href.split(/[?#]/, 1)[0]?.replace(/\/+$/, "") || "/";
 
-  const menu = subMenus.find((menu) => menu.menuKey === getMenuKeyByPath(href));
+  const sortedMenuKeys = [...MENU_KEYS].sort((a, b) => b.length - a.length);
 
-  if (menu) return menu.menuKey;
+  const foundMenuKey = sortedMenuKeys.find((menuKey) => {
+    const menuPath = getPathByMenuKey(menuKey);
+    return path === menuPath || path.startsWith(`${menuPath}/`);
+  });
 
-  return undefined;
+  return foundMenuKey;
 }
 
 const permissionsAddons = ["edit", "manage"] as const;
@@ -90,11 +110,19 @@ export function isAllowed(
 }
 
 export function getPathByMenuKey(menuKey: MenuKey): string {
-  return `/${menuKey.replace(".", "/")}`;
+  const routeKey = menuKey.startsWith("store.")
+    ? `admin.${menuKey.slice("store.".length)}`
+    : menuKey;
+  return `/${routeKey.replaceAll(".", "/")}`;
 }
 
 export function getMenuKeyByPath(path: string): MenuKey | undefined {
-  const menuKey = path.split("/").filter(Boolean).join(".") as MenuKey;
+  const rawMenuKey = path.split("/").filter(Boolean).join(".");
+  const menuKey = (
+    rawMenuKey.startsWith("admin.")
+      ? `store.${rawMenuKey.slice("admin.".length)}`
+      : rawMenuKey
+  ) as MenuKey;
 
   return MENU_KEYS.includes(menuKey) ? menuKey : undefined;
 }

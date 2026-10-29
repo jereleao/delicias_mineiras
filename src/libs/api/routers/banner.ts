@@ -1,9 +1,9 @@
 import type { inferRouterOutputs } from "@trpc/server";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import {
   createTRPCRouter,
-  permissionProcedure,
-  publicProcedure,
+  storePermissionProcedure,
+  storePublicProcedure,
 } from "~/libs/api/trpc";
 import { banners } from "~/libs/db/schema";
 import {
@@ -19,7 +19,7 @@ export type Banner = BannerOutputs["all"][number];
 export type GetBannerResponse = Array<Banner>;
 
 export const bannerRouter = createTRPCRouter({
-  all: publicProcedure.query(async ({ ctx }) => {
+  all: storePublicProcedure.query(async ({ ctx }) => {
     const banners = await ctx.db.query.banners.findMany({
       columns: {
         id: true,
@@ -30,14 +30,15 @@ export const bannerRouter = createTRPCRouter({
         actionUrl: true,
         active: true,
       },
-      where: (banner, { isNotNull }) => isNotNull(banner.imageUrl),
+      where: (banner, { and, eq, isNotNull }) =>
+        and(eq(banner.storeId, ctx.store.id), isNotNull(banner.imageUrl)),
       orderBy: (banner, { desc }) => [desc(banner.createdAt)],
     });
 
     return banners ?? null;
   }),
 
-  active: publicProcedure.query(async ({ ctx }) => {
+  active: storePublicProcedure.query(async ({ ctx }) => {
     const banners = await ctx.db.query.banners.findMany({
       columns: {
         id: true,
@@ -49,18 +50,23 @@ export const bannerRouter = createTRPCRouter({
         active: true,
       },
       where: (banner, { isNotNull, and }) =>
-        and(isNotNull(banner.imageUrl), banner.active),
+        and(
+          eq(banner.storeId, ctx.store.id),
+          isNotNull(banner.imageUrl),
+          banner.active,
+        ),
       orderBy: (banner, { desc }) => [desc(banner.createdAt)],
     });
 
     return banners ?? null;
   }),
 
-  getById: permissionProcedure("admin.banners")
+  getById: storePermissionProcedure("store.banners")
     .input(byIdSchema)
     .query(async ({ ctx, input }) => {
       const banner = await ctx.db.query.banners.findFirst({
-        where: (banner, { eq }) => eq(banner.id, input.id),
+        where: (banner, { and, eq }) =>
+          and(eq(banner.id, input.id), eq(banner.storeId, ctx.store.id)),
         orderBy: (banner, { desc }) => [desc(banner.createdAt)],
       });
       if (!banner) throw new Error("not Found");
@@ -68,7 +74,7 @@ export const bannerRouter = createTRPCRouter({
       return banner ?? null;
     }),
 
-  create: permissionProcedure("admin.banners:manage")
+  create: storePermissionProcedure("store.banners:manage")
     .input(createBannerSchema)
     .mutation(async ({ ctx, input }) => {
       const bannerData = {
@@ -78,6 +84,7 @@ export const bannerRouter = createTRPCRouter({
         actionLabel: input.actionLabel,
         actionUrl: input.actionUrl,
         createdById: ctx.session.user.id,
+        storeId: ctx.store.id,
       };
 
       const newBanner = await ctx.db
@@ -96,11 +103,12 @@ export const bannerRouter = createTRPCRouter({
       return newBanner;
     }),
 
-  update: permissionProcedure("admin.banners:edit")
+  update: storePermissionProcedure("store.banners:edit")
     .input(updateBannerSchema)
     .mutation(async ({ ctx, input }) => {
       const banner = await ctx.db.query.banners.findFirst({
-        where: (banner, { eq }) => eq(banner.id, input.id),
+        where: (banner, { and, eq }) =>
+          and(eq(banner.id, input.id), eq(banner.storeId, ctx.store.id)),
       });
 
       if (!banner) throw new Error("not Found");
@@ -110,7 +118,7 @@ export const bannerRouter = createTRPCRouter({
       const newBanner = await ctx.db
         .update(banners)
         .set(updated)
-        .where(eq(banners.id, input.id))
+        .where(and(eq(banners.id, input.id), eq(banners.storeId, ctx.store.id)))
         .returning({
           id: banners.id,
           title: banners.title,
@@ -124,16 +132,21 @@ export const bannerRouter = createTRPCRouter({
       return newBanner;
     }),
 
-  delete: permissionProcedure("admin.banners:manage")
+  delete: storePermissionProcedure("store.banners:manage")
     .input(byIdSchema)
     .mutation(async ({ ctx, input }) => {
       const banner = await ctx.db.query.banners.findFirst({
-        where: (banner, { eq }) => eq(banner.id, input.id),
+        where: (banner, { and, eq }) =>
+          and(eq(banner.id, input.id), eq(banner.storeId, ctx.store.id)),
       });
 
       if (!banner) throw new Error("not Found");
 
-      await ctx.db.delete(banners).where(eq(banners.id, input.id));
+      await ctx.db
+        .delete(banners)
+        .where(
+          and(eq(banners.id, input.id), eq(banners.storeId, ctx.store.id)),
+        );
 
       return { imageUrl: banner.imageUrl };
     }),

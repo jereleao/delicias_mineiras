@@ -17,5 +17,5 @@ export async function deleteAction(bannerId: number | string) {
     }
   }
 
-  revalidatePath(getPathByMenuKey("admin.banners"));
+  revalidatePath(getPathByMenuKey("store.banners"));
 }

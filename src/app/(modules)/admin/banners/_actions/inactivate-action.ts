@@ -4,8 +4,8 @@ import { revalidatePath } from "next/cache";
 import { getPathByMenuKey } from "~/libs/auth/menus";
 import { api } from "~/libs/trpc/server";
 
-export async function inactivateAction(productId: number | string) {
-  await api.banner.update({ id: Number(productId), active: false });
+export async function inactivateAction(bannerId: number | string) {
+  await api.banner.update({ id: Number(bannerId), active: false });
 
-  revalidatePath(getPathByMenuKey("admin.banners"));
+  revalidatePath(getPathByMenuKey("store.banners"));
 }

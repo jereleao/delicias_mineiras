@@ -13,7 +13,7 @@ export async function updateAction(
     name: categoryName,
   });
 
-  revalidatePath(getPathByMenuKey("admin.categories"));
+  revalidatePath(getPathByMenuKey("store.categories"));
 
   if (categories.length !== 1) return null;
 

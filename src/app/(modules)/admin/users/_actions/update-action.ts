@@ -6,14 +6,12 @@ import type { UserFormType } from "./user-schema";
 import { getPathByMenuKey } from "~/libs/auth/menus";
 
 export async function updateAction(userId: string, user: UserFormType) {
-  const newUsers = await api.user.update({
+  const newUsers = await api.user.updateStore({
     id: userId,
-    name: user.name,
-    bio: user.bio,
-    roleId: user.roleId,
+    roleIds: user.roleIds,
   });
 
-  revalidatePath(getPathByMenuKey("admin.users"));
+  revalidatePath(getPathByMenuKey("store.users"));
 
   if (newUsers.length !== 1) return null;
 

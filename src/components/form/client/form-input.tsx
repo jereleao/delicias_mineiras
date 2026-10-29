@@ -14,6 +14,7 @@ import {
   InputGroupInput,
   InputGroupText,
 } from "~/components/ui/input-group";
+import { cn } from "~/utils";
 
 const CURRENCY_SYMBOLS = {
   USD: "$",
@@ -22,6 +23,10 @@ const CURRENCY_SYMBOLS = {
 
 type FormInputCustomProps = {
   currency?: keyof typeof CURRENCY_SYMBOLS;
+  classNames?: {
+    container?: string;
+    input?: string;
+  };
 };
 
 type InputProps = React.ComponentProps<"input">;
@@ -31,15 +36,23 @@ export const FormInput: FormControlFunc<InputProps & FormInputCustomProps> = ({
   label,
   name,
   description,
+  classNames,
   ...inputProps
 }) => {
-  const controllerProps = { control, label, name, description };
+  const controllerProps = { control, label, name, description, classNames };
+
+  const { container: containerClassName, input: inputClassName } =
+    classNames || {};
+
   return (
     <FormBase
       {...controllerProps}
       render={({ field, fieldState, label, description }) => {
         return (
-          <Field data-invalid={fieldState.invalid}>
+          <Field
+            data-invalid={fieldState.invalid}
+            className={containerClassName}
+          >
             <FieldContent>
               <FieldLabel htmlFor={field.name}>{label}</FieldLabel>
               {description && (
@@ -49,6 +62,7 @@ export const FormInput: FormControlFunc<InputProps & FormInputCustomProps> = ({
             <InputGrouped
               id={field.name}
               aria-invalid={fieldState.invalid}
+              className={cn(inputProps.className, inputClassName)}
               {...field}
               {...inputProps}
             />

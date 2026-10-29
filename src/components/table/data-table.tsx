@@ -108,7 +108,7 @@ export function DataTableComponent<TData extends RowData>({
           className="max-w-sm"
         />
       </div> */}
-      <div className={cn("overflow-hidden rounded-md border", className)}>
+      <div className={cn("overflow-hidden", className)}>
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (

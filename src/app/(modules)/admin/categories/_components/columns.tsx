@@ -2,7 +2,6 @@
 
 import { DataTableColumnHeader } from "~/components/table/data-table-column-header";
 import { createColumnHelper } from "~/components/table/data-table-features";
-import { Checkbox } from "~/components/ui/checkbox";
 import PermissionGuard from "~/components/permission-guard";
 import type { Category } from "~/libs/api/routers/category";
 
@@ -13,33 +12,6 @@ import { DeleteButton } from "./buttons/delete-button";
 const columnHelper = createColumnHelper<Category>();
 
 export const columns = columnHelper.columns([
-  // columnHelper.display({
-  //   id: "select",
-  //   meta: {
-  //     classNames: {
-  //       header: "w-8",
-  //     },
-  //   },
-  //   header: ({ table }) => (
-  //     <Checkbox
-  //       checked={table.getIsAllPageRowsSelected()}
-  //       indeterminate={
-  //         table.getIsSomePageRowsSelected() && !table.getIsAllPageRowsSelected()
-  //       }
-  //       onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-  //       aria-label="Select all"
-  //     />
-  //   ),
-  //   cell: ({ row }) => (
-  //     <Checkbox
-  //       checked={row.getIsSelected()}
-  //       onCheckedChange={(value) => row.toggleSelected(!!value)}
-  //       aria-label="Select row"
-  //     />
-  //   ),
-  //   enableSorting: false,
-  //   enableHiding: false,
-  // }),
   columnHelper.accessor("name", {
     header: ({ column }) => (
       <DataTableColumnHeader
@@ -66,7 +38,7 @@ export const columns = columnHelper.columns([
         column={column}
         className="flex justify-center"
         title={
-          <PermissionGuard permission="admin.categories:manage">
+          <PermissionGuard permission="store.categories:manage">
             <NewButton />
           </PermissionGuard>
         }
@@ -77,10 +49,10 @@ export const columns = columnHelper.columns([
 
       return (
         <div className="flex gap-1">
-          <PermissionGuard permission="admin.categories:edit">
+          <PermissionGuard permission="store.categories:edit">
             <EditButton {...category} />
           </PermissionGuard>
-          <PermissionGuard permission="admin.categories:manage">
+          <PermissionGuard permission="store.categories:manage">
             <DeleteButton categoryId={category.id} />
           </PermissionGuard>
         </div>

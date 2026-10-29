@@ -17,3 +17,10 @@ export const urlToFile = async (imageUrl: string, fileName: string) => {
   // Create and return the JavaScript File object
   return new File([blob], fileName, { type: blob.type });
 };
+
+export function formatPrice(value: number): string {
+  return value.toLocaleString("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+  });
+}

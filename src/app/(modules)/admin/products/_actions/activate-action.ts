@@ -7,5 +7,5 @@ import { api } from "~/libs/trpc/server";
 export async function activateAction(productId: number | string) {
   await api.product.update({ id: Number(productId), active: true });
 
-  revalidatePath(getPathByMenuKey("admin.products"));
+  revalidatePath(getPathByMenuKey("store.products"));
 }

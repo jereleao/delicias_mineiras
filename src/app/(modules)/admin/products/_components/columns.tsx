@@ -3,7 +3,6 @@
 import { cn } from "~/utils";
 import { DataTableColumnHeader } from "~/components/table/data-table-column-header";
 import { createColumnHelper } from "~/components/table/data-table-features";
-import { Checkbox } from "~/components/ui/checkbox";
 import PermissionGuard from "~/components/permission-guard";
 import type { Product } from "~/libs/api/routers/product";
 
@@ -23,33 +22,6 @@ import { Tooltip } from "~/components/ui/tooltip";
 const columnHelper = createColumnHelper<Product>();
 
 export const columns = columnHelper.columns([
-  // columnHelper.display({
-  //   id: "select",
-  //   meta: {
-  //     classNames: {
-  //       header: "w-8",
-  //     },
-  //   },
-  //   header: ({ table }) => (
-  //     <Checkbox
-  //       checked={table.getIsAllPageRowsSelected()}
-  //       indeterminate={
-  //         table.getIsSomePageRowsSelected() && !table.getIsAllPageRowsSelected()
-  //       }
-  //       onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-  //       aria-label="Select all"
-  //     />
-  //   ),
-  //   cell: ({ row }) => (
-  //     <Checkbox
-  //       checked={row.getIsSelected()}
-  //       onCheckedChange={(value) => row.toggleSelected(!!value)}
-  //       aria-label="Select row"
-  //     />
-  //   ),
-  //   enableSorting: false,
-  //   enableHiding: false,
-  // }),
   columnHelper.accessor("name", {
     meta: {
       classNames: {
@@ -200,7 +172,7 @@ export const columns = columnHelper.columns([
       <DataTableColumnOptions
         table={table}
         title={
-          <PermissionGuard permission="admin.products:manage">
+          <PermissionGuard permission="store.products:manage">
             <NewButton />
           </PermissionGuard>
         }
@@ -213,7 +185,7 @@ export const columns = columnHelper.columns([
 
       return (
         <div>
-          <PermissionGuard permission="admin.products:edit">
+          <PermissionGuard permission="store.products:edit">
             <EditButton {...row.original} />
             {isActive ? (
               <InactivateButton productId={productId} />
@@ -221,7 +193,7 @@ export const columns = columnHelper.columns([
               <ActivateButton productId={productId} />
             )}
           </PermissionGuard>
-          <PermissionGuard permission="admin.products:manage">
+          <PermissionGuard permission="store.products:manage">
             <DeleteButton productId={productId} />
           </PermissionGuard>
         </div>

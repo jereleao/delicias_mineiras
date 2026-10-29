@@ -5,21 +5,21 @@ import { PencilIcon } from "lucide-react";
 import { DialogButton } from "~/components/dialog-button";
 import { UserForm } from "../user-form";
 import type { UserFormType } from "../../_actions/user-schema";
-import type { Role } from "~/libs/api/routers/permissions";
+import type { RoleOption } from "~/libs/api/routers/permissions";
 
 type EditButtonProps = {
   id: string;
   name: string | null;
   bio: string | null;
-  roleId: number;
-  roleOptions: Array<Role>;
+  roleIds: number[];
+  roleOptions: Array<RoleOption>;
 };
 
 export function EditButton({
   id,
   name,
   bio,
-  roleId,
+  roleIds,
   roleOptions,
 }: EditButtonProps) {
   const t = useTranslations("AdminPage.users.table");
@@ -28,7 +28,7 @@ export function EditButton({
     id,
     name: name ?? "",
     bio: bio ?? undefined,
-    roleId,
+    roleIds,
   };
 
   return (
@@ -38,6 +38,7 @@ export function EditButton({
         description={t("actions.edit.description")}
         className="md:max-w-3xl"
         content={UserForm}
+        storeScoped
         user={user}
         roleOptions={roleOptions}
       >

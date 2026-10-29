@@ -36,6 +36,7 @@ export function FieldKeyWords({ form }: FieldKeyWordsProps) {
     control: form.control,
     name: "keywords",
   });
+
   return (
     <FieldSet className="gap-4">
       <FieldLegend variant="label">{t("fields.keywords.label")}</FieldLegend>
