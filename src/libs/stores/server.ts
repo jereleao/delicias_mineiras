@@ -17,10 +17,20 @@ export function normalizeHostname(rawHost: string): string | undefined {
   }
 }
 
+function getStoreSlugFromHostname(hostname: string): string | undefined {
+  const hostnameParts = hostname.split(".");
+  const slugIndex = hostnameParts[0] === "www" ? 1 : 0;
+  const slug = hostnameParts[slugIndex];
+
+  return slug && hostnameParts.length > slugIndex + 1 ? slug : undefined;
+}
+
 export async function getStoreForHostname(
   hostname: string,
   database: typeof db = db,
 ) {
+  console.info(`Search ${hostname}`);
+
   const storeByDomain = await database
     .select({
       id: stores.id,
@@ -41,7 +51,24 @@ export async function getStoreForHostname(
     .limit(1)
     .then((rows) => rows[0]);
 
-  return storeByDomain;
+  if (storeByDomain) return storeByDomain;
+
+  const slug = getStoreSlugFromHostname(hostname);
+  if (!slug) return undefined;
+
+  return database
+    .select({
+      id: stores.id,
+      name: stores.name,
+      slug: stores.slug,
+      active: stores.active,
+      createdAt: stores.createdAt,
+      updatedAt: stores.updatedAt,
+    })
+    .from(stores)
+    .where(and(sql`lower(${stores.slug}) = ${slug}`, eq(stores.active, true)))
+    .limit(1)
+    .then((rows) => rows[0]);
 }
 
 export async function hasStoreForCurrentHost(): Promise<boolean> {
