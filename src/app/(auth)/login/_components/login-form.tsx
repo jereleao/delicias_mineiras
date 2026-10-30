@@ -71,7 +71,9 @@ export default function LoginForm() {
               "h-10 w-full max-w-70 rounded-full sm:w-[49%]",
               !passkeyAvailable && "w-full!",
             )}
-            onClick={() => signIn("google", { callbackUrl: "/" })}
+            onClick={() =>
+              signIn("google", { callbackUrl: window.location.origin })
+            }
           >
             <GoogleIcon className="mr-2" />
             <span>{t("google")}</span>

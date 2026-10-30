@@ -174,42 +174,52 @@ export const authConfig = {
         secure: useSecureCookies,
       },
     },
+    callbackUrl: {
+      options: { domain },
+    },
+    pkceCodeVerifier: {
+      options: { domain },
+    },
+    state: {
+      options: { domain },
+    },
+    nonce: {
+      options: { domain },
+    },
   },
   pages: {
     error: "/auth",
   },
   callbacks: {
     async redirect({ url, baseUrl }) {
-      console.log({ url, baseUrl });
+      // console.log("redirect", { url, baseUrl });
+      try {
+        const target = new URL(url, baseUrl);
+        const base = new URL(baseUrl);
+        const isAllowedHost =
+          target.hostname === base.hostname ||
+          target.hostname.endsWith(`.${base.hostname}`);
+
+        if (
+          target.protocol === base.protocol &&
+          target.port === base.port &&
+          !target.username &&
+          !target.password &&
+          isAllowedHost
+        ) {
+          console.log({ target: target.toString() });
+          return target.toString();
+        }
+      } catch {
+        console.log("catch", { baseUrl });
+        return baseUrl;
+      }
+      console.log({ baseUrl });
       return baseUrl;
     },
-    //         try {
-    //           const target = new URL(url, baseUrl);
-    //           const base = new URL(baseUrl);
-    //           const targetUsesSharedDomain =
-    //             target.hostname === authCookieDomain ||
-    //             target.hostname.endsWith(`.${authCookieDomain}`);
-    //           const baseUsesSharedDomain =
-    //             base.hostname === authCookieDomain ||
-    //             base.hostname.endsWith(`.${authCookieDomain}`);
-
-    //           if (
-    //             target.origin === base.origin ||
-    //             (targetUsesSharedDomain &&
-    //               baseUsesSharedDomain &&
-    //               target.protocol === base.protocol &&
-    //               target.port === base.port)
-    //           ) {
-    //             return target.toString();
-    //           }
-    //         } catch {
-    //           return baseUrl;
-    //         }
-
-    //         return baseUrl;
-    //       },
-    async signIn({ user, account, profile }) {
-      console.log("signIn", { user, account, profile });
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    async signIn({ user, account, profile, credentials, email }) {
+      // console.log("signIn", { user, account, profile, credentials, email });
 
       if (!user.email) return false;
 

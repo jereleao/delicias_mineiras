@@ -103,6 +103,12 @@ The application matches the first hostname label (except `www`) against an
 active store slug. An exact domain registered to a store continues to take
 precedence, so custom domains remain supported.
 
+For Google login on store subdomains, set `AUTH_URL` to the main application
+domain (for example, `https://shop.craft.tec.br`) and add
+`https://shop.craft.tec.br/api/auth/callback/google` as an authorized redirect
+URI in the Google OAuth client. The login returns to the subdomain where it was
+started.
+
 ## Database commands
 
 ```bash

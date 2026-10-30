@@ -13,7 +13,11 @@ import { ZodError } from "zod";
 import { auth } from "~/libs/auth";
 import { db } from "~/libs/db";
 import { isAllowed, type PermissionKey } from "~/libs/auth/menus";
-import { getStoreForHostname, normalizeHostname } from "~/libs/stores/server";
+import {
+  getRequestHost,
+  getStoreForHostname,
+  normalizeHostname,
+} from "~/libs/stores/server";
 
 /**
  * 1. CONTEXT
@@ -148,7 +152,7 @@ export const permissionProcedure = (permission: PermissionKey) =>
   });
 
 const optionalStoreContextMiddleware = t.middleware(async ({ ctx, next }) => {
-  const rawHost = ctx.headers.get("host");
+  const rawHost = getRequestHost(ctx.headers);
   let store: Awaited<ReturnType<typeof getStoreForHostname>> = undefined;
 
   if (rawHost) {
@@ -173,7 +177,7 @@ const optionalStoreContextMiddleware = t.middleware(async ({ ctx, next }) => {
 const requiredStoreContextMiddleware =
   optionalStoreContextMiddleware.unstable_pipe(async ({ ctx, next }) => {
     if (!ctx.store) {
-      const rawHost = ctx.headers.get("host");
+      const rawHost = getRequestHost(ctx.headers);
       const hostname = rawHost ? `" ${normalizeHostname(rawHost)}"` : "";
 
       throw new TRPCError({

@@ -17,6 +17,14 @@ export function normalizeHostname(rawHost: string): string | undefined {
   }
 }
 
+export function getRequestHost(requestHeaders: Headers): string | undefined {
+  const forwardedHost = requestHeaders.get("x-forwarded-host");
+  const rawHost =
+    forwardedHost?.split(",")[0]?.trim() || requestHeaders.get("host")?.trim();
+
+  return rawHost || undefined;
+}
+
 function getStoreSlugFromHostname(hostname: string): string | undefined {
   const hostnameParts = hostname.split(".");
   const slugIndex = hostnameParts[0] === "www" ? 1 : 0;
@@ -77,7 +85,7 @@ export async function hasStoreForCurrentHost(): Promise<boolean> {
 
 export async function getStoreForCurrentHost() {
   const requestHeaders = await headers();
-  const rawHost = requestHeaders.get("host");
+  const rawHost = getRequestHost(requestHeaders);
   if (!rawHost) return undefined;
 
   const hostname = normalizeHostname(rawHost);
