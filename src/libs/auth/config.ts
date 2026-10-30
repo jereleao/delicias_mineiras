@@ -243,6 +243,7 @@ export const authConfig = {
 
       return true;
     },
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     async jwt({ token, user, account, profile, session, trigger }) {
       // console.log("jwt", { token, user, account, profile, session, trigger });
 
@@ -271,7 +272,10 @@ export const authConfig = {
 
       return resultToken;
     },
-    async session({ session, token }) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    async session({ session, token, newSession, user, trigger }) {
+      // console.log("session", { session, token, newSession, user, trigger });
+
       const userId = token.sub || token.id;
 
       return {

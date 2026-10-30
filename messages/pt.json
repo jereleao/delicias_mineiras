@@ -1,7 +1,4 @@
 {
-  "AboutPage": {
-    "title": "Quem Somos"
-  },
   "AccountPage": {
     "title": "Minha Conta",
     "preferences": "Preferências",
@@ -261,7 +258,7 @@
   "Footer": {
     "institutional": "Institucional",
     "restricted": "Área restrita",
-    "versionCraft": "© 2026 CRAFT. Todos os direitos reservados. {appVersion}",
+    "rights": "Todos os direitos reservados.",
     "crafted": "Criado com precisão"
   },
   "HomePage": {

@@ -8,9 +8,10 @@ import { auth } from "~/libs/auth";
 
 export function normalizeHostname(rawHost: string): string | undefined {
   try {
-    return new URL(`http://${rawHost}`).hostname
-      .toLowerCase()
-      .replace(/\.$/, "");
+    const parsedHost = new URL(`http://${rawHost}`);
+    const hostname = parsedHost.hostname.toLowerCase().replace(/\.$/, "");
+
+    return parsedHost.port ? `${hostname}:${parsedHost.port}` : hostname;
   } catch {
     return undefined;
   }
