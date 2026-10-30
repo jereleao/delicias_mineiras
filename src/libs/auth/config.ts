@@ -116,10 +116,6 @@ const updateUserInfo = async (user: CurrentUser, profile: Profile) => {
   await db.update(users).set(updatedUser).where(eq(users.id, user.id));
 };
 
-const domain = `.${new URL(env.NEXT_PUBLIC_BASE_URL).hostname}`;
-
-const useSecureCookies = env.NODE_ENV === "production";
-
 /**
  * Options for NextAuth.js used to configure adapters, providers, callbacks, etc.
  *
@@ -202,6 +198,7 @@ export const authConfig = {
 
       return true;
     },
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     async jwt({ token, user, account, profile, session, trigger }) {
       // console.log("jwt", { token, user, account, profile, session, trigger });
 
@@ -230,7 +227,10 @@ export const authConfig = {
 
       return resultToken;
     },
-    async session({ session, token }) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    async session({ session, token, newSession, user, trigger }) {
+      // console.log("session", { session, token, newSession, user, trigger });
+
       const userId = token.sub || token.id;
 
       return {

@@ -4,11 +4,11 @@ import Link from "next/link";
 import { LogoLinkHome } from "~/components/logo-link-home";
 import { auth } from "~/libs/auth";
 import { isAllowed, type PermissionKey } from "~/libs/auth/menus";
-import { env } from "~/env";
 import {
   getStoreScopedPermissions,
   hasStoreForCurrentHost,
 } from "~/libs/stores/server";
+import { FooterLine } from "./footer-line";
 
 type AuthenticatedFooterLink = {
   label: string;
@@ -67,8 +67,6 @@ export default async function HomeFooter() {
     });
   }
 
-  const appVersion = `v${env.NEXT_PUBLIC_APP_VERSION}`;
-
   return (
     <footer className="bg-muted w-dvw">
       <div className="container mx-auto grid max-w-6xl grid-cols-1 gap-10 px-4 py-8 sm:grid-cols-2 sm:px-6">
@@ -108,9 +106,9 @@ export default async function HomeFooter() {
             className="mt-2 flex-col [&>p]:text-sm"
             variant="small"
           />
-          <p className="text-muted-foreground text-xs">{appVersion}</p>
         </div>
       </div>
+      <FooterLine />
     </footer>
   );
 }
