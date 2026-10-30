@@ -26,7 +26,8 @@ type UserMenuProps = { session: Session };
 export default function UserMenu({ session }: UserMenuProps) {
   const [isLogingOut, startLogout] = useTransition();
 
-  const handleLogout = () => startLogout(() => logoutAction());
+  const handleLogout = () =>
+    startLogout(() => logoutAction(window.location.origin));
 
   const t = useTranslations();
 
