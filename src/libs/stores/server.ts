@@ -7,6 +7,7 @@ import { storeDomains, stores } from "~/libs/db/schema";
 import { auth } from "~/libs/auth";
 import { isAllowedAuthRedirectUrl } from "~/libs/auth/redirect";
 import { env } from "~/env";
+import { getStoreUrl } from "~/utils";
 
 export function normalizeHostname(rawHost: string): string | undefined {
   try {
@@ -128,8 +129,17 @@ export async function getLoginUrl() {
   const requestHost =
     forwardedHost?.split(",")[0]?.trim() || host || authOrigin.host;
   const loginUrl = new URL("/login", authOrigin);
+  const requestHostname = normalizeHostname(requestHost);
+  const store = requestHostname
+    ? await getStoreForHostname(requestHostname)
+    : undefined;
 
-  if (requestHost.toLowerCase() !== authOrigin.host.toLowerCase()) {
+  if (store) {
+    const callbackUrl = getStoreUrl(store.slug);
+    if (await isAllowedAuthRedirectUrl(callbackUrl, authOrigin)) {
+      loginUrl.searchParams.set("callbackUrl", callbackUrl.origin);
+    }
+  } else if (requestHost.toLowerCase() !== authOrigin.host.toLowerCase()) {
     const forwardedProto = headersList
       .get("x-forwarded-proto")
       ?.split(",")[0]

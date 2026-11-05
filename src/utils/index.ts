@@ -1,5 +1,6 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { env } from "~/env";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -23,4 +24,14 @@ export function formatPrice(value: number): string {
     style: "currency",
     currency: "BRL",
   });
+}
+
+export function getStoreUrl(slug: string): URL {
+  const storeUrl = new URL(env.NEXT_PUBLIC_BASE_URL);
+  const baseHostname =
+    storeUrl.hostname === "localhost" ? "localtest.me" : storeUrl.hostname;
+
+  storeUrl.hostname = `${slug}.${baseHostname}`;
+
+  return storeUrl;
 }

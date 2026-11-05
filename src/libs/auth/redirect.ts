@@ -20,6 +20,11 @@ export async function isAllowedAuthRedirectUrl(
 
   if (isAuthHost) return target.port === authOrigin.port;
 
+  const isLocalTestHost =
+    authOrigin.hostname === "localhost" &&
+    target.hostname.endsWith(".localtest.me");
+  if (isLocalTestHost) return target.port === authOrigin.port;
+
   const allowedHosts = [target.host.toLowerCase()];
   if (target.hostname.toLowerCase().startsWith("www.")) {
     const withoutWww = new URL(target);
