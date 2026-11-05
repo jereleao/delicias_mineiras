@@ -140,7 +140,6 @@ export async function getLoginUrl() {
         : authOrigin.protocol;
     try {
       const callbackUrl = new URL(`${protocol}//${requestHost}`);
-
       if (await isAllowedAuthRedirectUrl(callbackUrl, authOrigin)) {
         loginUrl.searchParams.set("callbackUrl", callbackUrl.origin);
       }

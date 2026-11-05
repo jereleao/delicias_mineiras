@@ -196,12 +196,11 @@ export const authConfig = {
       try {
         const target = new URL(url, baseUrl);
         const authOrigin = new URL(env.AUTH_URL);
-
         if (await isAllowedAuthRedirectUrl(target, authOrigin)) {
           return target.toString();
         }
       } catch (error) {
-        console.error("Invalid authentication redirect URL:", error);
+        console.error("Could not validate authentication redirect URL:", error);
       }
 
       return baseUrl;

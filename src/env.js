@@ -23,7 +23,7 @@ export const env = createEnv({
       process.env.NODE_ENV === "production"
         ? z.string()
         : z.string().optional(),
-    AUTH_URL: z.url().optional(),
+    AUTH_URL: z.url(),
     WEB_AUTHN_CHALLENGE: z.string(),
     REQUIRED_CREATED_USER: z.coerce.boolean().default(false),
     AUTH_GOOGLE_ID: z.string(),
@@ -68,7 +68,7 @@ export const env = createEnv({
     PORT: process.env.PORT,
 
     AUTH_SECRET: process.env.AUTH_SECRET,
-    AUTH_URL: process.env.AUTH_URL || process.env.NEXT_PUBLIC_BASE_URL,
+    AUTH_URL: process.env.AUTH_URL,
     WEB_AUTHN_CHALLENGE: process.env.WEB_AUTHN_CHALLENGE,
     REQUIRED_CREATED_USER: process.env.REQUIRED_CREATED_USER,
     AUTH_GOOGLE_ID: process.env.AUTH_GOOGLE_ID,
@@ -87,7 +87,8 @@ export const env = createEnv({
     BLOB_READ_WRITE_TOKEN: process.env.BLOB_READ_WRITE_TOKEN,
 
     NEXT_PUBLIC_SENTRY_DSN: process.env.NEXT_PUBLIC_SENTRY_DSN,
-    NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
+    NEXT_PUBLIC_BASE_URL:
+      process.env.AUTH_URL || process.env.NEXT_PUBLIC_BASE_URL,
     NEXT_PUBLIC_APP_VERSION: packageJson.version,
   },
   /**
