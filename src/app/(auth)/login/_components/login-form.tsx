@@ -17,7 +17,7 @@ type LoginFormProps = {
   callbackUrl?: string;
 };
 
-export default function LoginForm({ callbackUrl }: LoginFormProps) {
+export default function LoginForm({ callbackUrl = "/" }: LoginFormProps) {
   const [email, setEmail] = useState("");
   const [emailSent, setEmailSent] = useState(false);
 
@@ -27,7 +27,8 @@ export default function LoginForm({ callbackUrl }: LoginFormProps) {
 
   const [isPendingEmail, startEmailTransition] = useTransition();
 
-  const [isAsserting, manuallyStartAuthentication] = useWebauthnAssert();
+  const [isAsserting, manuallyStartAuthentication] =
+    useWebauthnAssert(callbackUrl);
 
   const handleSendEmail = (email: string) => {
     startEmailTransition(async () => {
@@ -36,7 +37,7 @@ export default function LoginForm({ callbackUrl }: LoginFormProps) {
       const result = await signIn("nodemailer", {
         email,
         redirect: false,
-        redirectTo: callbackUrl || "/",
+        redirectTo: callbackUrl,
       });
 
       if (result?.error) {
@@ -75,7 +76,7 @@ export default function LoginForm({ callbackUrl }: LoginFormProps) {
               "h-10 w-full max-w-70 rounded-full sm:w-[49%]",
               !passkeyAvailable && "w-full!",
             )}
-            onClick={() => signIn("google", { redirectTo: callbackUrl || "/" })}
+            onClick={() => signIn("google", { redirectTo: callbackUrl })}
           >
             <GoogleIcon className="mr-2" />
             <span>{t("google")}</span>

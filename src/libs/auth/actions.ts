@@ -8,6 +8,7 @@ import { storedCredentials } from "~/libs/db/schema";
 import { getNow } from "~/utils";
 import { eq } from "drizzle-orm";
 import { rpId } from "~/libs/auth/config";
+import { isAllowedAuthRedirectUrl } from "~/libs/auth/redirect";
 
 export async function logoutAction(redirectTo: string) {
   await signOut({ redirectTo });
@@ -15,6 +16,7 @@ export async function logoutAction(redirectTo: string) {
 
 export async function loginWithPasskey(
   claimedCred: AuthenticationResponseJSON,
+  callbackUrl?: string,
 ) {
   const expectedChallenge = env.WEB_AUTHN_CHALLENGE;
   const expectedOrigin = env.NEXT_PUBLIC_BASE_URL;
@@ -60,6 +62,14 @@ export async function loginWithPasskey(
     throw new Error("User verification failed.");
   }
 
+  let redirectUrl: string | undefined;
+  if (callbackUrl) {
+    const target = new URL(callbackUrl, env.AUTH_URL);
+    if (await isAllowedAuthRedirectUrl(target, new URL(env.AUTH_URL))) {
+      redirectUrl = target.toString();
+    }
+  }
+
   await db
     .update(storedCredentials)
     .set({
@@ -72,4 +82,6 @@ export async function loginWithPasskey(
     userId: storedCred.userId,
     redirect: false,
   });
+
+  return redirectUrl;
 }

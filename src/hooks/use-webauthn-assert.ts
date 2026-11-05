@@ -8,7 +8,7 @@ import { loginWithPasskey } from "~/libs/auth/actions";
 import { useSession } from "next-auth/react";
 import { startAuthentication } from "@simplewebauthn/browser";
 
-export function useWebauthnAssert() {
+export function useWebauthnAssert(callbackUrl?: string) {
   const router = useRouter();
   const session = useSession();
 
@@ -21,7 +21,7 @@ export function useWebauthnAssert() {
     if (session.status == "authenticated") return;
 
     getCredentials(makeAssertionOptions.publicKey);
-  }, [makeAssertionOptions, session]);
+  }, [callbackUrl, makeAssertionOptions, session]);
 
   const manuallyStartAuthentication = () => {
     if (!makeAssertionOptions || !("publicKey" in makeAssertionOptions))
@@ -41,7 +41,15 @@ export function useWebauthnAssert() {
 
     if (!credentialJSON) return;
 
-    await loginWithPasskey(credentialJSON as any);
+    const redirectUrl = await loginWithPasskey(
+      credentialJSON as any,
+      callbackUrl,
+    );
+
+    if (redirectUrl) {
+      window.location.assign(redirectUrl);
+      return;
+    }
 
     router.back();
   };
