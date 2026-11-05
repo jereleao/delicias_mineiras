@@ -68,7 +68,7 @@ export const env = createEnv({
     PORT: process.env.PORT,
 
     AUTH_SECRET: process.env.AUTH_SECRET,
-    AUTH_URL: process.env.AUTH_URL,
+    AUTH_URL: process.env.AUTH_URL || process.env.NEXT_PUBLIC_BASE_URL,
     WEB_AUTHN_CHALLENGE: process.env.WEB_AUTHN_CHALLENGE,
     REQUIRED_CREATED_USER: process.env.REQUIRED_CREATED_USER,
     AUTH_GOOGLE_ID: process.env.AUTH_GOOGLE_ID,
