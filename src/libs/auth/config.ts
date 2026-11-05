@@ -195,10 +195,14 @@ export const authConfig = {
     async redirect({ url, baseUrl }) {
       try {
         const target = new URL(url, baseUrl);
-        const authOrigin = new URL(env.AUTH_URL);
+        const authOrigin = new URL(baseUrl);
         if (await isAllowedAuthRedirectUrl(target, authOrigin)) {
           return target.toString();
         }
+        console.warn("Rejected authentication redirect URL:", {
+          target: target.origin,
+          authOrigin: authOrigin.origin,
+        });
       } catch (error) {
         console.error("Could not validate authentication redirect URL:", error);
       }
