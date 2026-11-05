@@ -107,7 +107,8 @@ For Google login on store subdomains, set `AUTH_URL` to the main application
 domain (for example, `https://shop.craft.tec.br`) and add
 `https://shop.craft.tec.br/api/auth/callback/google` as an authorized redirect
 URI in the Google OAuth client. The login returns to the subdomain where it was
-started.
+started. Custom store domains registered to an active store are also supported
+as login callback destinations.
 
 ## Database commands
 

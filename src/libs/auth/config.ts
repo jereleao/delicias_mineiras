@@ -18,6 +18,7 @@ import {
 import { eq } from "drizzle-orm";
 import type { PermissionKey } from "./menus";
 import { PasskeyProvider } from "./providers/passkey";
+import { isAllowedAuthRedirectUrl } from "./redirect";
 
 export type ScopedPermissions = {
   platform: PermissionKey[];
@@ -195,21 +196,11 @@ export const authConfig = {
       try {
         const target = new URL(url, baseUrl);
         const authOrigin = new URL(env.AUTH_URL);
-        const isAllowedHost =
-          target.hostname === authOrigin.hostname ||
-          target.hostname.endsWith(`.${authOrigin.hostname}`);
-
-        if (
-          target.protocol === authOrigin.protocol &&
-          target.port === authOrigin.port &&
-          !target.username &&
-          !target.password &&
-          isAllowedHost
-        ) {
+        if (await isAllowedAuthRedirectUrl(target, authOrigin)) {
           return target.toString();
         }
       } catch (error) {
-        console.error("Invalid authentication redirect URL:", error);
+        console.error("Could not validate authentication redirect URL:", error);
       }
 
       return baseUrl;
