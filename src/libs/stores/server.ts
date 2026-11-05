@@ -5,6 +5,7 @@ import { headers } from "next/headers";
 import { db } from "~/libs/db";
 import { storeDomains, stores } from "~/libs/db/schema";
 import { auth } from "~/libs/auth";
+import { env } from "~/env";
 
 export function normalizeHostname(rawHost: string): string | undefined {
   try {
@@ -111,4 +112,50 @@ export async function getStoreScopedPermissions() {
   const scopedPermissions = [...plataformPermissions, ...storePermissions];
 
   return scopedPermissions;
+}
+
+export async function getLoginUrl() {
+  const headersList = await headers();
+
+  // Extracts the hostname (e.g., "example.com" or "localhost:3000")
+  const host = headersList.get("host");
+
+  // Use 'x-forwarded-host' if your app sits behind a reverse proxy like Vercel, Cloudflare, or Nginx
+  const forwardedHost = headersList.get("x-forwarded-host");
+
+  const authOrigin = new URL(env.AUTH_URL);
+  const requestHost =
+    forwardedHost?.split(",")[0]?.trim() || host || authOrigin.host;
+  const loginUrl = new URL("/login", authOrigin);
+
+  if (requestHost.toLowerCase() !== authOrigin.host.toLowerCase()) {
+    const forwardedProto = headersList
+      .get("x-forwarded-proto")
+      ?.split(",")[0]
+      ?.trim();
+    const protocol =
+      forwardedProto === "http" || forwardedProto === "https"
+        ? `${forwardedProto}:`
+        : authOrigin.protocol;
+    try {
+      const callbackUrl = new URL(`${protocol}//${requestHost}`);
+      const isAllowedHost =
+        callbackUrl.hostname === authOrigin.hostname ||
+        callbackUrl.hostname.endsWith(`.${authOrigin.hostname}`);
+
+      if (
+        isAllowedHost &&
+        callbackUrl.protocol === authOrigin.protocol &&
+        callbackUrl.port === authOrigin.port &&
+        !callbackUrl.username &&
+        !callbackUrl.password
+      ) {
+        loginUrl.searchParams.set("callbackUrl", callbackUrl.origin);
+      }
+    } catch (error) {
+      console.error("Could not build the tenant login callback URL:", error);
+    }
+  }
+
+  return loginUrl;
 }

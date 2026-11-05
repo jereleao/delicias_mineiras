@@ -13,7 +13,11 @@ import { usePasskeyAvailable } from "~/hooks/use-passkey-available";
 import { useWebauthnAssert } from "~/hooks/use-webauthn-assert";
 import { cn } from "~/utils";
 
-export default function LoginForm() {
+type LoginFormProps = {
+  callbackUrl?: string;
+};
+
+export default function LoginForm({ callbackUrl }: LoginFormProps) {
   const [email, setEmail] = useState("");
   const [emailSent, setEmailSent] = useState(false);
 
@@ -32,7 +36,7 @@ export default function LoginForm() {
       const result = await signIn("nodemailer", {
         email,
         redirect: false,
-        callbackUrl: "/",
+        redirectTo: callbackUrl || "/",
       });
 
       if (result?.error) {
@@ -71,9 +75,7 @@ export default function LoginForm() {
               "h-10 w-full max-w-70 rounded-full sm:w-[49%]",
               !passkeyAvailable && "w-full!",
             )}
-            onClick={() =>
-              signIn("google", { callbackUrl: window.location.origin })
-            }
+            onClick={() => signIn("google", { redirectTo: callbackUrl || "/" })}
           >
             <GoogleIcon className="mr-2" />
             <span>{t("google")}</span>
