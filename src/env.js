@@ -23,7 +23,7 @@ export const env = createEnv({
       process.env.NODE_ENV === "production"
         ? z.string()
         : z.string().optional(),
-    AUTH_URL: z.url(),
+    AUTH_URL: z.url().optional(),
     WEB_AUTHN_CHALLENGE: z.string(),
     REQUIRED_CREATED_USER: z.coerce.boolean().default(false),
     AUTH_GOOGLE_ID: z.string(),
