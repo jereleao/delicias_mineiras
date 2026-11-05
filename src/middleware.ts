@@ -40,8 +40,9 @@ export async function middleware(request: NextRequest) {
     if (!token) {
       console.info("Redirected in the middleware, reason: missing token");
 
-      url.pathname = "/login";
-      return NextResponse.redirect(url);
+      const loginUrl = new URL("/login", env.AUTH_URL);
+      loginUrl.searchParams.set("callbackUrl", url.toString());
+      return NextResponse.redirect(loginUrl);
     }
 
     if (menuKey.startsWith("store.")) {
@@ -66,7 +67,9 @@ export async function middleware(request: NextRequest) {
   } catch (error) {
     console.debug("TODO: Redirerect to a error page");
     console.error("Middleware error:", error);
-    return NextResponse.redirect(new URL("/login", request.url));
+    const loginUrl = new URL("/login", env.AUTH_URL);
+    loginUrl.searchParams.set("callbackUrl", request.nextUrl.toString());
+    return NextResponse.redirect(loginUrl);
   }
 }
 

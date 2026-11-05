@@ -1,5 +1,5 @@
 import { auth } from "~/libs/auth";
-import { SignIn } from "~/components/auth-component";
+import { SignIn } from "~/components/sign-in";
 import UserMenu from "~/components/user-menu";
 
 type UserButtonProps = {

@@ -8,7 +8,8 @@ import {
   getStoreScopedPermissions,
   hasStoreForCurrentHost,
 } from "~/libs/stores/server";
-import { FooterLine } from "./footer-line";
+import { SignInLink } from "~/components/sign-in";
+import { FooterLine } from "~/components/footer-line";
 
 type AuthenticatedFooterLink = {
   label: string;
@@ -27,6 +28,7 @@ type FooterLink = AuthenticatedFooterLink | AuthorizedFooterLink;
 type FooterColumn = {
   title: string;
   href?: string;
+  requiresAuth?: boolean;
   links: FooterLink[];
 };
 
@@ -42,13 +44,12 @@ export default async function HomeFooter() {
 
   const columns: FooterColumn[] = [
     {
-      title: isAuthenticated ? t("Footer.restricted") : t("UserMenu.login"),
-      href: "/login",
+      title: t("Footer.restricted"),
+      requiresAuth: true,
       links: [
         {
           label: t("AccountPage.title"),
           href: "/account",
-          requiresAuth: true,
         },
         // {
         //   label: t("AdminPage.title"),
@@ -70,37 +71,49 @@ export default async function HomeFooter() {
   return (
     <footer className="bg-muted w-dvw">
       <div className="container mx-auto grid max-w-6xl grid-cols-1 gap-10 px-4 py-8 sm:grid-cols-2 sm:px-6">
-        {columns.map((column) => (
-          <nav key={column.title} aria-label={column.title}>
-            <h2 className="text-foreground text-sm font-bold tracking-wide uppercase">
-              {column.href ? (
-                <Link href={column.href}>{column.title}</Link>
-              ) : (
-                column.title
-              )}
-            </h2>
-            <span
-              className="bg-border mt-2 block h-px w-8"
-              aria-hidden="true"
-            />
-            <ul className="mt-6 flex flex-col gap-4">
-              {column.links
-                .filter((link) =>
-                  checkPermission(link, session?.user, permissions),
-                )
-                .map((link) => (
-                  <li key={link.label}>
-                    <Link
-                      href={link.href}
-                      className="text-muted-foreground hover:text-foreground text-sm transition-colors"
-                    >
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-            </ul>
-          </nav>
-        ))}
+        {columns.map((column) => {
+          if (!isAuthenticated && column.requiresAuth)
+            return (
+              <h2
+                key={column.title}
+                className="text-foreground text-sm font-bold tracking-wide uppercase"
+              >
+                <SignInLink />
+              </h2>
+            );
+
+          return (
+            <nav key={column.title} aria-label={column.title}>
+              <h2 className="text-foreground text-sm font-bold tracking-wide uppercase">
+                {column.href ? (
+                  <Link href={column.href}>{column.title}</Link>
+                ) : (
+                  column.title
+                )}
+              </h2>
+              <span
+                className="bg-border mt-2 block h-px w-8"
+                aria-hidden="true"
+              />
+              <ul className="mt-6 flex flex-col gap-4">
+                {column.links
+                  .filter((link) =>
+                    checkPermission(link, session?.user, permissions),
+                  )
+                  .map((link) => (
+                    <li key={link.label}>
+                      <Link
+                        href={link.href}
+                        className="text-muted-foreground hover:text-foreground text-sm transition-colors"
+                      >
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+              </ul>
+            </nav>
+          );
+        })}
         <div className="flex flex-col items-start justify-between gap-2 lg:items-end">
           <LogoLinkHome
             className="mt-2 flex-col [&>p]:text-sm"

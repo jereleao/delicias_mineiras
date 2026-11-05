@@ -116,7 +116,7 @@ const updateUserInfo = async (user: CurrentUser, profile: Profile) => {
   await db.update(users).set(updatedUser).where(eq(users.id, user.id));
 };
 
-const domain = `.${new URL(env.NEXT_PUBLIC_BASE_URL).hostname}`;
+const domain = `.${new URL(env.AUTH_URL).hostname}`;
 
 const useSecureCookies = env.NODE_ENV === "production";
 
@@ -192,29 +192,26 @@ export const authConfig = {
   },
   callbacks: {
     async redirect({ url, baseUrl }) {
-      // console.log("redirect", { url, baseUrl });
       try {
         const target = new URL(url, baseUrl);
-        const base = new URL(baseUrl);
+        const authOrigin = new URL(env.AUTH_URL);
         const isAllowedHost =
-          target.hostname === base.hostname ||
-          target.hostname.endsWith(`.${base.hostname}`);
+          target.hostname === authOrigin.hostname ||
+          target.hostname.endsWith(`.${authOrigin.hostname}`);
 
         if (
-          target.protocol === base.protocol &&
-          target.port === base.port &&
+          target.protocol === authOrigin.protocol &&
+          target.port === authOrigin.port &&
           !target.username &&
           !target.password &&
           isAllowedHost
         ) {
-          console.log({ target: target.toString() });
           return target.toString();
         }
-      } catch {
-        console.log("catch", { baseUrl });
-        return baseUrl;
+      } catch (error) {
+        console.error("Invalid authentication redirect URL:", error);
       }
-      console.log({ baseUrl });
+
       return baseUrl;
     },
     // eslint-disable-next-line @typescript-eslint/no-unused-vars

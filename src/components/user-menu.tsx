@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useTransition } from "react";
 import type { Session } from "next-auth";
 import { useTranslations } from "next-intl";
-import { LoaderCircleIcon } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,7 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { Button } from "~/components/ui/button";
-import { SignOut } from "~/components/auth-component";
+import { SignOut } from "~/components/sign-out";
 import { logoutAction } from "~/libs/auth/actions";
 import UserAvatar from "~/components/user-avatar";
 import UserMenuLanguage from "~/components/user-menu-language";
@@ -34,7 +33,6 @@ export default function UserMenu({ session }: UserMenuProps) {
   if (isLogingOut)
     return (
       <div className="flex items-center gap-2">
-        {/* <Skeleton className="bg-muted-foreground h-3 w-16" /> */}
         <Skeleton className="bg-muted-foreground size-8 rounded-full" />
       </div>
     );
