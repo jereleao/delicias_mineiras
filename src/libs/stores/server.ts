@@ -5,6 +5,7 @@ import { headers } from "next/headers";
 import { db } from "~/libs/db";
 import { storeDomains, stores } from "~/libs/db/schema";
 import { auth } from "~/libs/auth";
+import { isAllowedAuthRedirectUrl } from "~/libs/auth/redirect";
 import { env } from "~/env";
 
 export function normalizeHostname(rawHost: string): string | undefined {
@@ -139,17 +140,8 @@ export async function getLoginUrl() {
         : authOrigin.protocol;
     try {
       const callbackUrl = new URL(`${protocol}//${requestHost}`);
-      const isAllowedHost =
-        callbackUrl.hostname === authOrigin.hostname ||
-        callbackUrl.hostname.endsWith(`.${authOrigin.hostname}`);
 
-      if (
-        isAllowedHost &&
-        callbackUrl.protocol === authOrigin.protocol &&
-        callbackUrl.port === authOrigin.port &&
-        !callbackUrl.username &&
-        !callbackUrl.password
-      ) {
+      if (await isAllowedAuthRedirectUrl(callbackUrl, authOrigin)) {
         loginUrl.searchParams.set("callbackUrl", callbackUrl.origin);
       }
     } catch (error) {
